@@ -89,7 +89,8 @@ int lock_file(const char* filename)
 
 int set_open_file_limit(int maxsize)
 {
-    struct rlimit limit = {maxsize,maxsize} ;
+    if (maxsize < 0) return -1;
+    struct rlimit limit = {(size_t)maxsize, (size_t)maxsize} ;
     return setrlimit(RLIMIT_NOFILE,&limit) ;
 }
 

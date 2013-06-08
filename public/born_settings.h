@@ -6,6 +6,7 @@
 #include "../public/game_common.pb.h"
 #include "../config/player_init_data.pb.h"
 #include "../config/phy_strength.pb.h"
+#include "../config/number_limits.pb.h"
 
 using namespace protocols::common;
 
@@ -16,6 +17,10 @@ class RoleBornSettings
 public:
 	bool Init(const char* data_file);
 	bool InitPhyStrength(const char* data_file);
+	bool InitNumberLimits(const char* data_file);
+
+	// number_limit_type_: NumberLimitType
+	int  GetNumberLimitByType(int number_limit_type_);
 
 	const PlayerInitData* GetRoleBornPrototype(Gender gender, Profession pro);
 
@@ -35,6 +40,8 @@ private:
 	typedef std::map<int, IntRangePair>  LevelToRangeMap;
 	LevelToRangeMap        m_level_to_range_map;
 	PhyStrengthMap         m_phy_strength_map; 
+
+	std::map<int, int>     m_number_limits_map;
 
 	DECLARE_SINGLETON_CONSTRUCTER(RoleBornSettings);
 };

@@ -1,11 +1,14 @@
 #ifndef PUBLIC_UTIL_H
 #define PUBLIC_UTIL_H
 
+#include <string.h>
 #include <iostream>
 #include <string>
 #include <vector>
 #include <assert.h>
-
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 std::vector<std::string> str_split(const std::string& src, std::string delimit, std::string null_subst = "");
 
@@ -140,6 +143,7 @@ namespace HttpUtility
 	}
 }
 
+time_t convert_string_to_time_t(const std::string & time_string);
 
 #endif //PUBLIC_UTIL_H
 

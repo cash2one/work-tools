@@ -41,19 +41,26 @@ public:
 
     ~object_pool()
     {
-        clear() ;
+        clear_with_delete();
     }
 
-    void clear()
+    void clear_with_delete()
     {
         for(typename object_container::iterator it=m_objects.begin();it!=m_objects.end();++it)
         {
-            delete it->second ;
+			if (it->second) {
+				delete it->second ;
+				it->second = NULL;
+			}
         }
 
         m_objects.clear() ;
     }
 
+	void clear()
+	{
+		m_objects.clear() ;
+	}
 
     object_type* create(key_type key)
     {

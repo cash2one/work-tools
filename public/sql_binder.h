@@ -1,6 +1,7 @@
 #ifndef _generate_h_SQL_BINDER 
 #define _generate_h_SQL_BINDER 
 #include <stdint.h>
+#include <string.h>
 #include <string>
 #include <vector>
 using std::string;

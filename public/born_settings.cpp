@@ -50,6 +50,33 @@ bool RoleBornSettings::InitPhyStrength(const char* data_file)
 	return true;
 }
 
+bool RoleBornSettings::InitNumberLimits(const char* data_file)
+{
+	std::fstream  fs( data_file, std::ios::in | std::ios::binary );
+	if (fs.fail()) return false;
+
+	NumberLimitDataGroup  limits_group;
+	if (!limits_group.ParseFromIstream( &fs )) return false;
+
+	for (int i=0; i<limits_group.number_limit_data_size(); ++i)
+	{
+		const NumberLimitData&  d = limits_group.number_limit_data(i);
+		m_number_limits_map[d.limit_type()] = d.limit_value();
+	}
+
+	return true;
+}
+
+// number_limit_type_: NumberLimitType
+int  RoleBornSettings::GetNumberLimitByType(int number_limit_type_)
+{
+	if (m_number_limits_map.count(number_limit_type_))
+	{
+		return m_number_limits_map[number_limit_type_];
+	}
+	return -1;
+}
+
 const PhyStrengthData* RoleBornSettings::GetPhyStrengthData(int player_level, int vip_level)
 {
 	if (m_level_to_range_map.count(player_level) == 0) return NULL;

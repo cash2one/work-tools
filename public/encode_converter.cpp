@@ -13,6 +13,8 @@
 
 #include "encode_converter.h"
 #include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 EncodeConverter::EncodeConverter(const char *from_charset,const char *to_charset) 
 {

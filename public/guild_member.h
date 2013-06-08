@@ -78,6 +78,18 @@ public:
     void set_gender(int8_t value) { if(gender!= value){dirty[13] = 1; gender = value;} } ; 
     int sql_gender(char* buf,int size) const{return snprintf(buf,size,"gender='%ld'",(int64_t)gender);}
 
+    int32_t get_total_donate() const { return total_donate;} ; 
+    void set_total_donate(int32_t value) { if(total_donate!= value){dirty[14] = 1; total_donate = value;} } ; 
+    int sql_total_donate(char* buf,int size) const{return snprintf(buf,size,"total_donate='%ld'",(int64_t)total_donate);}
+
+    int32_t get_recent_donate() const { return recent_donate;} ; 
+    void set_recent_donate(int32_t value) { if(recent_donate!= value){dirty[15] = 1; recent_donate = value;} } ; 
+    int sql_recent_donate(char* buf,int size) const{return snprintf(buf,size,"recent_donate='%ld'",(int64_t)recent_donate);}
+
+    int32_t get_last_donate_time() const { return last_donate_time;} ; 
+    void set_last_donate_time(int32_t value) { if(last_donate_time!= value){dirty[16] = 1; last_donate_time = value;} } ; 
+    int sql_last_donate_time(char* buf,int size) const{return snprintf(buf,size,"last_donate_time='%ld'",(int64_t)last_donate_time);}
+
 private:
     //data member
     int32_t guild_id ; 
@@ -94,9 +106,12 @@ private:
     string role_name ; 
     int32_t login_time ; 
     int8_t gender ; 
+    int32_t total_donate ; 
+    int32_t recent_donate ; 
+    int32_t last_donate_time ; 
 private:
     //dirty flag for update
-    enum { FIELD_COUNT = 14 } ; 
+    enum { FIELD_COUNT = 17 } ; 
     int8_t dirty[FIELD_COUNT] ; 
 };
 #endif

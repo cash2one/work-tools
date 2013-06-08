@@ -14,8 +14,9 @@
 #include <stdlib.h>
 #include <sys/time.h>
 #include <unistd.h>
+#include <limits.h>
 
-enum { SECONDS_HALF_HOUR = 1800, SECONDS_OF_HOUR = 3600, };
+enum { SECONDS_QUARTER_HOUR = 900, SECONDS_HALF_HOUR = 1800, SECONDS_OF_HOUR = 3600, };
 enum { SECONDS_OF_DAY = 24 * 3600, SECONDS_OF_WEEK = SECONDS_OF_DAY * 7, };  // 每天的秒数
 enum { LOCAL_TIME_ZONE = 8 * 3600 }; // 本地时区
 
@@ -74,7 +75,7 @@ inline int64_t get_tsc_us()
         tsc_interval = rdtsc() - begin_tsc  ;
         us_interval = time_us() - begin_us ;
 
-    } while(us_interval < 1 || us_interval > (100000 << 3) ) ;
+    } while(us_interval < 1 ); //cliff : || us_interval  (100000 << 3) ) ;
 
     return tsc_interval/us_interval ;
 }
@@ -154,43 +155,67 @@ inline bool is_same_day(time_t first_t, time_t second_t, int default_day_seconds
 	return (first_t - timezone) / default_day_seconds == (second_t - timezone )/ default_day_seconds;
 }
 
+struct SimpleTime
+{
+	int hour;
+	int min;
+	int sec;
+};
+
+inline int seconds_diff(const SimpleTime& start, const SimpleTime& end)
+{
+    int seconds_diff = (end.hour * SECONDS_OF_HOUR + end.min * 60 + end.sec)
+        - (start.hour * SECONDS_OF_HOUR + start.min * 60 + start.sec);
+
+    return seconds_diff;
+}
+
+inline struct tm* convert_from_simple_time(const SimpleTime& a, struct tm* tm_time)
+{
+	tm_time->tm_hour = a.hour;
+	tm_time->tm_min = a.min;
+	tm_time->tm_sec = a.sec;
+	return tm_time;
+}
+
+inline SimpleTime* convert_from_tm(const struct tm& tm_time, SimpleTime* a)
+{
+	a->hour = tm_time.tm_hour;
+	a->min = tm_time.tm_min;
+	a->sec = tm_time.tm_sec;
+	return a;
+}
+
+inline int time_cmp(const SimpleTime& a, const SimpleTime& b)
+{
+	if (a.hour > b.hour)      return 1;
+	else if (a.hour < b.hour) return -1;
+	else
+	{
+		if (a.min > b.min)       return 1;
+		else if (a.min < b.min)  return -1;
+		else
+		{
+			if (a.sec > b.sec)      return 1;
+			else if (a.sec < b.sec) return -1;
+			else                    return 0;
+		}
+	}
+}
+
 // 仅比较时分秒
 inline int time_cmp(struct tm time_a, int hour, int min, int sec)
 {
-	if (time_a.tm_hour > hour)
-	{
-		return 1;
-	}
-	else if (time_a.tm_hour < hour)
-	{
-		return -1;
-	}
-	else
-	{
-		if (time_a.tm_min > min)
-		{
-			return 1;
-		}
-		else if (time_a.tm_min < min)
-		{
-			return -1;
-		}
-		else
-		{
-			if (time_a.tm_sec > sec)
-			{
-				return 1;
-			}
-			else if (time_a.tm_sec < sec)
-			{
-				return -1;
-			}
-			else
-			{
-				return 0;
-			}
-		}
-	}
+	SimpleTime a, b;
+	a.hour = time_a.tm_hour;
+	a.min = time_a.tm_min;
+	a.sec = time_a.tm_sec;
+
+	b.hour = hour;
+	b.min = min;
+	b.sec = sec;
+
+	return time_cmp(a, b);
 }
 
 // 距最近的指定时间还剩多少秒
@@ -231,6 +256,35 @@ inline time_t get_seconds_elapsed_of_the_week(time_t now_sec = 0)
 	localtime_r(&now_sec, &now_tm_time);
 
 	return now_tm_time.tm_wday * SECONDS_OF_DAY + get_seconds_elapsed_of_the_day(now_sec);
+}
+
+// 计算距离某time_t时间 到 现在 是第几天
+// time_t 所在的天 是第一天
+inline int get_passed_days_since(time_t  last_time = 0, int default_day_seconds = SECONDS_OF_DAY)
+{
+	if (last_time < 0) return INT_MAX;
+	
+	time_t now = time(NULL);
+	if (last_time > now) return 0;
+	else if (last_time == now) return 1;
+
+	bool need_add_one_more_day = false;
+	if (last_time == 0) 
+	{
+		need_add_one_more_day = ((now % default_day_seconds) > 0 );
+
+		return (now / default_day_seconds) + (need_add_one_more_day ? 1 : 0);
+	}
+	else
+	{
+		time_t first_day_left_seconds = default_day_seconds - get_seconds_elapsed_of_the_day(last_time);
+		
+		if (now - last_time < first_day_left_seconds) return 1; // 还是第一天
+		
+		need_add_one_more_day = ((now - last_time - first_day_left_seconds) % default_day_seconds) > 0;
+
+		return (now - last_time - first_day_left_seconds) / default_day_seconds + 1 + (need_add_one_more_day ? 1 : 0);
+	}
 }
 
 

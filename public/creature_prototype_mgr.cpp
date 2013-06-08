@@ -43,7 +43,7 @@ const MonsterBuffData*  CreaturePrototypeMgr::GetMonsterBuff(int buff_id)
 		return buff_map[buff_id];
 	}
 
-	return false;
+	return NULL;
 }
 
 const CreatureInitData* CreaturePrototypeMgr::GetCreaturePrototype( int creature_id )

@@ -15,6 +15,7 @@ role_skill::role_skill()
     delta_time = 0;
     expire_count_left = 0;
     delta_exp = 0;
+    is_used = 0;
     create_time = 0;
     memset(dirty,1,sizeof(dirty));
 }
@@ -33,7 +34,8 @@ void role_skill::load(const char** data)
     delta_time = (int32_t)atoi(data[10]);
     expire_count_left = (int32_t)atoi(data[11]);
     delta_exp = (int32_t)atoi(data[12]);
-    create_time = (int32_t)atoi(data[13]);
+    is_used = (int32_t)atoi(data[13]);
+    create_time = (int32_t)atoi(data[14]);
     memset(dirty,0,sizeof(dirty));
 }
 void role_skill::load(const vector<string>& data)
@@ -51,7 +53,8 @@ void role_skill::load(const vector<string>& data)
     delta_time = (int32_t)atoi(data[10].c_str());
     expire_count_left = (int32_t)atoi(data[11].c_str());
     delta_exp = (int32_t)atoi(data[12].c_str());
-    create_time = (int32_t)atoi(data[13].c_str());
+    is_used = (int32_t)atoi(data[13].c_str());
+    create_time = (int32_t)atoi(data[14].c_str());
     memset(dirty,0,sizeof(dirty));
 }
 int role_skill::sql_key(char* buf,int size) const
@@ -150,6 +153,12 @@ int role_skill::sql_data(char* buf,int size) const
         buf += len ; size -= len ;first_flag=0;
     }
     if(dirty[13])
+    {
+        if(first_flag==0) {memcpy(buf,",",1); buf+= 1 ; size-= 1 ;}
+        len =sql_is_used(buf,size);
+        buf += len ; size -= len ;first_flag=0;
+    }
+    if(dirty[14])
     {
         if(first_flag==0) {memcpy(buf,",",1); buf+= 1 ; size-= 1 ;}
         len =sql_create_time(buf,size);

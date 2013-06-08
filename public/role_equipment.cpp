@@ -24,9 +24,10 @@ void role_equipment::load(const char** data)
     extra_attr_data.assign(data[7]);
     strength_attr_data.assign(data[8]);
     slot_data.assign(data[9]);
-    create_time = (int32_t)atoi(data[10]);
-    mark = (int32_t)atoi(data[11]);
-    db_stone_data.assign(data[12]);
+    reserved_attr_value_data.assign(data[10]);
+    create_time = (int32_t)atoi(data[11]);
+    mark = (int32_t)atoi(data[12]);
+    db_stone_data.assign(data[13]);
     memset(dirty,0,sizeof(dirty));
 }
 void role_equipment::load(const vector<string>& data)
@@ -41,9 +42,10 @@ void role_equipment::load(const vector<string>& data)
     extra_attr_data.assign(data[7].c_str());
     strength_attr_data.assign(data[8].c_str());
     slot_data.assign(data[9].c_str());
-    create_time = (int32_t)atoi(data[10].c_str());
-    mark = (int32_t)atoi(data[11].c_str());
-    db_stone_data.assign(data[12].c_str());
+    reserved_attr_value_data.assign(data[10].c_str());
+    create_time = (int32_t)atoi(data[11].c_str());
+    mark = (int32_t)atoi(data[12].c_str());
+    db_stone_data.assign(data[13].c_str());
     memset(dirty,0,sizeof(dirty));
 }
 int role_equipment::sql_key(char* buf,int size) const
@@ -120,16 +122,22 @@ int role_equipment::sql_data(char* buf,int size) const
     if(dirty[10])
     {
         if(first_flag==0) {memcpy(buf,",",1); buf+= 1 ; size-= 1 ;}
-        len =sql_create_time(buf,size);
+        len =sql_reserved_attr_value_data(buf,size);
         buf += len ; size -= len ;first_flag=0;
     }
     if(dirty[11])
     {
         if(first_flag==0) {memcpy(buf,",",1); buf+= 1 ; size-= 1 ;}
-        len =sql_mark(buf,size);
+        len =sql_create_time(buf,size);
         buf += len ; size -= len ;first_flag=0;
     }
     if(dirty[12])
+    {
+        if(first_flag==0) {memcpy(buf,",",1); buf+= 1 ; size-= 1 ;}
+        len =sql_mark(buf,size);
+        buf += len ; size -= len ;first_flag=0;
+    }
+    if(dirty[13])
     {
         if(first_flag==0) {memcpy(buf,",",1); buf+= 1 ; size-= 1 ;}
         len =sql_db_stone_data(buf,size);

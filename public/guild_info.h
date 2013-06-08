@@ -80,6 +80,27 @@ public:
     void set_notice(const char* value) { if(strcmp(notice.c_str(),value)!=0) {dirty[13] = 1; notice.assign(value);} }; 
     int sql_notice(char* buf,int size) const{return snprintf(buf,size,"notice='%s'",notice.c_str());}
 
+    int64_t get_building_grade() const { return building_grade;} ; 
+    void set_building_grade(int64_t value) { if(building_grade!= value){dirty[14] = 1; building_grade = value;} } ; 
+    int sql_building_grade(char* buf,int size) const{return snprintf(buf,size,"building_grade='%ld'",(int64_t)building_grade);}
+
+    int32_t get_maintain_time() const { return maintain_time;} ; 
+    void set_maintain_time(int32_t value) { if(maintain_time!= value){dirty[15] = 1; maintain_time = value;} } ; 
+    int sql_maintain_time(char* buf,int size) const{return snprintf(buf,size,"maintain_time='%ld'",(int64_t)maintain_time);}
+
+    const string& get_guild_activity_data() const { return guild_activity_data;} ; 
+    void set_guild_activity_data(const string& value) { if(guild_activity_data!= value){dirty[16] = 1; guild_activity_data.assign(value);} }; 
+    void set_guild_activity_data(const char* value) { if(strcmp(guild_activity_data.c_str(),value)!=0) {dirty[16] = 1; guild_activity_data.assign(value);} }; 
+    int sql_guild_activity_data(char* buf,int size) const{return snprintf(buf,size,"guild_activity_data='%s'",guild_activity_data.c_str());}
+
+    int32_t get_boss_damage_buff() const { return boss_damage_buff;} ; 
+    void set_boss_damage_buff(int32_t value) { if(boss_damage_buff!= value){dirty[17] = 1; boss_damage_buff = value;} } ; 
+    int sql_boss_damage_buff(char* buf,int size) const{return snprintf(buf,size,"boss_damage_buff='%ld'",(int64_t)boss_damage_buff);}
+
+    int32_t get_boss_defence_buff() const { return boss_defence_buff;} ; 
+    void set_boss_defence_buff(int32_t value) { if(boss_defence_buff!= value){dirty[18] = 1; boss_defence_buff = value;} } ; 
+    int sql_boss_defence_buff(char* buf,int size) const{return snprintf(buf,size,"boss_defence_buff='%ld'",(int64_t)boss_defence_buff);}
+
 private:
     //data member
     int32_t guild_id ; 
@@ -96,9 +117,14 @@ private:
     string leader_name ; 
     string guild_name ; 
     string notice ; 
+    int64_t building_grade ; 
+    int32_t maintain_time ; 
+    string guild_activity_data ; 
+    int32_t boss_damage_buff ; 
+    int32_t boss_defence_buff ; 
 private:
     //dirty flag for update
-    enum { FIELD_COUNT = 14 } ; 
+    enum { FIELD_COUNT = 19 } ; 
     int8_t dirty[FIELD_COUNT] ; 
 };
 #endif

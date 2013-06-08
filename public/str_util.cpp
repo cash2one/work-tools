@@ -1,3 +1,5 @@
+#include <stdlib.h>
+#include <stdio.h>
 #include "str_util.h"
 
 
@@ -186,4 +188,28 @@ int random(int min_num, int max_num)
 	//assert(max_num >= min_num);
 	//return (int) ((max_num - min_num + 1) * (rand() / (RAND_MAX + 1.0)));
 	return rand() % abs(max_num - min_num + 1) + min_num;
+}
+
+
+time_t convert_string_to_time_t(const std::string & time_string)
+{
+	struct tm tm1;
+	memset(&tm1, 0, sizeof(tm1));
+	time_t time1;
+	int i = sscanf(time_string.c_str(), "%4d%2d%2d %d:%d:%d",
+		&(tm1.tm_year),
+		&(tm1.tm_mon),
+		&(tm1.tm_mday),
+		&(tm1.tm_hour),
+		&(tm1.tm_min),
+		&(tm1.tm_sec));
+    if (i!=6)
+        return 0;
+	tm1.tm_year -= 1900;
+	tm1.tm_mon --;
+	tm1.tm_isdst=-1;
+
+	time1 = mktime(&tm1);
+
+	return time1;
 }

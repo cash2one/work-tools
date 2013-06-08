@@ -14,6 +14,9 @@
 #include "const_strings.h"
 #include "day_roll_bill.h"
 
+
+using namespace protocols::common;
+
 day_roll_bill::day_roll_bill():m_fd(-1),m_filedate(0),m_buf(NULL)
 {
     memset(m_prefix,0,sizeof(m_prefix)) ;
@@ -107,8 +110,9 @@ int day_roll_bill::write_sql(int seq,int result,const char* sql)
 
 int day_roll_bill::write_money(int seq, int role_id, int action_type, int change_money_type, int money_type, int money_value, int result_money_value)
 {
-	return write_format("%d|%d|%s|%s|%s|%d|%d|", seq, role_id, 
-		get_log_action_name(action_type), 
+	return write_format("%d|%d|%s|%d|%s|%s|%d|%d|", seq, role_id, 
+		get_log_action_name(action_type),
+		change_money_type,
 		get_money_change_type_info(change_money_type), 
 		get_money_type_info(money_type), 
 		money_value,
@@ -117,9 +121,9 @@ int day_roll_bill::write_money(int seq, int role_id, int action_type, int change
 
 int day_roll_bill::write_trade(int seq, int role_id, int action_type, int trans_type, int money_type, int cost_value)
 {
-	return write_format("%d|%d|%s|%s|%s|%d|", seq, role_id, 
+	return write_format("%d|%d|%s|%d|%s|%d|", seq, role_id, 
 		get_log_action_name(action_type),
-		get_buy_type_info(trans_type),
+		trans_type,
 		get_money_type_info(money_type),
 		cost_value);
 }
@@ -132,6 +136,23 @@ int day_roll_bill::write_item(int seq, int role_id, int action_type, int item_ch
 		item_id, count);
 }
 
+int day_roll_bill::write_transaction(SendLogNotify*  notify) 
+{
+	if (notify == 0) return -1;
+
+	const LogPlayerData&  lplayer = notify->player_info();
+	const LogOptionalParams&  params = notify->optional_paras();
+
+	return write_format("%d|%d|%s|%d|%d|%d|%d|%d|%d|%d|%d|%d", 
+		notify->seq(), lplayer.role_id(),
+		lplayer.name().c_str(), lplayer.user_level(), lplayer.job(),
+		params.para1(), params.para2(), 
+		params.para3(), params.para4(),
+		params.para5(), 
+		params.para11() & 0xffffffff,
+		params.para12() & 0xffffffff
+		);
+}
 
 int day_roll_bill::write_format(const char* fmt,...)
 {

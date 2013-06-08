@@ -8,6 +8,7 @@ void ShopPrototypeManager::clear()
     m_prototype.clear() ;
     m_shop_data.Clear() ;
     m_market_data.Clear() ;
+    m_fast_query_price.clear() ;
 }
 bool ShopPrototypeManager::load_shop( const char* data_file )
 {

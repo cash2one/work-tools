@@ -480,6 +480,17 @@ class TalkChannelRequest : public ::google::protobuf::Message {
   inline ::google::protobuf::int32 flag() const;
   inline void set_flag(::google::protobuf::int32 value);
   
+  // optional string data = 4;
+  inline bool has_data() const;
+  inline void clear_data();
+  static const int kDataFieldNumber = 4;
+  inline const ::std::string& data() const;
+  inline void set_data(const ::std::string& value);
+  inline void set_data(const char* value);
+  inline void set_data(const char* value, size_t size);
+  inline ::std::string* mutable_data();
+  inline ::std::string* release_data();
+  
   // @@protoc_insertion_point(class_scope:protocols.common.TalkChannelRequest)
  private:
   inline void set_has_channel();
@@ -488,15 +499,18 @@ class TalkChannelRequest : public ::google::protobuf::Message {
   inline void clear_has_content();
   inline void set_has_flag();
   inline void clear_has_flag();
+  inline void set_has_data();
+  inline void clear_has_data();
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
   ::std::string* content_;
   int channel_;
   ::google::protobuf::int32 flag_;
+  ::std::string* data_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(3 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(4 + 31) / 32];
   
   friend void  protobuf_AddDesc_game_5fchat_2eproto();
   friend void protobuf_AssignDesc_game_5fchat_2eproto();
@@ -707,6 +721,17 @@ class TalkChannelNotify : public ::google::protobuf::Message {
   inline ::google::protobuf::int32 vip_level() const;
   inline void set_vip_level(::google::protobuf::int32 value);
   
+  // optional string data = 9;
+  inline bool has_data() const;
+  inline void clear_data();
+  static const int kDataFieldNumber = 9;
+  inline const ::std::string& data() const;
+  inline void set_data(const ::std::string& value);
+  inline void set_data(const char* value);
+  inline void set_data(const char* value, size_t size);
+  inline ::std::string* mutable_data();
+  inline ::std::string* release_data();
+  
   // @@protoc_insertion_point(class_scope:protocols.common.TalkChannelNotify)
  private:
   inline void set_has_src_guid();
@@ -725,6 +750,8 @@ class TalkChannelNotify : public ::google::protobuf::Message {
   inline void clear_has_src_server_id();
   inline void set_has_vip_level();
   inline void clear_has_vip_level();
+  inline void set_has_data();
+  inline void clear_has_data();
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
@@ -735,10 +762,11 @@ class TalkChannelNotify : public ::google::protobuf::Message {
   ::google::protobuf::int32 flag_;
   int gender_;
   ::google::protobuf::int32 src_server_id_;
+  ::std::string* data_;
   ::google::protobuf::int32 vip_level_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(8 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(9 + 31) / 32];
   
   friend void  protobuf_AddDesc_game_5fchat_2eproto();
   friend void protobuf_AssignDesc_game_5fchat_2eproto();
@@ -828,6 +856,17 @@ class TalkPlayerRequest : public ::google::protobuf::Message {
   inline ::google::protobuf::int32 flag() const;
   inline void set_flag(::google::protobuf::int32 value);
   
+  // optional string data = 4;
+  inline bool has_data() const;
+  inline void clear_data();
+  static const int kDataFieldNumber = 4;
+  inline const ::std::string& data() const;
+  inline void set_data(const ::std::string& value);
+  inline void set_data(const char* value);
+  inline void set_data(const char* value, size_t size);
+  inline ::std::string* mutable_data();
+  inline ::std::string* release_data();
+  
   // @@protoc_insertion_point(class_scope:protocols.common.TalkPlayerRequest)
  private:
   inline void set_has_dst_guid();
@@ -836,15 +875,18 @@ class TalkPlayerRequest : public ::google::protobuf::Message {
   inline void clear_has_content();
   inline void set_has_flag();
   inline void clear_has_flag();
+  inline void set_has_data();
+  inline void clear_has_data();
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
   ::google::protobuf::int64 dst_guid_;
   ::std::string* content_;
+  ::std::string* data_;
   ::google::protobuf::int32 flag_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(3 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(4 + 31) / 32];
   
   friend void  protobuf_AddDesc_game_5fchat_2eproto();
   friend void protobuf_AssignDesc_game_5fchat_2eproto();
@@ -1048,6 +1090,17 @@ class TalkPlayerNotify : public ::google::protobuf::Message {
   inline ::google::protobuf::int32 vip_level() const;
   inline void set_vip_level(::google::protobuf::int32 value);
   
+  // optional string data = 8;
+  inline bool has_data() const;
+  inline void clear_data();
+  static const int kDataFieldNumber = 8;
+  inline const ::std::string& data() const;
+  inline void set_data(const ::std::string& value);
+  inline void set_data(const char* value);
+  inline void set_data(const char* value, size_t size);
+  inline ::std::string* mutable_data();
+  inline ::std::string* release_data();
+  
   // @@protoc_insertion_point(class_scope:protocols.common.TalkPlayerNotify)
  private:
   inline void set_has_src_guid();
@@ -1064,6 +1117,8 @@ class TalkPlayerNotify : public ::google::protobuf::Message {
   inline void clear_has_src_server_id();
   inline void set_has_vip_level();
   inline void clear_has_vip_level();
+  inline void set_has_data();
+  inline void clear_has_data();
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
@@ -1074,9 +1129,10 @@ class TalkPlayerNotify : public ::google::protobuf::Message {
   int gender_;
   ::google::protobuf::int32 src_server_id_;
   ::google::protobuf::int32 vip_level_;
+  ::std::string* data_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(7 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(8 + 31) / 32];
   
   friend void  protobuf_AddDesc_game_5fchat_2eproto();
   friend void protobuf_AssignDesc_game_5fchat_2eproto();
@@ -1563,6 +1619,64 @@ inline void TalkChannelRequest::set_flag(::google::protobuf::int32 value) {
   flag_ = value;
 }
 
+// optional string data = 4;
+inline bool TalkChannelRequest::has_data() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void TalkChannelRequest::set_has_data() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void TalkChannelRequest::clear_has_data() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void TalkChannelRequest::clear_data() {
+  if (data_ != &::google::protobuf::internal::kEmptyString) {
+    data_->clear();
+  }
+  clear_has_data();
+}
+inline const ::std::string& TalkChannelRequest::data() const {
+  return *data_;
+}
+inline void TalkChannelRequest::set_data(const ::std::string& value) {
+  set_has_data();
+  if (data_ == &::google::protobuf::internal::kEmptyString) {
+    data_ = new ::std::string;
+  }
+  data_->assign(value);
+}
+inline void TalkChannelRequest::set_data(const char* value) {
+  set_has_data();
+  if (data_ == &::google::protobuf::internal::kEmptyString) {
+    data_ = new ::std::string;
+  }
+  data_->assign(value);
+}
+inline void TalkChannelRequest::set_data(const char* value, size_t size) {
+  set_has_data();
+  if (data_ == &::google::protobuf::internal::kEmptyString) {
+    data_ = new ::std::string;
+  }
+  data_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* TalkChannelRequest::mutable_data() {
+  set_has_data();
+  if (data_ == &::google::protobuf::internal::kEmptyString) {
+    data_ = new ::std::string;
+  }
+  return data_;
+}
+inline ::std::string* TalkChannelRequest::release_data() {
+  clear_has_data();
+  if (data_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = data_;
+    data_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+
 // -------------------------------------------------------------------
 
 // TalkChannelResponse
@@ -1843,6 +1957,64 @@ inline void TalkChannelNotify::set_vip_level(::google::protobuf::int32 value) {
   vip_level_ = value;
 }
 
+// optional string data = 9;
+inline bool TalkChannelNotify::has_data() const {
+  return (_has_bits_[0] & 0x00000100u) != 0;
+}
+inline void TalkChannelNotify::set_has_data() {
+  _has_bits_[0] |= 0x00000100u;
+}
+inline void TalkChannelNotify::clear_has_data() {
+  _has_bits_[0] &= ~0x00000100u;
+}
+inline void TalkChannelNotify::clear_data() {
+  if (data_ != &::google::protobuf::internal::kEmptyString) {
+    data_->clear();
+  }
+  clear_has_data();
+}
+inline const ::std::string& TalkChannelNotify::data() const {
+  return *data_;
+}
+inline void TalkChannelNotify::set_data(const ::std::string& value) {
+  set_has_data();
+  if (data_ == &::google::protobuf::internal::kEmptyString) {
+    data_ = new ::std::string;
+  }
+  data_->assign(value);
+}
+inline void TalkChannelNotify::set_data(const char* value) {
+  set_has_data();
+  if (data_ == &::google::protobuf::internal::kEmptyString) {
+    data_ = new ::std::string;
+  }
+  data_->assign(value);
+}
+inline void TalkChannelNotify::set_data(const char* value, size_t size) {
+  set_has_data();
+  if (data_ == &::google::protobuf::internal::kEmptyString) {
+    data_ = new ::std::string;
+  }
+  data_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* TalkChannelNotify::mutable_data() {
+  set_has_data();
+  if (data_ == &::google::protobuf::internal::kEmptyString) {
+    data_ = new ::std::string;
+  }
+  return data_;
+}
+inline ::std::string* TalkChannelNotify::release_data() {
+  clear_has_data();
+  if (data_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = data_;
+    data_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+
 // -------------------------------------------------------------------
 
 // TalkPlayerRequest
@@ -1947,6 +2119,64 @@ inline ::google::protobuf::int32 TalkPlayerRequest::flag() const {
 inline void TalkPlayerRequest::set_flag(::google::protobuf::int32 value) {
   set_has_flag();
   flag_ = value;
+}
+
+// optional string data = 4;
+inline bool TalkPlayerRequest::has_data() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void TalkPlayerRequest::set_has_data() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void TalkPlayerRequest::clear_has_data() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void TalkPlayerRequest::clear_data() {
+  if (data_ != &::google::protobuf::internal::kEmptyString) {
+    data_->clear();
+  }
+  clear_has_data();
+}
+inline const ::std::string& TalkPlayerRequest::data() const {
+  return *data_;
+}
+inline void TalkPlayerRequest::set_data(const ::std::string& value) {
+  set_has_data();
+  if (data_ == &::google::protobuf::internal::kEmptyString) {
+    data_ = new ::std::string;
+  }
+  data_->assign(value);
+}
+inline void TalkPlayerRequest::set_data(const char* value) {
+  set_has_data();
+  if (data_ == &::google::protobuf::internal::kEmptyString) {
+    data_ = new ::std::string;
+  }
+  data_->assign(value);
+}
+inline void TalkPlayerRequest::set_data(const char* value, size_t size) {
+  set_has_data();
+  if (data_ == &::google::protobuf::internal::kEmptyString) {
+    data_ = new ::std::string;
+  }
+  data_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* TalkPlayerRequest::mutable_data() {
+  set_has_data();
+  if (data_ == &::google::protobuf::internal::kEmptyString) {
+    data_ = new ::std::string;
+  }
+  return data_;
+}
+inline ::std::string* TalkPlayerRequest::release_data() {
+  clear_has_data();
+  if (data_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = data_;
+    data_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
 }
 
 // -------------------------------------------------------------------
@@ -2204,6 +2434,64 @@ inline ::google::protobuf::int32 TalkPlayerNotify::vip_level() const {
 inline void TalkPlayerNotify::set_vip_level(::google::protobuf::int32 value) {
   set_has_vip_level();
   vip_level_ = value;
+}
+
+// optional string data = 8;
+inline bool TalkPlayerNotify::has_data() const {
+  return (_has_bits_[0] & 0x00000080u) != 0;
+}
+inline void TalkPlayerNotify::set_has_data() {
+  _has_bits_[0] |= 0x00000080u;
+}
+inline void TalkPlayerNotify::clear_has_data() {
+  _has_bits_[0] &= ~0x00000080u;
+}
+inline void TalkPlayerNotify::clear_data() {
+  if (data_ != &::google::protobuf::internal::kEmptyString) {
+    data_->clear();
+  }
+  clear_has_data();
+}
+inline const ::std::string& TalkPlayerNotify::data() const {
+  return *data_;
+}
+inline void TalkPlayerNotify::set_data(const ::std::string& value) {
+  set_has_data();
+  if (data_ == &::google::protobuf::internal::kEmptyString) {
+    data_ = new ::std::string;
+  }
+  data_->assign(value);
+}
+inline void TalkPlayerNotify::set_data(const char* value) {
+  set_has_data();
+  if (data_ == &::google::protobuf::internal::kEmptyString) {
+    data_ = new ::std::string;
+  }
+  data_->assign(value);
+}
+inline void TalkPlayerNotify::set_data(const char* value, size_t size) {
+  set_has_data();
+  if (data_ == &::google::protobuf::internal::kEmptyString) {
+    data_ = new ::std::string;
+  }
+  data_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* TalkPlayerNotify::mutable_data() {
+  set_has_data();
+  if (data_ == &::google::protobuf::internal::kEmptyString) {
+    data_ = new ::std::string;
+  }
+  return data_;
+}
+inline ::std::string* TalkPlayerNotify::release_data() {
+  clear_has_data();
+  if (data_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = data_;
+    data_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
 }
 
 // -------------------------------------------------------------------

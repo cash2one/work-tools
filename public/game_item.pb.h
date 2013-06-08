@@ -62,7 +62,44 @@ class OpenDepotRequest;
 class OpenDepotResponse;
 class ExpandStorageRequest;
 class ExpandStorageResponse;
+class BuyVipRequest;
+class BuyVipResponse;
+class WingSpiritSystemRequest;
+class WingSpiritSystemResponse;
 
+enum WingSpiritRequestType {
+  wing_spirit_get_wing_list = 0,
+  wing_spirit_get_spirit_pool = 4,
+  wing_spirit_get_generator_list = 5,
+  wing_spirit_get_spirit_bag = 8,
+  wing_spirit_get_spirit_fragments = 12,
+  wing_spirit_enable_generator_l4 = 6,
+  wing_spirit_gen_wing_spirit = 1,
+  wing_spirit_get_wing_spirit = 2,
+  wing_spirit_sell_wing_spirit = 3,
+  wing_spirit_merge_spirit = 7,
+  wing_spirit_enable_bag_slot = 9,
+  wing_spirit_equip_spirit = 10,
+  wing_spirit_unequip_spirit = 11,
+  wing_spirit_exchange_fragments = 13,
+  wing_spirit_magic_leaf_num = 14,
+  wing_spirit_move_spirit_in_bag = 15
+};
+bool WingSpiritRequestType_IsValid(int value);
+const WingSpiritRequestType WingSpiritRequestType_MIN = wing_spirit_get_wing_list;
+const WingSpiritRequestType WingSpiritRequestType_MAX = wing_spirit_move_spirit_in_bag;
+const int WingSpiritRequestType_ARRAYSIZE = WingSpiritRequestType_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* WingSpiritRequestType_descriptor();
+inline const ::std::string& WingSpiritRequestType_Name(WingSpiritRequestType value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    WingSpiritRequestType_descriptor(), value);
+}
+inline bool WingSpiritRequestType_Parse(
+    const ::std::string& name, WingSpiritRequestType* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<WingSpiritRequestType>(
+    WingSpiritRequestType_descriptor(), name, value);
+}
 // ===================================================================
 
 class BuyItemRequest : public ::google::protobuf::Message {
@@ -2649,17 +2686,27 @@ class ExpandStorageRequest : public ::google::protobuf::Message {
   inline ::google::protobuf::int32 pos_type() const;
   inline void set_pos_type(::google::protobuf::int32 value);
   
+  // optional int32 count = 2 [default = 1];
+  inline bool has_count() const;
+  inline void clear_count();
+  static const int kCountFieldNumber = 2;
+  inline ::google::protobuf::int32 count() const;
+  inline void set_count(::google::protobuf::int32 value);
+  
   // @@protoc_insertion_point(class_scope:protocols.common.ExpandStorageRequest)
  private:
   inline void set_has_pos_type();
   inline void clear_has_pos_type();
+  inline void set_has_count();
+  inline void clear_has_count();
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
   ::google::protobuf::int32 pos_type_;
+  ::google::protobuf::int32 count_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
   
   friend void  protobuf_AddDesc_game_5fitem_2eproto();
   friend void protobuf_AssignDesc_game_5fitem_2eproto();
@@ -2759,6 +2806,504 @@ class ExpandStorageResponse : public ::google::protobuf::Message {
   
   void InitAsDefaultInstance();
   static ExpandStorageResponse* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class BuyVipRequest : public ::google::protobuf::Message {
+ public:
+  BuyVipRequest();
+  virtual ~BuyVipRequest();
+  
+  BuyVipRequest(const BuyVipRequest& from);
+  
+  inline BuyVipRequest& operator=(const BuyVipRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const BuyVipRequest& default_instance();
+  
+  void Swap(BuyVipRequest* other);
+  
+  // implements Message ----------------------------------------------
+  
+  BuyVipRequest* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const BuyVipRequest& from);
+  void MergeFrom(const BuyVipRequest& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required int32 tid = 1;
+  inline bool has_tid() const;
+  inline void clear_tid();
+  static const int kTidFieldNumber = 1;
+  inline ::google::protobuf::int32 tid() const;
+  inline void set_tid(::google::protobuf::int32 value);
+  
+  // optional int32 vip_level = 2 [default = 0];
+  inline bool has_vip_level() const;
+  inline void clear_vip_level();
+  static const int kVipLevelFieldNumber = 2;
+  inline ::google::protobuf::int32 vip_level() const;
+  inline void set_vip_level(::google::protobuf::int32 value);
+  
+  // @@protoc_insertion_point(class_scope:protocols.common.BuyVipRequest)
+ private:
+  inline void set_has_tid();
+  inline void clear_has_tid();
+  inline void set_has_vip_level();
+  inline void clear_has_vip_level();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::int32 tid_;
+  ::google::protobuf::int32 vip_level_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_game_5fitem_2eproto();
+  friend void protobuf_AssignDesc_game_5fitem_2eproto();
+  friend void protobuf_ShutdownFile_game_5fitem_2eproto();
+  
+  void InitAsDefaultInstance();
+  static BuyVipRequest* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class BuyVipResponse : public ::google::protobuf::Message {
+ public:
+  BuyVipResponse();
+  virtual ~BuyVipResponse();
+  
+  BuyVipResponse(const BuyVipResponse& from);
+  
+  inline BuyVipResponse& operator=(const BuyVipResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const BuyVipResponse& default_instance();
+  
+  void Swap(BuyVipResponse* other);
+  
+  // implements Message ----------------------------------------------
+  
+  BuyVipResponse* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const BuyVipResponse& from);
+  void MergeFrom(const BuyVipResponse& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required int32 error_code = 1;
+  inline bool has_error_code() const;
+  inline void clear_error_code();
+  static const int kErrorCodeFieldNumber = 1;
+  inline ::google::protobuf::int32 error_code() const;
+  inline void set_error_code(::google::protobuf::int32 value);
+  
+  // optional int32 price_type = 2;
+  inline bool has_price_type() const;
+  inline void clear_price_type();
+  static const int kPriceTypeFieldNumber = 2;
+  inline ::google::protobuf::int32 price_type() const;
+  inline void set_price_type(::google::protobuf::int32 value);
+  
+  // optional int32 price_value = 3;
+  inline bool has_price_value() const;
+  inline void clear_price_value();
+  static const int kPriceValueFieldNumber = 3;
+  inline ::google::protobuf::int32 price_value() const;
+  inline void set_price_value(::google::protobuf::int32 value);
+  
+  // @@protoc_insertion_point(class_scope:protocols.common.BuyVipResponse)
+ private:
+  inline void set_has_error_code();
+  inline void clear_has_error_code();
+  inline void set_has_price_type();
+  inline void clear_has_price_type();
+  inline void set_has_price_value();
+  inline void clear_has_price_value();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::int32 error_code_;
+  ::google::protobuf::int32 price_type_;
+  ::google::protobuf::int32 price_value_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(3 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_game_5fitem_2eproto();
+  friend void protobuf_AssignDesc_game_5fitem_2eproto();
+  friend void protobuf_ShutdownFile_game_5fitem_2eproto();
+  
+  void InitAsDefaultInstance();
+  static BuyVipResponse* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class WingSpiritSystemRequest : public ::google::protobuf::Message {
+ public:
+  WingSpiritSystemRequest();
+  virtual ~WingSpiritSystemRequest();
+  
+  WingSpiritSystemRequest(const WingSpiritSystemRequest& from);
+  
+  inline WingSpiritSystemRequest& operator=(const WingSpiritSystemRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const WingSpiritSystemRequest& default_instance();
+  
+  void Swap(WingSpiritSystemRequest* other);
+  
+  // implements Message ----------------------------------------------
+  
+  WingSpiritSystemRequest* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const WingSpiritSystemRequest& from);
+  void MergeFrom(const WingSpiritSystemRequest& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required .protocols.common.WingSpiritRequestType type = 1;
+  inline bool has_type() const;
+  inline void clear_type();
+  static const int kTypeFieldNumber = 1;
+  inline protocols::common::WingSpiritRequestType type() const;
+  inline void set_type(protocols::common::WingSpiritRequestType value);
+  
+  // optional int32 generator_level = 2;
+  inline bool has_generator_level() const;
+  inline void clear_generator_level();
+  static const int kGeneratorLevelFieldNumber = 2;
+  inline ::google::protobuf::int32 generator_level() const;
+  inline void set_generator_level(::google::protobuf::int32 value);
+  
+  // optional int32 spirit_index = 3;
+  inline bool has_spirit_index() const;
+  inline void clear_spirit_index();
+  static const int kSpiritIndexFieldNumber = 3;
+  inline ::google::protobuf::int32 spirit_index() const;
+  inline void set_spirit_index(::google::protobuf::int32 value);
+  
+  // optional int32 source_spirit_index = 4;
+  inline bool has_source_spirit_index() const;
+  inline void clear_source_spirit_index();
+  static const int kSourceSpiritIndexFieldNumber = 4;
+  inline ::google::protobuf::int32 source_spirit_index() const;
+  inline void set_source_spirit_index(::google::protobuf::int32 value);
+  
+  // optional int32 slot_num = 5;
+  inline bool has_slot_num() const;
+  inline void clear_slot_num();
+  static const int kSlotNumFieldNumber = 5;
+  inline ::google::protobuf::int32 slot_num() const;
+  inline void set_slot_num(::google::protobuf::int32 value);
+  
+  // optional int64 wing_item_id = 6;
+  inline bool has_wing_item_id() const;
+  inline void clear_wing_item_id();
+  static const int kWingItemIdFieldNumber = 6;
+  inline ::google::protobuf::int64 wing_item_id() const;
+  inline void set_wing_item_id(::google::protobuf::int64 value);
+  
+  // optional int32 exchange_spirit_id = 7;
+  inline bool has_exchange_spirit_id() const;
+  inline void clear_exchange_spirit_id();
+  static const int kExchangeSpiritIdFieldNumber = 7;
+  inline ::google::protobuf::int32 exchange_spirit_id() const;
+  inline void set_exchange_spirit_id(::google::protobuf::int32 value);
+  
+  // @@protoc_insertion_point(class_scope:protocols.common.WingSpiritSystemRequest)
+ private:
+  inline void set_has_type();
+  inline void clear_has_type();
+  inline void set_has_generator_level();
+  inline void clear_has_generator_level();
+  inline void set_has_spirit_index();
+  inline void clear_has_spirit_index();
+  inline void set_has_source_spirit_index();
+  inline void clear_has_source_spirit_index();
+  inline void set_has_slot_num();
+  inline void clear_has_slot_num();
+  inline void set_has_wing_item_id();
+  inline void clear_has_wing_item_id();
+  inline void set_has_exchange_spirit_id();
+  inline void clear_has_exchange_spirit_id();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  int type_;
+  ::google::protobuf::int32 generator_level_;
+  ::google::protobuf::int32 spirit_index_;
+  ::google::protobuf::int32 source_spirit_index_;
+  ::google::protobuf::int64 wing_item_id_;
+  ::google::protobuf::int32 slot_num_;
+  ::google::protobuf::int32 exchange_spirit_id_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(7 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_game_5fitem_2eproto();
+  friend void protobuf_AssignDesc_game_5fitem_2eproto();
+  friend void protobuf_ShutdownFile_game_5fitem_2eproto();
+  
+  void InitAsDefaultInstance();
+  static WingSpiritSystemRequest* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class WingSpiritSystemResponse : public ::google::protobuf::Message {
+ public:
+  WingSpiritSystemResponse();
+  virtual ~WingSpiritSystemResponse();
+  
+  WingSpiritSystemResponse(const WingSpiritSystemResponse& from);
+  
+  inline WingSpiritSystemResponse& operator=(const WingSpiritSystemResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const WingSpiritSystemResponse& default_instance();
+  
+  void Swap(WingSpiritSystemResponse* other);
+  
+  // implements Message ----------------------------------------------
+  
+  WingSpiritSystemResponse* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const WingSpiritSystemResponse& from);
+  void MergeFrom(const WingSpiritSystemResponse& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required int32 error_code = 1;
+  inline bool has_error_code() const;
+  inline void clear_error_code();
+  static const int kErrorCodeFieldNumber = 1;
+  inline ::google::protobuf::int32 error_code() const;
+  inline void set_error_code(::google::protobuf::int32 value);
+  
+  // repeated .protocols.common.WingItemInfo wings = 2;
+  inline int wings_size() const;
+  inline void clear_wings();
+  static const int kWingsFieldNumber = 2;
+  inline const ::protocols::common::WingItemInfo& wings(int index) const;
+  inline ::protocols::common::WingItemInfo* mutable_wings(int index);
+  inline ::protocols::common::WingItemInfo* add_wings();
+  inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::WingItemInfo >&
+      wings() const;
+  inline ::google::protobuf::RepeatedPtrField< ::protocols::common::WingItemInfo >*
+      mutable_wings();
+  
+  // repeated .protocols.common.WingSpiritInfo spirits = 3;
+  inline int spirits_size() const;
+  inline void clear_spirits();
+  static const int kSpiritsFieldNumber = 3;
+  inline const ::protocols::common::WingSpiritInfo& spirits(int index) const;
+  inline ::protocols::common::WingSpiritInfo* mutable_spirits(int index);
+  inline ::protocols::common::WingSpiritInfo* add_spirits();
+  inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::WingSpiritInfo >&
+      spirits() const;
+  inline ::google::protobuf::RepeatedPtrField< ::protocols::common::WingSpiritInfo >*
+      mutable_spirits();
+  
+  // repeated .protocols.common.SpiritGeneratorInfo generators = 4;
+  inline int generators_size() const;
+  inline void clear_generators();
+  static const int kGeneratorsFieldNumber = 4;
+  inline const ::protocols::common::SpiritGeneratorInfo& generators(int index) const;
+  inline ::protocols::common::SpiritGeneratorInfo* mutable_generators(int index);
+  inline ::protocols::common::SpiritGeneratorInfo* add_generators();
+  inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::SpiritGeneratorInfo >&
+      generators() const;
+  inline ::google::protobuf::RepeatedPtrField< ::protocols::common::SpiritGeneratorInfo >*
+      mutable_generators();
+  
+  // optional .protocols.common.WingSpiritBag bag = 5;
+  inline bool has_bag() const;
+  inline void clear_bag();
+  static const int kBagFieldNumber = 5;
+  inline const ::protocols::common::WingSpiritBag& bag() const;
+  inline ::protocols::common::WingSpiritBag* mutable_bag();
+  inline ::protocols::common::WingSpiritBag* release_bag();
+  
+  // optional int64 fragement_num = 6;
+  inline bool has_fragement_num() const;
+  inline void clear_fragement_num();
+  static const int kFragementNumFieldNumber = 6;
+  inline ::google::protobuf::int64 fragement_num() const;
+  inline void set_fragement_num(::google::protobuf::int64 value);
+  
+  // optional int64 point = 7;
+  inline bool has_point() const;
+  inline void clear_point();
+  static const int kPointFieldNumber = 7;
+  inline ::google::protobuf::int64 point() const;
+  inline void set_point(::google::protobuf::int64 value);
+  
+  // optional int64 magic_leaf_num = 8;
+  inline bool has_magic_leaf_num() const;
+  inline void clear_magic_leaf_num();
+  static const int kMagicLeafNumFieldNumber = 8;
+  inline ::google::protobuf::int64 magic_leaf_num() const;
+  inline void set_magic_leaf_num(::google::protobuf::int64 value);
+  
+  // @@protoc_insertion_point(class_scope:protocols.common.WingSpiritSystemResponse)
+ private:
+  inline void set_has_error_code();
+  inline void clear_has_error_code();
+  inline void set_has_bag();
+  inline void clear_has_bag();
+  inline void set_has_fragement_num();
+  inline void clear_has_fragement_num();
+  inline void set_has_point();
+  inline void clear_has_point();
+  inline void set_has_magic_leaf_num();
+  inline void clear_has_magic_leaf_num();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::RepeatedPtrField< ::protocols::common::WingItemInfo > wings_;
+  ::google::protobuf::RepeatedPtrField< ::protocols::common::WingSpiritInfo > spirits_;
+  ::google::protobuf::RepeatedPtrField< ::protocols::common::SpiritGeneratorInfo > generators_;
+  ::protocols::common::WingSpiritBag* bag_;
+  ::google::protobuf::int64 fragement_num_;
+  ::google::protobuf::int64 point_;
+  ::google::protobuf::int64 magic_leaf_num_;
+  ::google::protobuf::int32 error_code_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(8 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_game_5fitem_2eproto();
+  friend void protobuf_AssignDesc_game_5fitem_2eproto();
+  friend void protobuf_ShutdownFile_game_5fitem_2eproto();
+  
+  void InitAsDefaultInstance();
+  static WingSpiritSystemResponse* default_instance_;
 };
 // ===================================================================
 
@@ -4318,6 +4863,28 @@ inline void ExpandStorageRequest::set_pos_type(::google::protobuf::int32 value) 
   pos_type_ = value;
 }
 
+// optional int32 count = 2 [default = 1];
+inline bool ExpandStorageRequest::has_count() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void ExpandStorageRequest::set_has_count() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void ExpandStorageRequest::clear_has_count() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void ExpandStorageRequest::clear_count() {
+  count_ = 1;
+  clear_has_count();
+}
+inline ::google::protobuf::int32 ExpandStorageRequest::count() const {
+  return count_;
+}
+inline void ExpandStorageRequest::set_count(::google::protobuf::int32 value) {
+  set_has_count();
+  count_ = value;
+}
+
 // -------------------------------------------------------------------
 
 // ExpandStorageResponse
@@ -4366,6 +4933,479 @@ inline void ExpandStorageResponse::set_max_size(::google::protobuf::int32 value)
   max_size_ = value;
 }
 
+// -------------------------------------------------------------------
+
+// BuyVipRequest
+
+// required int32 tid = 1;
+inline bool BuyVipRequest::has_tid() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void BuyVipRequest::set_has_tid() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void BuyVipRequest::clear_has_tid() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void BuyVipRequest::clear_tid() {
+  tid_ = 0;
+  clear_has_tid();
+}
+inline ::google::protobuf::int32 BuyVipRequest::tid() const {
+  return tid_;
+}
+inline void BuyVipRequest::set_tid(::google::protobuf::int32 value) {
+  set_has_tid();
+  tid_ = value;
+}
+
+// optional int32 vip_level = 2 [default = 0];
+inline bool BuyVipRequest::has_vip_level() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void BuyVipRequest::set_has_vip_level() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void BuyVipRequest::clear_has_vip_level() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void BuyVipRequest::clear_vip_level() {
+  vip_level_ = 0;
+  clear_has_vip_level();
+}
+inline ::google::protobuf::int32 BuyVipRequest::vip_level() const {
+  return vip_level_;
+}
+inline void BuyVipRequest::set_vip_level(::google::protobuf::int32 value) {
+  set_has_vip_level();
+  vip_level_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// BuyVipResponse
+
+// required int32 error_code = 1;
+inline bool BuyVipResponse::has_error_code() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void BuyVipResponse::set_has_error_code() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void BuyVipResponse::clear_has_error_code() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void BuyVipResponse::clear_error_code() {
+  error_code_ = 0;
+  clear_has_error_code();
+}
+inline ::google::protobuf::int32 BuyVipResponse::error_code() const {
+  return error_code_;
+}
+inline void BuyVipResponse::set_error_code(::google::protobuf::int32 value) {
+  set_has_error_code();
+  error_code_ = value;
+}
+
+// optional int32 price_type = 2;
+inline bool BuyVipResponse::has_price_type() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void BuyVipResponse::set_has_price_type() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void BuyVipResponse::clear_has_price_type() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void BuyVipResponse::clear_price_type() {
+  price_type_ = 0;
+  clear_has_price_type();
+}
+inline ::google::protobuf::int32 BuyVipResponse::price_type() const {
+  return price_type_;
+}
+inline void BuyVipResponse::set_price_type(::google::protobuf::int32 value) {
+  set_has_price_type();
+  price_type_ = value;
+}
+
+// optional int32 price_value = 3;
+inline bool BuyVipResponse::has_price_value() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void BuyVipResponse::set_has_price_value() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void BuyVipResponse::clear_has_price_value() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void BuyVipResponse::clear_price_value() {
+  price_value_ = 0;
+  clear_has_price_value();
+}
+inline ::google::protobuf::int32 BuyVipResponse::price_value() const {
+  return price_value_;
+}
+inline void BuyVipResponse::set_price_value(::google::protobuf::int32 value) {
+  set_has_price_value();
+  price_value_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// WingSpiritSystemRequest
+
+// required .protocols.common.WingSpiritRequestType type = 1;
+inline bool WingSpiritSystemRequest::has_type() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void WingSpiritSystemRequest::set_has_type() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void WingSpiritSystemRequest::clear_has_type() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void WingSpiritSystemRequest::clear_type() {
+  type_ = 0;
+  clear_has_type();
+}
+inline protocols::common::WingSpiritRequestType WingSpiritSystemRequest::type() const {
+  return static_cast< protocols::common::WingSpiritRequestType >(type_);
+}
+inline void WingSpiritSystemRequest::set_type(protocols::common::WingSpiritRequestType value) {
+  GOOGLE_DCHECK(protocols::common::WingSpiritRequestType_IsValid(value));
+  set_has_type();
+  type_ = value;
+}
+
+// optional int32 generator_level = 2;
+inline bool WingSpiritSystemRequest::has_generator_level() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void WingSpiritSystemRequest::set_has_generator_level() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void WingSpiritSystemRequest::clear_has_generator_level() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void WingSpiritSystemRequest::clear_generator_level() {
+  generator_level_ = 0;
+  clear_has_generator_level();
+}
+inline ::google::protobuf::int32 WingSpiritSystemRequest::generator_level() const {
+  return generator_level_;
+}
+inline void WingSpiritSystemRequest::set_generator_level(::google::protobuf::int32 value) {
+  set_has_generator_level();
+  generator_level_ = value;
+}
+
+// optional int32 spirit_index = 3;
+inline bool WingSpiritSystemRequest::has_spirit_index() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void WingSpiritSystemRequest::set_has_spirit_index() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void WingSpiritSystemRequest::clear_has_spirit_index() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void WingSpiritSystemRequest::clear_spirit_index() {
+  spirit_index_ = 0;
+  clear_has_spirit_index();
+}
+inline ::google::protobuf::int32 WingSpiritSystemRequest::spirit_index() const {
+  return spirit_index_;
+}
+inline void WingSpiritSystemRequest::set_spirit_index(::google::protobuf::int32 value) {
+  set_has_spirit_index();
+  spirit_index_ = value;
+}
+
+// optional int32 source_spirit_index = 4;
+inline bool WingSpiritSystemRequest::has_source_spirit_index() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void WingSpiritSystemRequest::set_has_source_spirit_index() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void WingSpiritSystemRequest::clear_has_source_spirit_index() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void WingSpiritSystemRequest::clear_source_spirit_index() {
+  source_spirit_index_ = 0;
+  clear_has_source_spirit_index();
+}
+inline ::google::protobuf::int32 WingSpiritSystemRequest::source_spirit_index() const {
+  return source_spirit_index_;
+}
+inline void WingSpiritSystemRequest::set_source_spirit_index(::google::protobuf::int32 value) {
+  set_has_source_spirit_index();
+  source_spirit_index_ = value;
+}
+
+// optional int32 slot_num = 5;
+inline bool WingSpiritSystemRequest::has_slot_num() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void WingSpiritSystemRequest::set_has_slot_num() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void WingSpiritSystemRequest::clear_has_slot_num() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void WingSpiritSystemRequest::clear_slot_num() {
+  slot_num_ = 0;
+  clear_has_slot_num();
+}
+inline ::google::protobuf::int32 WingSpiritSystemRequest::slot_num() const {
+  return slot_num_;
+}
+inline void WingSpiritSystemRequest::set_slot_num(::google::protobuf::int32 value) {
+  set_has_slot_num();
+  slot_num_ = value;
+}
+
+// optional int64 wing_item_id = 6;
+inline bool WingSpiritSystemRequest::has_wing_item_id() const {
+  return (_has_bits_[0] & 0x00000020u) != 0;
+}
+inline void WingSpiritSystemRequest::set_has_wing_item_id() {
+  _has_bits_[0] |= 0x00000020u;
+}
+inline void WingSpiritSystemRequest::clear_has_wing_item_id() {
+  _has_bits_[0] &= ~0x00000020u;
+}
+inline void WingSpiritSystemRequest::clear_wing_item_id() {
+  wing_item_id_ = GOOGLE_LONGLONG(0);
+  clear_has_wing_item_id();
+}
+inline ::google::protobuf::int64 WingSpiritSystemRequest::wing_item_id() const {
+  return wing_item_id_;
+}
+inline void WingSpiritSystemRequest::set_wing_item_id(::google::protobuf::int64 value) {
+  set_has_wing_item_id();
+  wing_item_id_ = value;
+}
+
+// optional int32 exchange_spirit_id = 7;
+inline bool WingSpiritSystemRequest::has_exchange_spirit_id() const {
+  return (_has_bits_[0] & 0x00000040u) != 0;
+}
+inline void WingSpiritSystemRequest::set_has_exchange_spirit_id() {
+  _has_bits_[0] |= 0x00000040u;
+}
+inline void WingSpiritSystemRequest::clear_has_exchange_spirit_id() {
+  _has_bits_[0] &= ~0x00000040u;
+}
+inline void WingSpiritSystemRequest::clear_exchange_spirit_id() {
+  exchange_spirit_id_ = 0;
+  clear_has_exchange_spirit_id();
+}
+inline ::google::protobuf::int32 WingSpiritSystemRequest::exchange_spirit_id() const {
+  return exchange_spirit_id_;
+}
+inline void WingSpiritSystemRequest::set_exchange_spirit_id(::google::protobuf::int32 value) {
+  set_has_exchange_spirit_id();
+  exchange_spirit_id_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// WingSpiritSystemResponse
+
+// required int32 error_code = 1;
+inline bool WingSpiritSystemResponse::has_error_code() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void WingSpiritSystemResponse::set_has_error_code() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void WingSpiritSystemResponse::clear_has_error_code() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void WingSpiritSystemResponse::clear_error_code() {
+  error_code_ = 0;
+  clear_has_error_code();
+}
+inline ::google::protobuf::int32 WingSpiritSystemResponse::error_code() const {
+  return error_code_;
+}
+inline void WingSpiritSystemResponse::set_error_code(::google::protobuf::int32 value) {
+  set_has_error_code();
+  error_code_ = value;
+}
+
+// repeated .protocols.common.WingItemInfo wings = 2;
+inline int WingSpiritSystemResponse::wings_size() const {
+  return wings_.size();
+}
+inline void WingSpiritSystemResponse::clear_wings() {
+  wings_.Clear();
+}
+inline const ::protocols::common::WingItemInfo& WingSpiritSystemResponse::wings(int index) const {
+  return wings_.Get(index);
+}
+inline ::protocols::common::WingItemInfo* WingSpiritSystemResponse::mutable_wings(int index) {
+  return wings_.Mutable(index);
+}
+inline ::protocols::common::WingItemInfo* WingSpiritSystemResponse::add_wings() {
+  return wings_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::WingItemInfo >&
+WingSpiritSystemResponse::wings() const {
+  return wings_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::protocols::common::WingItemInfo >*
+WingSpiritSystemResponse::mutable_wings() {
+  return &wings_;
+}
+
+// repeated .protocols.common.WingSpiritInfo spirits = 3;
+inline int WingSpiritSystemResponse::spirits_size() const {
+  return spirits_.size();
+}
+inline void WingSpiritSystemResponse::clear_spirits() {
+  spirits_.Clear();
+}
+inline const ::protocols::common::WingSpiritInfo& WingSpiritSystemResponse::spirits(int index) const {
+  return spirits_.Get(index);
+}
+inline ::protocols::common::WingSpiritInfo* WingSpiritSystemResponse::mutable_spirits(int index) {
+  return spirits_.Mutable(index);
+}
+inline ::protocols::common::WingSpiritInfo* WingSpiritSystemResponse::add_spirits() {
+  return spirits_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::WingSpiritInfo >&
+WingSpiritSystemResponse::spirits() const {
+  return spirits_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::protocols::common::WingSpiritInfo >*
+WingSpiritSystemResponse::mutable_spirits() {
+  return &spirits_;
+}
+
+// repeated .protocols.common.SpiritGeneratorInfo generators = 4;
+inline int WingSpiritSystemResponse::generators_size() const {
+  return generators_.size();
+}
+inline void WingSpiritSystemResponse::clear_generators() {
+  generators_.Clear();
+}
+inline const ::protocols::common::SpiritGeneratorInfo& WingSpiritSystemResponse::generators(int index) const {
+  return generators_.Get(index);
+}
+inline ::protocols::common::SpiritGeneratorInfo* WingSpiritSystemResponse::mutable_generators(int index) {
+  return generators_.Mutable(index);
+}
+inline ::protocols::common::SpiritGeneratorInfo* WingSpiritSystemResponse::add_generators() {
+  return generators_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::SpiritGeneratorInfo >&
+WingSpiritSystemResponse::generators() const {
+  return generators_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::protocols::common::SpiritGeneratorInfo >*
+WingSpiritSystemResponse::mutable_generators() {
+  return &generators_;
+}
+
+// optional .protocols.common.WingSpiritBag bag = 5;
+inline bool WingSpiritSystemResponse::has_bag() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void WingSpiritSystemResponse::set_has_bag() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void WingSpiritSystemResponse::clear_has_bag() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void WingSpiritSystemResponse::clear_bag() {
+  if (bag_ != NULL) bag_->::protocols::common::WingSpiritBag::Clear();
+  clear_has_bag();
+}
+inline const ::protocols::common::WingSpiritBag& WingSpiritSystemResponse::bag() const {
+  return bag_ != NULL ? *bag_ : *default_instance_->bag_;
+}
+inline ::protocols::common::WingSpiritBag* WingSpiritSystemResponse::mutable_bag() {
+  set_has_bag();
+  if (bag_ == NULL) bag_ = new ::protocols::common::WingSpiritBag;
+  return bag_;
+}
+inline ::protocols::common::WingSpiritBag* WingSpiritSystemResponse::release_bag() {
+  clear_has_bag();
+  ::protocols::common::WingSpiritBag* temp = bag_;
+  bag_ = NULL;
+  return temp;
+}
+
+// optional int64 fragement_num = 6;
+inline bool WingSpiritSystemResponse::has_fragement_num() const {
+  return (_has_bits_[0] & 0x00000020u) != 0;
+}
+inline void WingSpiritSystemResponse::set_has_fragement_num() {
+  _has_bits_[0] |= 0x00000020u;
+}
+inline void WingSpiritSystemResponse::clear_has_fragement_num() {
+  _has_bits_[0] &= ~0x00000020u;
+}
+inline void WingSpiritSystemResponse::clear_fragement_num() {
+  fragement_num_ = GOOGLE_LONGLONG(0);
+  clear_has_fragement_num();
+}
+inline ::google::protobuf::int64 WingSpiritSystemResponse::fragement_num() const {
+  return fragement_num_;
+}
+inline void WingSpiritSystemResponse::set_fragement_num(::google::protobuf::int64 value) {
+  set_has_fragement_num();
+  fragement_num_ = value;
+}
+
+// optional int64 point = 7;
+inline bool WingSpiritSystemResponse::has_point() const {
+  return (_has_bits_[0] & 0x00000040u) != 0;
+}
+inline void WingSpiritSystemResponse::set_has_point() {
+  _has_bits_[0] |= 0x00000040u;
+}
+inline void WingSpiritSystemResponse::clear_has_point() {
+  _has_bits_[0] &= ~0x00000040u;
+}
+inline void WingSpiritSystemResponse::clear_point() {
+  point_ = GOOGLE_LONGLONG(0);
+  clear_has_point();
+}
+inline ::google::protobuf::int64 WingSpiritSystemResponse::point() const {
+  return point_;
+}
+inline void WingSpiritSystemResponse::set_point(::google::protobuf::int64 value) {
+  set_has_point();
+  point_ = value;
+}
+
+// optional int64 magic_leaf_num = 8;
+inline bool WingSpiritSystemResponse::has_magic_leaf_num() const {
+  return (_has_bits_[0] & 0x00000080u) != 0;
+}
+inline void WingSpiritSystemResponse::set_has_magic_leaf_num() {
+  _has_bits_[0] |= 0x00000080u;
+}
+inline void WingSpiritSystemResponse::clear_has_magic_leaf_num() {
+  _has_bits_[0] &= ~0x00000080u;
+}
+inline void WingSpiritSystemResponse::clear_magic_leaf_num() {
+  magic_leaf_num_ = GOOGLE_LONGLONG(0);
+  clear_has_magic_leaf_num();
+}
+inline ::google::protobuf::int64 WingSpiritSystemResponse::magic_leaf_num() const {
+  return magic_leaf_num_;
+}
+inline void WingSpiritSystemResponse::set_magic_leaf_num(::google::protobuf::int64 value) {
+  set_has_magic_leaf_num();
+  magic_leaf_num_ = value;
+}
+
 
 // @@protoc_insertion_point(namespace_scope)
 
@@ -4376,6 +5416,10 @@ inline void ExpandStorageResponse::set_max_size(::google::protobuf::int32 value)
 namespace google {
 namespace protobuf {
 
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< protocols::common::WingSpiritRequestType>() {
+  return protocols::common::WingSpiritRequestType_descriptor();
+}
 
 }  // namespace google
 }  // namespace protobuf

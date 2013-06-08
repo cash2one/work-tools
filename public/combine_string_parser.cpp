@@ -10,6 +10,7 @@
  ******************************************************************************/
 #include "combine_string_parser.h"
 #include <sstream>
+#include <stdlib.h>
 
 using namespace std;
 
@@ -37,6 +38,10 @@ void combine_string_parser::parse_string(const std::string& comb_str, bool is_ke
 {
     if (comb_str.size() == 0) return;
     
+	orig_str.clear();
+	item_list.clear();
+	item_map.clear();
+
     orig_str.assign(comb_str);
 
     vector<string>  raw_strings;

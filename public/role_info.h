@@ -284,6 +284,67 @@ public:
     void set_follow_buddy_id(int32_t value) { if(follow_buddy_id!= value){dirty[63] = 1; follow_buddy_id = value;} } ; 
     int sql_follow_buddy_id(char* buf,int size) const{return snprintf(buf,size,"follow_buddy_id='%ld'",(int64_t)follow_buddy_id);}
 
+    int32_t get_total_online_time() const { return total_online_time;} ; 
+    void set_total_online_time(int32_t value) { if(total_online_time!= value){dirty[64] = 1; total_online_time = value;} } ; 
+    int sql_total_online_time(char* buf,int size) const{return snprintf(buf,size,"total_online_time='%ld'",(int64_t)total_online_time);}
+
+    const string& get_learned_guild_skills() const { return learned_guild_skills;} ; 
+    void set_learned_guild_skills(const string& value) { if(learned_guild_skills!= value){dirty[65] = 1; learned_guild_skills.assign(value);} }; 
+    void set_learned_guild_skills(const char* value) { if(strcmp(learned_guild_skills.c_str(),value)!=0) {dirty[65] = 1; learned_guild_skills.assign(value);} }; 
+    int sql_learned_guild_skills(char* buf,int size) const{return snprintf(buf,size,"learned_guild_skills='%s'",learned_guild_skills.c_str());}
+
+    int32_t get_wing_tid() const { return wing_tid;} ; 
+    void set_wing_tid(int32_t value) { if(wing_tid!= value){dirty[66] = 1; wing_tid = value;} } ; 
+    int sql_wing_tid(char* buf,int size) const{return snprintf(buf,size,"wing_tid='%ld'",(int64_t)wing_tid);}
+
+    int32_t get_daily_first_charge_value() const { return daily_first_charge_value;} ; 
+    void set_daily_first_charge_value(int32_t value) { if(daily_first_charge_value!= value){dirty[67] = 1; daily_first_charge_value = value;} } ; 
+    int sql_daily_first_charge_value(char* buf,int size) const{return snprintf(buf,size,"daily_first_charge_value='%ld'",(int64_t)daily_first_charge_value);}
+
+    int32_t get_daily_first_charge_time() const { return daily_first_charge_time;} ; 
+    void set_daily_first_charge_time(int32_t value) { if(daily_first_charge_time!= value){dirty[68] = 1; daily_first_charge_time = value;} } ; 
+    int sql_daily_first_charge_time(char* buf,int size) const{return snprintf(buf,size,"daily_first_charge_time='%ld'",(int64_t)daily_first_charge_time);}
+
+    int16_t get_last_map_id() const { return last_map_id;} ; 
+    void set_last_map_id(int16_t value) { if(last_map_id!= value){dirty[69] = 1; last_map_id = value;} } ; 
+    int sql_last_map_id(char* buf,int size) const{return snprintf(buf,size,"last_map_id='%ld'",(int64_t)last_map_id);}
+
+    int16_t get_last_map_x() const { return last_map_x;} ; 
+    void set_last_map_x(int16_t value) { if(last_map_x!= value){dirty[70] = 1; last_map_x = value;} } ; 
+    int sql_last_map_x(char* buf,int size) const{return snprintf(buf,size,"last_map_x='%ld'",(int64_t)last_map_x);}
+
+    int16_t get_last_map_y() const { return last_map_y;} ; 
+    void set_last_map_y(int16_t value) { if(last_map_y!= value){dirty[71] = 1; last_map_y = value;} } ; 
+    int sql_last_map_y(char* buf,int size) const{return snprintf(buf,size,"last_map_y='%ld'",(int64_t)last_map_y);}
+
+    int32_t get_alien_boss_diamond_buff() const { return alien_boss_diamond_buff;} ; 
+    void set_alien_boss_diamond_buff(int32_t value) { if(alien_boss_diamond_buff!= value){dirty[72] = 1; alien_boss_diamond_buff = value;} } ; 
+    int sql_alien_boss_diamond_buff(char* buf,int size) const{return snprintf(buf,size,"alien_boss_diamond_buff='%ld'",(int64_t)alien_boss_diamond_buff);}
+
+    int32_t get_alien_boss_coin_buff() const { return alien_boss_coin_buff;} ; 
+    void set_alien_boss_coin_buff(int32_t value) { if(alien_boss_coin_buff!= value){dirty[73] = 1; alien_boss_coin_buff = value;} } ; 
+    int sql_alien_boss_coin_buff(char* buf,int size) const{return snprintf(buf,size,"alien_boss_coin_buff='%ld'",(int64_t)alien_boss_coin_buff);}
+
+    int32_t get_killed_time() const { return killed_time;} ; 
+    void set_killed_time(int32_t value) { if(killed_time!= value){dirty[74] = 1; killed_time = value;} } ; 
+    int sql_killed_time(char* buf,int size) const{return snprintf(buf,size,"killed_time='%ld'",(int64_t)killed_time);}
+
+    int32_t get_title() const { return title;} ; 
+    void set_title(int32_t value) { if(title!= value){dirty[75] = 1; title = value;} } ; 
+    int sql_title(char* buf,int size) const{return snprintf(buf,size,"title='%ld'",(int64_t)title);}
+
+    int32_t get_cur_auto_instance_count() const { return cur_auto_instance_count;} ; 
+    void set_cur_auto_instance_count(int32_t value) { if(cur_auto_instance_count!= value){dirty[76] = 1; cur_auto_instance_count = value;} } ; 
+    int sql_cur_auto_instance_count(char* buf,int size) const{return snprintf(buf,size,"cur_auto_instance_count='%ld'",(int64_t)cur_auto_instance_count);}
+
+    int32_t get_max_auto_instance_count() const { return max_auto_instance_count;} ; 
+    void set_max_auto_instance_count(int32_t value) { if(max_auto_instance_count!= value){dirty[77] = 1; max_auto_instance_count = value;} } ; 
+    int sql_max_auto_instance_count(char* buf,int size) const{return snprintf(buf,size,"max_auto_instance_count='%ld'",(int64_t)max_auto_instance_count);}
+
+    int32_t get_last_auto_instance_time() const { return last_auto_instance_time;} ; 
+    void set_last_auto_instance_time(int32_t value) { if(last_auto_instance_time!= value){dirty[78] = 1; last_auto_instance_time = value;} } ; 
+    int sql_last_auto_instance_time(char* buf,int size) const{return snprintf(buf,size,"last_auto_instance_time='%ld'",(int64_t)last_auto_instance_time);}
+
 private:
     //data member
     int32_t role_id ; 
@@ -350,9 +411,24 @@ private:
     int32_t instance_reset_count ; 
     int32_t last_instance_reset_time ; 
     int32_t follow_buddy_id ; 
+    int32_t total_online_time ; 
+    string learned_guild_skills ; 
+    int32_t wing_tid ; 
+    int32_t daily_first_charge_value ; 
+    int32_t daily_first_charge_time ; 
+    int16_t last_map_id ; 
+    int16_t last_map_x ; 
+    int16_t last_map_y ; 
+    int32_t alien_boss_diamond_buff ; 
+    int32_t alien_boss_coin_buff ; 
+    int32_t killed_time ; 
+    int32_t title ; 
+    int32_t cur_auto_instance_count ; 
+    int32_t max_auto_instance_count ; 
+    int32_t last_auto_instance_time ; 
 private:
     //dirty flag for update
-    enum { FIELD_COUNT = 64 } ; 
+    enum { FIELD_COUNT = 79 } ; 
     int8_t dirty[FIELD_COUNT] ; 
 };
 #endif

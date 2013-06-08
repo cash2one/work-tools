@@ -73,8 +73,12 @@ public:
     void set_delta_exp(int32_t value) { if(delta_exp!= value){dirty[12] = 1; delta_exp = value;} } ; 
     int sql_delta_exp(char* buf,int size) const{return snprintf(buf,size,"delta_exp='%ld'",(int64_t)delta_exp);}
 
+    int32_t get_is_used() const { return is_used;} ; 
+    void set_is_used(int32_t value) { if(is_used!= value){dirty[13] = 1; is_used = value;} } ; 
+    int sql_is_used(char* buf,int size) const{return snprintf(buf,size,"is_used='%ld'",(int64_t)is_used);}
+
     int32_t get_create_time() const { return create_time;} ; 
-    void set_create_time(int32_t value) { if(create_time!= value){dirty[13] = 1; create_time = value;} } ; 
+    void set_create_time(int32_t value) { if(create_time!= value){dirty[14] = 1; create_time = value;} } ; 
     int sql_create_time(char* buf,int size) const{return snprintf(buf,size,"create_time='%ld'",(int64_t)create_time);}
 
 private:
@@ -92,10 +96,11 @@ private:
     int32_t delta_time ; 
     int32_t expire_count_left ; 
     int32_t delta_exp ; 
+    int32_t is_used ; 
     int32_t create_time ; 
 private:
     //dirty flag for update
-    enum { FIELD_COUNT = 14 } ; 
+    enum { FIELD_COUNT = 15 } ; 
     int8_t dirty[FIELD_COUNT] ; 
 };
 #endif

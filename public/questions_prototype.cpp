@@ -9,7 +9,9 @@
  ******************************************************************************/
 
 #include <fstream>
+#include <algorithm>
 #include "questions_prototype.h"
+#include <algorithm>
 
 using namespace std;
 
@@ -44,6 +46,7 @@ void QuestionPrototype::clear()
 {
 	m_question_ids.clear();
 	m_all_questions.clear();
+	m_latest_questions.clear();
 }
 
 string QuestionPrototype::get_answer_by_id(int id)
@@ -56,6 +59,12 @@ string QuestionPrototype::get_answer_by_id(int id)
 	return "";
 }
 
+bool QuestionPrototype::is_question_in_recent_list(int id)
+{
+	return (find(m_latest_questions.begin(), m_latest_questions.end(), id) != m_latest_questions.end());
+}
+
+
 const QuestionData* QuestionPrototype::get_random_question()
 {
 	if (m_all_questions.size() <= 0 || m_question_ids.size() <= 0) return NULL;
@@ -63,6 +72,21 @@ const QuestionData* QuestionPrototype::get_random_question()
 	if (m_all_questions.size() != m_question_ids.size()) return NULL;
 	
 	int index = random() % m_question_ids.size();
+
+	int i = 0;
+	while(is_question_in_recent_list(index)
+		&& i < 20)
+	{
+		index = random() % m_question_ids.size();
+		i++;
+	}
+
+	if (m_latest_questions.size() > 10)
+	{
+		m_latest_questions.pop_front();
+	}
+	m_latest_questions.push_back(index);
+
 	int id = m_question_ids[index];
 	
 	if (m_all_questions.count(id))

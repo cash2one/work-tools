@@ -18,7 +18,6 @@ const char* get_money_change_type_info(int action_type) ;
 
 // 公司的udp服务器需要的货币增减类型 task, cc, install, free
 const char* get_company_money_change_type_info(int action_type) ;
-const char*  get_buy_type_info(int buy_type);
 const char*  get_props_change_type_info(int change_from);
 
 

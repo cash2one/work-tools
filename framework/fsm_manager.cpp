@@ -6,6 +6,7 @@
  */
 
 
+#include <stddef.h>
 #include "fsm_manager.h"
 
 namespace kingnet

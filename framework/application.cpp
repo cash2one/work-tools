@@ -56,7 +56,7 @@ int application::parse_option(int argc,char** argv)
 
     for(int i=1 ; i < argc ; ++i)
     {
-        char* p = argv[i] ;
+        const char* p = argv[i] ;
         if (*p++ != '-') error_return(-1,"invalid option:%s",argv[i]) ;
         switch(*p++)
         {
@@ -74,7 +74,7 @@ int application::parse_option(int argc,char** argv)
             m_daemon = 1 ;
             break ;
         case 'c':
-            if(*p) config_file = (const char*)*p ;
+            if(*p) config_file = (const char*)p ;
             else if (argv[++i]) config_file = argv[i] ;
             else error_return(-1,"option -c require parameter") ;
 

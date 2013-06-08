@@ -54,6 +54,12 @@ public:
         INIT_BUF_SIZE = 81920 ,
     };
 
+    enum
+    {
+        MIN_WRITE_SIZE = 0x1 << 10 ,
+        MAX_WRITE_SIZE = 0x1 << 24 ,
+    };
+
 public:
     tcp_data_handler();
     virtual ~tcp_data_handler();
@@ -106,7 +112,12 @@ public:
     int get_remote_addr(sa_in_t* addr) const ;
     
     void set_readall_flag(bool flag) { m_readall_flag = flag ; } ;
-
+    void set_max_write_size(int max_size) 
+    { 
+        if(max_size < MIN_WRITE_SIZE) max_size = MIN_WRITE_SIZE ;
+        m_max_write_size = max_size ; 
+    } ;
+    
 protected:
     //virtual void on_connected() { } ;
     //virtual void on_disconnect() { } ;
@@ -146,6 +157,7 @@ private:
     buffer m_sbuf ;
     connection_id m_id ;
     epoll_reactor* m_reactor ;
+    int m_max_write_size ;
     bool m_readall_flag ;
 
 };

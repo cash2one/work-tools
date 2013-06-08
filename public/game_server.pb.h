@@ -35,6 +35,8 @@ void  protobuf_AddDesc_game_5fserver_2eproto();
 void protobuf_AssignDesc_game_5fserver_2eproto();
 void protobuf_ShutdownFile_game_5fserver_2eproto();
 
+class WebGetOnlineMemberRequest;
+class WebGetOnlineMemberResponse;
 class WebGetFightDataRequest;
 class WebGetFightDataResponse;
 class FightStatData;
@@ -42,6 +44,8 @@ class BroadcastData;
 class SyncPositionNotify;
 class GMSetDaySecondsRequest;
 class GMSetDaySecondsResponse;
+class GMSetPvPLevelRequest;
+class GMSetPvPLevelResponse;
 class GMAddItemRequest;
 class GMAddItemResponse;
 class GMAddPhyStrengthRequest;
@@ -52,6 +56,8 @@ class GMUpdateAttributeRequest;
 class GMUpdateAttributeResponse;
 class GMAddMoneyRequest;
 class GMAddMoneyResponse;
+class ChargeMoneyRequest;
+class ChargeMoneyResponse;
 class GMAddExpRequest;
 class GMAddExpResponse;
 class GMAddSkillExpRequest;
@@ -93,8 +99,25 @@ class GMUpdatePassInstanceRequest;
 class GMUpdatePassInstanceResponse;
 class GMSetLimitCountRequest;
 class GMSetLimitCountResponse;
+class GmQueryPlayerFlagsRequest;
+class GmQueryPlayerFlagsResponse;
 class GMSetFightExpFactorRequest;
 class GMSetFightExpFactorResponse;
+class GMSetGuildDataRequest;
+class GMSetGuildDataResponse;
+class GMGetItemListRequest;
+class GMStartGuildCrystalTowerRequest;
+class GMStartGuildCrystalTowerResponse;
+class GMGetItemListResponse;
+class GMGetSkillListRequest;
+class GMGetSkillListResponse;
+class GMGetTitleListRequest;
+class GMGetTitleListResponse;
+class GMSetRoleTitleRequest;
+class GMSetRoleTitleResponse;
+class GMGetTitleInfoRequest;
+class TitleInfo;
+class GMGetTitleInfoResponse;
 
 enum ServerMessageAction {
   MSG_ACTION_BROADCAST = 1,
@@ -128,11 +151,23 @@ enum ServerMessageAction {
   MSG_ACTION_GM_SET_LIMIT_COUNT = 30,
   MSG_ACTION_WEB_GET_FIGHT_DATA = 31,
   MSG_ACTION_GM_SET_FIGHT_EXP_FACTOR = 32,
-  MSG_ACTION_GM_ADD_PHY_STRENGTH = 33
+  MSG_ACTION_GM_ADD_PHY_STRENGTH = 33,
+  MSG_ACTION_WEB_GET_ONLINE_MEMBER = 34,
+  MSG_ACTION_GM_SET_GUILD_DATA = 35,
+  MSG_ACTION_CHARGE_MONEY = 36,
+  MSG_ACTION_GM_GET_GUILD_DETAIL = 37,
+  MSG_ACTION_QUERY_PLAYER_FLAGS = 38,
+  MSG_ACTION_GM_GET_ITEM_LIST = 39,
+  MSG_ACTION_GM_GET_SKILL_LIST = 40,
+  MSG_ACTION_GM_GET_TITLE_LIST = 41,
+  MSG_ACTION_GM_SET_ROLE_TITLE = 42,
+  MSG_ACTION_GM_GET_TITLE_INFO = 43,
+  MSG_ACTION_GM_SET_PVP_LEVEL = 44,
+  MSG_ACTION_GM_START_GUILD_CRYSTAL_TOWER = 45
 };
 bool ServerMessageAction_IsValid(int value);
 const ServerMessageAction ServerMessageAction_MIN = MSG_ACTION_BROADCAST;
-const ServerMessageAction ServerMessageAction_MAX = MSG_ACTION_GM_ADD_PHY_STRENGTH;
+const ServerMessageAction ServerMessageAction_MAX = MSG_ACTION_GM_START_GUILD_CRYSTAL_TOWER;
 const int ServerMessageAction_ARRAYSIZE = ServerMessageAction_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* ServerMessageAction_descriptor();
@@ -167,6 +202,29 @@ inline bool LOG_SRC_TYPE_Parse(
   return ::google::protobuf::internal::ParseNamedEnum<LOG_SRC_TYPE>(
     LOG_SRC_TYPE_descriptor(), name, value);
 }
+enum TRANSACTION_CHANNEL {
+  TRANS_CHANNEL_GM = 1,
+  TRANS_CHANNEL_MART = 2,
+  TRANS_CHANNEL_SHOP = 3,
+  TRANS_CHANNEL_BUY = 4,
+  TRANS_CHANNEL_PAY = 5,
+  TRANS_CHANNEL_OTHER = 6
+};
+bool TRANSACTION_CHANNEL_IsValid(int value);
+const TRANSACTION_CHANNEL TRANSACTION_CHANNEL_MIN = TRANS_CHANNEL_GM;
+const TRANSACTION_CHANNEL TRANSACTION_CHANNEL_MAX = TRANS_CHANNEL_OTHER;
+const int TRANSACTION_CHANNEL_ARRAYSIZE = TRANSACTION_CHANNEL_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* TRANSACTION_CHANNEL_descriptor();
+inline const ::std::string& TRANSACTION_CHANNEL_Name(TRANSACTION_CHANNEL value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    TRANSACTION_CHANNEL_descriptor(), value);
+}
+inline bool TRANSACTION_CHANNEL_Parse(
+    const ::std::string& name, TRANSACTION_CHANNEL* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<TRANSACTION_CHANNEL>(
+    TRANSACTION_CHANNEL_descriptor(), name, value);
+}
 enum LOG_ACTION_TYPE {
   LOG_ACTION_LOGON = 1,
   LOG_ACTION_LOGOFF = 2,
@@ -183,11 +241,16 @@ enum LOG_ACTION_TYPE {
   LOG_ACTION_GUIDE = 13,
   LOG_ACTION_FRIEND_FEED = 14,
   LOG_ACTION_GIFT_FEED = 15,
-  LOG_ACTION_FEED_EVENT = 16
+  LOG_ACTION_FEED_EVENT = 16,
+  LOG_ACTION_TRANSACTION = 17,
+  LOG_ACTION_EQUIP_STAT = 18,
+  LOG_ACTION_QUEST = 19,
+  LOG_ACTION_LUCKY_ACT = 20,
+  LOG_ACTION_WING_SPIRIT = 21
 };
 bool LOG_ACTION_TYPE_IsValid(int value);
 const LOG_ACTION_TYPE LOG_ACTION_TYPE_MIN = LOG_ACTION_LOGON;
-const LOG_ACTION_TYPE LOG_ACTION_TYPE_MAX = LOG_ACTION_FEED_EVENT;
+const LOG_ACTION_TYPE LOG_ACTION_TYPE_MAX = LOG_ACTION_WING_SPIRIT;
 const int LOG_ACTION_TYPE_ARRAYSIZE = LOG_ACTION_TYPE_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* LOG_ACTION_TYPE_descriptor();
@@ -200,15 +263,186 @@ inline bool LOG_ACTION_TYPE_Parse(
   return ::google::protobuf::internal::ParseNamedEnum<LOG_ACTION_TYPE>(
     LOG_ACTION_TYPE_descriptor(), name, value);
 }
+enum PAY_MAIN_CATALOG {
+  PAY_NOT_DEFINED = 0,
+  PAY_ROLE = 1,
+  PAY_SOUL = 2,
+  PAY_SKILL = 3,
+  PAY_EQUIP = 4,
+  PAY_STONE = 5,
+  PAY_HIRE_YINGLING = 6,
+  PAY_INSTANCE_WANTED_1 = 7,
+  PAY_INSTANCE_WANTED_2 = 8,
+  PAY_ARENA = 9,
+  PAY_AUTO_FIGHT = 10,
+  PAY_WANTED_QUEST = 11,
+  PAY_YOULI = 12,
+  PAY_FIGHT = 13,
+  PAY_GUILD = 14,
+  PAY_INSTANCE_WANTED = 15,
+  PAY_QUEST = 16,
+  PAY_ROLE_LIMIT = 17,
+  PAY_ACT_PAY = 18,
+  PAY_WING_SPIRIT = 19
+};
+bool PAY_MAIN_CATALOG_IsValid(int value);
+const PAY_MAIN_CATALOG PAY_MAIN_CATALOG_MIN = PAY_NOT_DEFINED;
+const PAY_MAIN_CATALOG PAY_MAIN_CATALOG_MAX = PAY_WING_SPIRIT;
+const int PAY_MAIN_CATALOG_ARRAYSIZE = PAY_MAIN_CATALOG_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* PAY_MAIN_CATALOG_descriptor();
+inline const ::std::string& PAY_MAIN_CATALOG_Name(PAY_MAIN_CATALOG value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    PAY_MAIN_CATALOG_descriptor(), value);
+}
+inline bool PAY_MAIN_CATALOG_Parse(
+    const ::std::string& name, PAY_MAIN_CATALOG* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<PAY_MAIN_CATALOG>(
+    PAY_MAIN_CATALOG_descriptor(), name, value);
+}
 enum BUY_TYPE {
-  BUY_PROPS = 1,
-  BUY_MORE_TIMES = 2,
-  BUY_CLEAR_CD = 3,
-  BUY_OTHER_PAY_FUNCTION = 4
+  BUY_OPEN_YINGLING_SLOT = 101,
+  BUY_OPEN_BAG_SLOT = 102,
+  BUY_PHY_STRENGTH_1 = 103,
+  BUY_PHY_STRENGTH_2 = 104,
+  BUY_PHY_STRENGTH_3 = 105,
+  BUY_PHY_STRENGTH_4 = 106,
+  BUY_PHY_STRENGTH_5 = 107,
+  BUY_PROPS = 108,
+  BUY_VIP_1 = 109,
+  BUY_VIP_2 = 110,
+  BUY_VIP_3 = 111,
+  BUY_VIP_4 = 112,
+  BUY_VIP_5 = 113,
+  BUY_VIP_6 = 114,
+  BUY_ROLE_SOUL_STONE = 201,
+  BUY_ROLE_SOUL_FEATHER = 202,
+  BUY_YINGLING_SOUL_STONE = 203,
+  BUY_YINGLING_SOUL_FEATHER = 204,
+  BUY_INJECT_ROLE_SOUL = 205,
+  BUY_INJECT_YINGLING_SOUL = 206,
+  BUY_SPACE_CHALLENGE_CD = 207,
+  BUY_SKILL_PRACTICE = 301,
+  BUY_SKILL_PRACTICE_SPEED_UP = 302,
+  BUY_EQUIP_STRENGTH = 401,
+  BUY_EQUIP_XILIAN = 402,
+  BUY_EQUIP_XILIAN_LOCK = 403,
+  BUY_EQUIP_INHERIT = 404,
+  BUY_EQUIP_SOCKET = 405,
+  BUY_EQUIP_STONE_INSERT = 406,
+  BUY_EQUIP_STONE_REMOVE = 407,
+  BUY_EQUIP_STONE_GEM = 501,
+  BUY_OPEN_HIRE_PLACE = 601,
+  BUY_REFRESH_YINGLING_HIRING_LIST = 602,
+  BUY_HIRE_YINGLING = 603,
+  BUY_TRAIN_YINGLING = 604,
+  BUY_INSTANCE_WANTED_ALL_RESET_1 = 701,
+  BUY_INSTANCE_WANTED_ALL_RESET_2 = 702,
+  BUY_INSTANCE_WANTED_ALL_RESET_3 = 703,
+  BUY_INSTANCE_WANTED_ALL_RESET_4 = 704,
+  BUY_INSTANCE_WANTED_ALL_RESET_5 = 705,
+  BUY_INSTANCE_WANTED_ALL_RESET_6 = 706,
+  BUY_INSTANCE_WANTED_ALL_RESET_7 = 707,
+  BUY_INSTANCE_WANTED_ALL_RESET_8 = 708,
+  BUY_INSTANCE_WANTED_ALL_RESET_9 = 709,
+  BUY_INSTANCE_WANTED_ALL_RESET_10 = 710,
+  BUY_INSTANCE_WANTED_ALL_RESET_11 = 711,
+  BUY_INSTANCE_WANTED_ALL_RESET_12 = 712,
+  BUY_INSTANCE_WANTED_ALL_RESET_13 = 713,
+  BUY_INSTANCE_WANTED_ALL_RESET_14 = 714,
+  BUY_INSTANCE_WANTED_ALL_RESET_15 = 715,
+  BUY_INSTANCE_WANTED_ALL_RESET_16 = 716,
+  BUY_INSTANCE_WANTED_ALL_RESET_17 = 717,
+  BUY_INSTANCE_WANTED_ALL_RESET_18 = 718,
+  BUY_INSTANCE_WANTED_ALL_RESET_19 = 719,
+  BUY_INSTANCE_WANTED_ALL_RESET_20 = 720,
+  BUY_INSTANCE_WANTED_ALL_RESET_21 = 801,
+  BUY_INSTANCE_WANTED_ALL_RESET_22 = 802,
+  BUY_INSTANCE_WANTED_ALL_RESET_23 = 803,
+  BUY_INSTANCE_WANTED_ALL_RESET_24 = 804,
+  BUY_INSTANCE_WANTED_ALL_RESET_25 = 805,
+  BUY_INSTANCE_WANTED_ALL_RESET_26 = 806,
+  BUY_INSTANCE_WANTED_ALL_RESET_27 = 807,
+  BUY_INSTANCE_WANTED_ALL_RESET_28 = 808,
+  BUY_INSTANCE_WANTED_ALL_RESET_29 = 809,
+  BUY_INSTANCE_WANTED_ALL_RESET_30 = 810,
+  BUY_INSTANCE_WANTED_ALL_RESET_31 = 811,
+  BUY_INSTANCE_WANTED_ALL_RESET_32 = 812,
+  BUY_INSTANCE_WANTED_ALL_RESET_33 = 813,
+  BUY_INSTANCE_WANTED_ALL_RESET_34 = 814,
+  BUY_INSTANCE_WANTED_ALL_RESET_35 = 815,
+  BUY_INSTANCE_WANTED_ALL_RESET_36 = 816,
+  BUY_INSTANCE_WANTED_ALL_RESET_37 = 817,
+  BUY_INSTANCE_WANTED_ALL_RESET_38 = 818,
+  BUY_INSTANCE_WANTED_ALL_RESET_39 = 819,
+  BUY_INSTANCE_WANTED_ALL_RESET_40 = 820,
+  BUY_ARENA_CHALLENGE_TIMES_1 = 901,
+  BUY_ARENA_CHALLENGE_TIMES_2 = 902,
+  BUY_ARENA_CHALLENGE_TIMES_3 = 903,
+  BUY_ARENA_CHALLENGE_TIMES_4 = 904,
+  BUY_ARENA_CHALLENGE_TIMES_5 = 905,
+  BUY_ARENA_CHALLENGE_TIMES_6 = 906,
+  BUY_ARENA_CHALLENGE_TIMES_7 = 907,
+  BUY_ARENA_CHALLENGE_TIMES_8 = 908,
+  BUY_ARENA_CHALLENGE_TIMES_9 = 909,
+  BUY_ARENA_CHALLENGE_TIMES_10 = 910,
+  BUY_ARENA_CHALLENGE_TIMES_11 = 911,
+  BUY_ARENA_CHALLENGE_TIMES_12 = 912,
+  BUY_ARENA_CHALLENGE_TIMES_13 = 913,
+  BUY_ARENA_CHALLENGE_TIMES_14 = 914,
+  BUY_ARENA_CHALLENGE_TIMES_15 = 915,
+  BUY_ARENA_REFRESH_CD = 916,
+  BUY_REFRESH_CD = 917,
+  BUY_FAST_AUTO_FIGHT = 1001,
+  BUY_REFRESH_REWARD_TASK = 1101,
+  BUY_FAST_REWRAD_TASK = 1102,
+  BUY_REWARD_TASK_1 = 1103,
+  BUY_REWARD_TASK_2 = 1104,
+  BUY_REWARD_TASK_3 = 1105,
+  BUY_REWARD_TASK_4 = 1106,
+  BUY_REWARD_TASK_5 = 1107,
+  BUY_REWARD_TASK_6 = 1108,
+  BUY_REWARD_TASK_7 = 1109,
+  BUY_REWARD_TASK_8 = 1110,
+  BUY_REWARD_TASK_9 = 1111,
+  BUY_REWARD_TASK_10 = 1112,
+  BUY_REWARD_TASK_11 = 1113,
+  BUY_REWARD_TASK_12 = 1114,
+  BUY_REWARD_TASK_13 = 1115,
+  BUY_REWARD_TASK_14 = 1116,
+  BUY_REWARD_TASK_15 = 1117,
+  BUY_YOULI_RESET_MAP = 1201,
+  BUY_YOULI_DICE = 1202,
+  BUY_YOULI_1 = 1203,
+  BUY_YOULI_2 = 1204,
+  BUY_YOULI_3 = 1205,
+  BUY_YOULI_4 = 1206,
+  BUY_YOULI_5 = 1207,
+  BUY_YOULI_6 = 1208,
+  BUY_YOULI_7 = 1209,
+  BUY_YOULI_8 = 1210,
+  BUY_YOULI_9 = 1211,
+  BUY_YOULI_10 = 1212,
+  BUY_SKIP_FIGHT = 1301,
+  BUY_QUICK_RESPAWN = 1302,
+  BUY_ENCOURAGE_BUFF = 1303,
+  BUY_DIRECT_FINISH_AUTO_INSTANCE = 1304,
+  BUY_GUILD_DONATE = 1401,
+  BUY_CREATE_GUILD = 1402,
+  BUY_GUILD_LEARN_SKILL = 1403,
+  BUY_DIRECT_FINISH_QUEST = 1601,
+  BUY_GEN_DAILY_QUEST = 1602,
+  BUY_LIMIT_COUNT = 1701,
+  BUY_CLEAR_PVP_CD = 1801,
+  BUY_GUILD_Boss_Damage_Buff = 1802,
+  BUY_GUILD_Boss_Defence_Weak = 1803,
+  BUY_WING_SPIRIT_ENABLE_LEVEL_4 = 1901,
+  BUY_WING_SPIRIT_ENABLE_BAG_SLOT = 1902,
+  BUY_WING_SPIRIT_GENERATOR = 1903
 };
 bool BUY_TYPE_IsValid(int value);
-const BUY_TYPE BUY_TYPE_MIN = BUY_PROPS;
-const BUY_TYPE BUY_TYPE_MAX = BUY_OTHER_PAY_FUNCTION;
+const BUY_TYPE BUY_TYPE_MIN = BUY_OPEN_YINGLING_SLOT;
+const BUY_TYPE BUY_TYPE_MAX = BUY_WING_SPIRIT_GENERATOR;
 const int BUY_TYPE_ARRAYSIZE = BUY_TYPE_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* BUY_TYPE_descriptor();
@@ -229,11 +463,13 @@ enum ADD_PROPS_TYPE {
   BY_USE_GIFT = 7,
   BY_GM = 8,
   BY_OTHER_BONUS = 5,
+  BY_ACT_EXCHANGE = 10,
+  BY_ACT_LUCKY = 11,
   BY_DAILY_GIFT = 9
 };
 bool ADD_PROPS_TYPE_IsValid(int value);
 const ADD_PROPS_TYPE ADD_PROPS_TYPE_MIN = BY_BUY;
-const ADD_PROPS_TYPE ADD_PROPS_TYPE_MAX = BY_DAILY_GIFT;
+const ADD_PROPS_TYPE ADD_PROPS_TYPE_MAX = BY_ACT_LUCKY;
 const int ADD_PROPS_TYPE_ARRAYSIZE = ADD_PROPS_TYPE_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* ADD_PROPS_TYPE_descriptor();
@@ -248,11 +484,12 @@ inline bool ADD_PROPS_TYPE_Parse(
 }
 enum SUB_PROPS_TYPE {
   USE_PROPS = 11,
-  SELL_PROPS = 12
+  SELL_PROPS = 12,
+  DESTROY_PROPS = 13
 };
 bool SUB_PROPS_TYPE_IsValid(int value);
 const SUB_PROPS_TYPE SUB_PROPS_TYPE_MIN = USE_PROPS;
-const SUB_PROPS_TYPE SUB_PROPS_TYPE_MAX = SELL_PROPS;
+const SUB_PROPS_TYPE SUB_PROPS_TYPE_MAX = DESTROY_PROPS;
 const int SUB_PROPS_TYPE_ARRAYSIZE = SUB_PROPS_TYPE_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* SUB_PROPS_TYPE_descriptor();
@@ -290,26 +527,171 @@ inline bool ADD_MONEY_TYPE_Parse(
   return ::google::protobuf::internal::ParseNamedEnum<ADD_MONEY_TYPE>(
     ADD_MONEY_TYPE_descriptor(), name, value);
 }
-enum SUB_MONEY_TYPE {
-  SUB_MONEY_BUY_PROPS = 21,
-  SUB_MONEY_BUY_PAY_FUNCTION = 22
-};
-bool SUB_MONEY_TYPE_IsValid(int value);
-const SUB_MONEY_TYPE SUB_MONEY_TYPE_MIN = SUB_MONEY_BUY_PROPS;
-const SUB_MONEY_TYPE SUB_MONEY_TYPE_MAX = SUB_MONEY_BUY_PAY_FUNCTION;
-const int SUB_MONEY_TYPE_ARRAYSIZE = SUB_MONEY_TYPE_MAX + 1;
-
-const ::google::protobuf::EnumDescriptor* SUB_MONEY_TYPE_descriptor();
-inline const ::std::string& SUB_MONEY_TYPE_Name(SUB_MONEY_TYPE value) {
-  return ::google::protobuf::internal::NameOfEnum(
-    SUB_MONEY_TYPE_descriptor(), value);
-}
-inline bool SUB_MONEY_TYPE_Parse(
-    const ::std::string& name, SUB_MONEY_TYPE* value) {
-  return ::google::protobuf::internal::ParseNamedEnum<SUB_MONEY_TYPE>(
-    SUB_MONEY_TYPE_descriptor(), name, value);
-}
 // ===================================================================
+
+class WebGetOnlineMemberRequest : public ::google::protobuf::Message {
+ public:
+  WebGetOnlineMemberRequest();
+  virtual ~WebGetOnlineMemberRequest();
+  
+  WebGetOnlineMemberRequest(const WebGetOnlineMemberRequest& from);
+  
+  inline WebGetOnlineMemberRequest& operator=(const WebGetOnlineMemberRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const WebGetOnlineMemberRequest& default_instance();
+  
+  void Swap(WebGetOnlineMemberRequest* other);
+  
+  // implements Message ----------------------------------------------
+  
+  WebGetOnlineMemberRequest* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const WebGetOnlineMemberRequest& from);
+  void MergeFrom(const WebGetOnlineMemberRequest& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // @@protoc_insertion_point(class_scope:protocols.common.WebGetOnlineMemberRequest)
+ private:
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[1];
+  
+  friend void  protobuf_AddDesc_game_5fserver_2eproto();
+  friend void protobuf_AssignDesc_game_5fserver_2eproto();
+  friend void protobuf_ShutdownFile_game_5fserver_2eproto();
+  
+  void InitAsDefaultInstance();
+  static WebGetOnlineMemberRequest* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class WebGetOnlineMemberResponse : public ::google::protobuf::Message {
+ public:
+  WebGetOnlineMemberResponse();
+  virtual ~WebGetOnlineMemberResponse();
+  
+  WebGetOnlineMemberResponse(const WebGetOnlineMemberResponse& from);
+  
+  inline WebGetOnlineMemberResponse& operator=(const WebGetOnlineMemberResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const WebGetOnlineMemberResponse& default_instance();
+  
+  void Swap(WebGetOnlineMemberResponse* other);
+  
+  // implements Message ----------------------------------------------
+  
+  WebGetOnlineMemberResponse* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const WebGetOnlineMemberResponse& from);
+  void MergeFrom(const WebGetOnlineMemberResponse& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required int32 error_code = 1;
+  inline bool has_error_code() const;
+  inline void clear_error_code();
+  static const int kErrorCodeFieldNumber = 1;
+  inline ::google::protobuf::int32 error_code() const;
+  inline void set_error_code(::google::protobuf::int32 value);
+  
+  // required int32 online_member = 2;
+  inline bool has_online_member() const;
+  inline void clear_online_member();
+  static const int kOnlineMemberFieldNumber = 2;
+  inline ::google::protobuf::int32 online_member() const;
+  inline void set_online_member(::google::protobuf::int32 value);
+  
+  // @@protoc_insertion_point(class_scope:protocols.common.WebGetOnlineMemberResponse)
+ private:
+  inline void set_has_error_code();
+  inline void clear_has_error_code();
+  inline void set_has_online_member();
+  inline void clear_has_online_member();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::int32 error_code_;
+  ::google::protobuf::int32 online_member_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_game_5fserver_2eproto();
+  friend void protobuf_AssignDesc_game_5fserver_2eproto();
+  friend void protobuf_ShutdownFile_game_5fserver_2eproto();
+  
+  void InitAsDefaultInstance();
+  static WebGetOnlineMemberResponse* default_instance_;
+};
+// -------------------------------------------------------------------
 
 class WebGetFightDataRequest : public ::google::protobuf::Message {
  public:
@@ -1064,6 +1446,170 @@ class GMSetDaySecondsResponse : public ::google::protobuf::Message {
 };
 // -------------------------------------------------------------------
 
+class GMSetPvPLevelRequest : public ::google::protobuf::Message {
+ public:
+  GMSetPvPLevelRequest();
+  virtual ~GMSetPvPLevelRequest();
+  
+  GMSetPvPLevelRequest(const GMSetPvPLevelRequest& from);
+  
+  inline GMSetPvPLevelRequest& operator=(const GMSetPvPLevelRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const GMSetPvPLevelRequest& default_instance();
+  
+  void Swap(GMSetPvPLevelRequest* other);
+  
+  // implements Message ----------------------------------------------
+  
+  GMSetPvPLevelRequest* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const GMSetPvPLevelRequest& from);
+  void MergeFrom(const GMSetPvPLevelRequest& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required int32 level = 1;
+  inline bool has_level() const;
+  inline void clear_level();
+  static const int kLevelFieldNumber = 1;
+  inline ::google::protobuf::int32 level() const;
+  inline void set_level(::google::protobuf::int32 value);
+  
+  // @@protoc_insertion_point(class_scope:protocols.common.GMSetPvPLevelRequest)
+ private:
+  inline void set_has_level();
+  inline void clear_has_level();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::int32 level_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_game_5fserver_2eproto();
+  friend void protobuf_AssignDesc_game_5fserver_2eproto();
+  friend void protobuf_ShutdownFile_game_5fserver_2eproto();
+  
+  void InitAsDefaultInstance();
+  static GMSetPvPLevelRequest* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class GMSetPvPLevelResponse : public ::google::protobuf::Message {
+ public:
+  GMSetPvPLevelResponse();
+  virtual ~GMSetPvPLevelResponse();
+  
+  GMSetPvPLevelResponse(const GMSetPvPLevelResponse& from);
+  
+  inline GMSetPvPLevelResponse& operator=(const GMSetPvPLevelResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const GMSetPvPLevelResponse& default_instance();
+  
+  void Swap(GMSetPvPLevelResponse* other);
+  
+  // implements Message ----------------------------------------------
+  
+  GMSetPvPLevelResponse* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const GMSetPvPLevelResponse& from);
+  void MergeFrom(const GMSetPvPLevelResponse& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required int32 error_code = 1;
+  inline bool has_error_code() const;
+  inline void clear_error_code();
+  static const int kErrorCodeFieldNumber = 1;
+  inline ::google::protobuf::int32 error_code() const;
+  inline void set_error_code(::google::protobuf::int32 value);
+  
+  // @@protoc_insertion_point(class_scope:protocols.common.GMSetPvPLevelResponse)
+ private:
+  inline void set_has_error_code();
+  inline void clear_has_error_code();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::int32 error_code_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_game_5fserver_2eproto();
+  friend void protobuf_AssignDesc_game_5fserver_2eproto();
+  friend void protobuf_ShutdownFile_game_5fserver_2eproto();
+  
+  void InitAsDefaultInstance();
+  static GMSetPvPLevelResponse* default_instance_;
+};
+// -------------------------------------------------------------------
+
 class GMAddItemRequest : public ::google::protobuf::Message {
  public:
   GMAddItemRequest();
@@ -1292,6 +1838,13 @@ class GMAddPhyStrengthRequest : public ::google::protobuf::Message {
   
   // accessors -------------------------------------------------------
   
+  // required int32 type = 2;
+  inline bool has_type() const;
+  inline void clear_type();
+  static const int kTypeFieldNumber = 2;
+  inline ::google::protobuf::int32 type() const;
+  inline void set_type(::google::protobuf::int32 value);
+  
   // required int32 phy_str = 1;
   inline bool has_phy_str() const;
   inline void clear_phy_str();
@@ -1301,15 +1854,18 @@ class GMAddPhyStrengthRequest : public ::google::protobuf::Message {
   
   // @@protoc_insertion_point(class_scope:protocols.common.GMAddPhyStrengthRequest)
  private:
+  inline void set_has_type();
+  inline void clear_has_type();
   inline void set_has_phy_str();
   inline void clear_has_phy_str();
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
+  ::google::protobuf::int32 type_;
   ::google::protobuf::int32 phy_str_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
   
   friend void  protobuf_AddDesc_game_5fserver_2eproto();
   friend void protobuf_AssignDesc_game_5fserver_2eproto();
@@ -1941,6 +2497,180 @@ class GMAddMoneyResponse : public ::google::protobuf::Message {
   
   void InitAsDefaultInstance();
   static GMAddMoneyResponse* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class ChargeMoneyRequest : public ::google::protobuf::Message {
+ public:
+  ChargeMoneyRequest();
+  virtual ~ChargeMoneyRequest();
+  
+  ChargeMoneyRequest(const ChargeMoneyRequest& from);
+  
+  inline ChargeMoneyRequest& operator=(const ChargeMoneyRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const ChargeMoneyRequest& default_instance();
+  
+  void Swap(ChargeMoneyRequest* other);
+  
+  // implements Message ----------------------------------------------
+  
+  ChargeMoneyRequest* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const ChargeMoneyRequest& from);
+  void MergeFrom(const ChargeMoneyRequest& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required int32 type = 1;
+  inline bool has_type() const;
+  inline void clear_type();
+  static const int kTypeFieldNumber = 1;
+  inline ::google::protobuf::int32 type() const;
+  inline void set_type(::google::protobuf::int32 value);
+  
+  // required int32 value = 2;
+  inline bool has_value() const;
+  inline void clear_value();
+  static const int kValueFieldNumber = 2;
+  inline ::google::protobuf::int32 value() const;
+  inline void set_value(::google::protobuf::int32 value);
+  
+  // @@protoc_insertion_point(class_scope:protocols.common.ChargeMoneyRequest)
+ private:
+  inline void set_has_type();
+  inline void clear_has_type();
+  inline void set_has_value();
+  inline void clear_has_value();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::int32 type_;
+  ::google::protobuf::int32 value_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_game_5fserver_2eproto();
+  friend void protobuf_AssignDesc_game_5fserver_2eproto();
+  friend void protobuf_ShutdownFile_game_5fserver_2eproto();
+  
+  void InitAsDefaultInstance();
+  static ChargeMoneyRequest* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class ChargeMoneyResponse : public ::google::protobuf::Message {
+ public:
+  ChargeMoneyResponse();
+  virtual ~ChargeMoneyResponse();
+  
+  ChargeMoneyResponse(const ChargeMoneyResponse& from);
+  
+  inline ChargeMoneyResponse& operator=(const ChargeMoneyResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const ChargeMoneyResponse& default_instance();
+  
+  void Swap(ChargeMoneyResponse* other);
+  
+  // implements Message ----------------------------------------------
+  
+  ChargeMoneyResponse* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const ChargeMoneyResponse& from);
+  void MergeFrom(const ChargeMoneyResponse& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required int32 error_code = 1;
+  inline bool has_error_code() const;
+  inline void clear_error_code();
+  static const int kErrorCodeFieldNumber = 1;
+  inline ::google::protobuf::int32 error_code() const;
+  inline void set_error_code(::google::protobuf::int32 value);
+  
+  // @@protoc_insertion_point(class_scope:protocols.common.ChargeMoneyResponse)
+ private:
+  inline void set_has_error_code();
+  inline void clear_has_error_code();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::int32 error_code_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_game_5fserver_2eproto();
+  friend void protobuf_AssignDesc_game_5fserver_2eproto();
+  friend void protobuf_ShutdownFile_game_5fserver_2eproto();
+  
+  void InitAsDefaultInstance();
+  static ChargeMoneyResponse* default_instance_;
 };
 // -------------------------------------------------------------------
 
@@ -4713,6 +5443,13 @@ class GMGetPlayerInfoResponse : public ::google::protobuf::Message {
   inline ::google::protobuf::RepeatedPtrField< ::protocols::common::YinglingInfo >*
       mutable_yingling_list();
   
+  // optional int32 uid = 5;
+  inline bool has_uid() const;
+  inline void clear_uid();
+  static const int kUidFieldNumber = 5;
+  inline ::google::protobuf::int32 uid() const;
+  inline void set_uid(::google::protobuf::int32 value);
+  
   // @@protoc_insertion_point(class_scope:protocols.common.GMGetPlayerInfoResponse)
  private:
   inline void set_has_error_code();
@@ -4721,16 +5458,19 @@ class GMGetPlayerInfoResponse : public ::google::protobuf::Message {
   inline void clear_has_player_info();
   inline void set_has_bank();
   inline void clear_has_bank();
+  inline void set_has_uid();
+  inline void clear_has_uid();
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
   ::protocols::common::PlayerInfo* player_info_;
   ::protocols::common::BankInfo* bank_;
-  ::google::protobuf::RepeatedPtrField< ::protocols::common::YinglingInfo > yingling_list_;
   ::google::protobuf::int32 error_code_;
+  ::google::protobuf::int32 uid_;
+  ::google::protobuf::RepeatedPtrField< ::protocols::common::YinglingInfo > yingling_list_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(4 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(5 + 31) / 32];
   
   friend void  protobuf_AddDesc_game_5fserver_2eproto();
   friend void protobuf_AssignDesc_game_5fserver_2eproto();
@@ -4979,54 +5719,34 @@ class GMSetFlagRequest : public ::google::protobuf::Message {
   
   // accessors -------------------------------------------------------
   
-  // required int32 flag = 1;
-  inline bool has_flag() const;
-  inline void clear_flag();
-  static const int kFlagFieldNumber = 1;
-  inline ::google::protobuf::int32 flag() const;
-  inline void set_flag(::google::protobuf::int32 value);
+  // required int32 flag_type = 1;
+  inline bool has_flag_type() const;
+  inline void clear_flag_type();
+  static const int kFlagTypeFieldNumber = 1;
+  inline ::google::protobuf::int32 flag_type() const;
+  inline void set_flag_type(::google::protobuf::int32 value);
   
-  // optional int32 expired = 2 [default = 0];
-  inline bool has_expired() const;
-  inline void clear_expired();
-  static const int kExpiredFieldNumber = 2;
-  inline ::google::protobuf::int32 expired() const;
-  inline void set_expired(::google::protobuf::int32 value);
-  
-  // optional int32 reason = 3 [default = 0];
-  inline bool has_reason() const;
-  inline void clear_reason();
-  static const int kReasonFieldNumber = 3;
-  inline ::google::protobuf::int32 reason() const;
-  inline void set_reason(::google::protobuf::int32 value);
-  
-  // optional bool value = 4 [default = false];
+  // optional int32 value = 2 [default = 0];
   inline bool has_value() const;
   inline void clear_value();
-  static const int kValueFieldNumber = 4;
-  inline bool value() const;
-  inline void set_value(bool value);
+  static const int kValueFieldNumber = 2;
+  inline ::google::protobuf::int32 value() const;
+  inline void set_value(::google::protobuf::int32 value);
   
   // @@protoc_insertion_point(class_scope:protocols.common.GMSetFlagRequest)
  private:
-  inline void set_has_flag();
-  inline void clear_has_flag();
-  inline void set_has_expired();
-  inline void clear_has_expired();
-  inline void set_has_reason();
-  inline void clear_has_reason();
+  inline void set_has_flag_type();
+  inline void clear_has_flag_type();
   inline void set_has_value();
   inline void clear_has_value();
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
-  ::google::protobuf::int32 flag_;
-  ::google::protobuf::int32 expired_;
-  ::google::protobuf::int32 reason_;
-  bool value_;
+  ::google::protobuf::int32 flag_type_;
+  ::google::protobuf::int32 value_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(4 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
   
   friend void  protobuf_AddDesc_game_5fserver_2eproto();
   friend void protobuf_AssignDesc_game_5fserver_2eproto();
@@ -6132,6 +6852,192 @@ class GMSetLimitCountResponse : public ::google::protobuf::Message {
 };
 // -------------------------------------------------------------------
 
+class GmQueryPlayerFlagsRequest : public ::google::protobuf::Message {
+ public:
+  GmQueryPlayerFlagsRequest();
+  virtual ~GmQueryPlayerFlagsRequest();
+  
+  GmQueryPlayerFlagsRequest(const GmQueryPlayerFlagsRequest& from);
+  
+  inline GmQueryPlayerFlagsRequest& operator=(const GmQueryPlayerFlagsRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const GmQueryPlayerFlagsRequest& default_instance();
+  
+  void Swap(GmQueryPlayerFlagsRequest* other);
+  
+  // implements Message ----------------------------------------------
+  
+  GmQueryPlayerFlagsRequest* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const GmQueryPlayerFlagsRequest& from);
+  void MergeFrom(const GmQueryPlayerFlagsRequest& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required int32 player_id = 1;
+  inline bool has_player_id() const;
+  inline void clear_player_id();
+  static const int kPlayerIdFieldNumber = 1;
+  inline ::google::protobuf::int32 player_id() const;
+  inline void set_player_id(::google::protobuf::int32 value);
+  
+  // @@protoc_insertion_point(class_scope:protocols.common.GmQueryPlayerFlagsRequest)
+ private:
+  inline void set_has_player_id();
+  inline void clear_has_player_id();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::int32 player_id_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_game_5fserver_2eproto();
+  friend void protobuf_AssignDesc_game_5fserver_2eproto();
+  friend void protobuf_ShutdownFile_game_5fserver_2eproto();
+  
+  void InitAsDefaultInstance();
+  static GmQueryPlayerFlagsRequest* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class GmQueryPlayerFlagsResponse : public ::google::protobuf::Message {
+ public:
+  GmQueryPlayerFlagsResponse();
+  virtual ~GmQueryPlayerFlagsResponse();
+  
+  GmQueryPlayerFlagsResponse(const GmQueryPlayerFlagsResponse& from);
+  
+  inline GmQueryPlayerFlagsResponse& operator=(const GmQueryPlayerFlagsResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const GmQueryPlayerFlagsResponse& default_instance();
+  
+  void Swap(GmQueryPlayerFlagsResponse* other);
+  
+  // implements Message ----------------------------------------------
+  
+  GmQueryPlayerFlagsResponse* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const GmQueryPlayerFlagsResponse& from);
+  void MergeFrom(const GmQueryPlayerFlagsResponse& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // optional int32 error_code = 1;
+  inline bool has_error_code() const;
+  inline void clear_error_code();
+  static const int kErrorCodeFieldNumber = 1;
+  inline ::google::protobuf::int32 error_code() const;
+  inline void set_error_code(::google::protobuf::int32 value);
+  
+  // optional .protocols.common.PlayerFlagDataPb flag_data = 2;
+  inline bool has_flag_data() const;
+  inline void clear_flag_data();
+  static const int kFlagDataFieldNumber = 2;
+  inline const ::protocols::common::PlayerFlagDataPb& flag_data() const;
+  inline ::protocols::common::PlayerFlagDataPb* mutable_flag_data();
+  inline ::protocols::common::PlayerFlagDataPb* release_flag_data();
+  
+  // optional .protocols.common.RoleDailyLimitPb limit_data = 3;
+  inline bool has_limit_data() const;
+  inline void clear_limit_data();
+  static const int kLimitDataFieldNumber = 3;
+  inline const ::protocols::common::RoleDailyLimitPb& limit_data() const;
+  inline ::protocols::common::RoleDailyLimitPb* mutable_limit_data();
+  inline ::protocols::common::RoleDailyLimitPb* release_limit_data();
+  
+  // @@protoc_insertion_point(class_scope:protocols.common.GmQueryPlayerFlagsResponse)
+ private:
+  inline void set_has_error_code();
+  inline void clear_has_error_code();
+  inline void set_has_flag_data();
+  inline void clear_has_flag_data();
+  inline void set_has_limit_data();
+  inline void clear_has_limit_data();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::protocols::common::PlayerFlagDataPb* flag_data_;
+  ::protocols::common::RoleDailyLimitPb* limit_data_;
+  ::google::protobuf::int32 error_code_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(3 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_game_5fserver_2eproto();
+  friend void protobuf_AssignDesc_game_5fserver_2eproto();
+  friend void protobuf_ShutdownFile_game_5fserver_2eproto();
+  
+  void InitAsDefaultInstance();
+  static GmQueryPlayerFlagsResponse* default_instance_;
+};
+// -------------------------------------------------------------------
+
 class GMSetFightExpFactorRequest : public ::google::protobuf::Message {
  public:
   GMSetFightExpFactorRequest();
@@ -6342,10 +7248,1452 @@ class GMSetFightExpFactorResponse : public ::google::protobuf::Message {
   void InitAsDefaultInstance();
   static GMSetFightExpFactorResponse* default_instance_;
 };
+// -------------------------------------------------------------------
+
+class GMSetGuildDataRequest : public ::google::protobuf::Message {
+ public:
+  GMSetGuildDataRequest();
+  virtual ~GMSetGuildDataRequest();
+  
+  GMSetGuildDataRequest(const GMSetGuildDataRequest& from);
+  
+  inline GMSetGuildDataRequest& operator=(const GMSetGuildDataRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const GMSetGuildDataRequest& default_instance();
+  
+  void Swap(GMSetGuildDataRequest* other);
+  
+  // implements Message ----------------------------------------------
+  
+  GMSetGuildDataRequest* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const GMSetGuildDataRequest& from);
+  void MergeFrom(const GMSetGuildDataRequest& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required int32 guild_id = 1;
+  inline bool has_guild_id() const;
+  inline void clear_guild_id();
+  static const int kGuildIdFieldNumber = 1;
+  inline ::google::protobuf::int32 guild_id() const;
+  inline void set_guild_id(::google::protobuf::int32 value);
+  
+  // optional int32 exp = 2;
+  inline bool has_exp() const;
+  inline void clear_exp();
+  static const int kExpFieldNumber = 2;
+  inline ::google::protobuf::int32 exp() const;
+  inline void set_exp(::google::protobuf::int32 value);
+  
+  // optional int32 money = 3;
+  inline bool has_money() const;
+  inline void clear_money();
+  static const int kMoneyFieldNumber = 3;
+  inline ::google::protobuf::int32 money() const;
+  inline void set_money(::google::protobuf::int32 value);
+  
+  // @@protoc_insertion_point(class_scope:protocols.common.GMSetGuildDataRequest)
+ private:
+  inline void set_has_guild_id();
+  inline void clear_has_guild_id();
+  inline void set_has_exp();
+  inline void clear_has_exp();
+  inline void set_has_money();
+  inline void clear_has_money();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::int32 guild_id_;
+  ::google::protobuf::int32 exp_;
+  ::google::protobuf::int32 money_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(3 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_game_5fserver_2eproto();
+  friend void protobuf_AssignDesc_game_5fserver_2eproto();
+  friend void protobuf_ShutdownFile_game_5fserver_2eproto();
+  
+  void InitAsDefaultInstance();
+  static GMSetGuildDataRequest* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class GMSetGuildDataResponse : public ::google::protobuf::Message {
+ public:
+  GMSetGuildDataResponse();
+  virtual ~GMSetGuildDataResponse();
+  
+  GMSetGuildDataResponse(const GMSetGuildDataResponse& from);
+  
+  inline GMSetGuildDataResponse& operator=(const GMSetGuildDataResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const GMSetGuildDataResponse& default_instance();
+  
+  void Swap(GMSetGuildDataResponse* other);
+  
+  // implements Message ----------------------------------------------
+  
+  GMSetGuildDataResponse* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const GMSetGuildDataResponse& from);
+  void MergeFrom(const GMSetGuildDataResponse& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required int32 error_code = 1;
+  inline bool has_error_code() const;
+  inline void clear_error_code();
+  static const int kErrorCodeFieldNumber = 1;
+  inline ::google::protobuf::int32 error_code() const;
+  inline void set_error_code(::google::protobuf::int32 value);
+  
+  // @@protoc_insertion_point(class_scope:protocols.common.GMSetGuildDataResponse)
+ private:
+  inline void set_has_error_code();
+  inline void clear_has_error_code();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::int32 error_code_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_game_5fserver_2eproto();
+  friend void protobuf_AssignDesc_game_5fserver_2eproto();
+  friend void protobuf_ShutdownFile_game_5fserver_2eproto();
+  
+  void InitAsDefaultInstance();
+  static GMSetGuildDataResponse* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class GMGetItemListRequest : public ::google::protobuf::Message {
+ public:
+  GMGetItemListRequest();
+  virtual ~GMGetItemListRequest();
+  
+  GMGetItemListRequest(const GMGetItemListRequest& from);
+  
+  inline GMGetItemListRequest& operator=(const GMGetItemListRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const GMGetItemListRequest& default_instance();
+  
+  void Swap(GMGetItemListRequest* other);
+  
+  // implements Message ----------------------------------------------
+  
+  GMGetItemListRequest* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const GMGetItemListRequest& from);
+  void MergeFrom(const GMGetItemListRequest& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required int32 role_id = 1;
+  inline bool has_role_id() const;
+  inline void clear_role_id();
+  static const int kRoleIdFieldNumber = 1;
+  inline ::google::protobuf::int32 role_id() const;
+  inline void set_role_id(::google::protobuf::int32 value);
+  
+  // required int32 type = 2;
+  inline bool has_type() const;
+  inline void clear_type();
+  static const int kTypeFieldNumber = 2;
+  inline ::google::protobuf::int32 type() const;
+  inline void set_type(::google::protobuf::int32 value);
+  
+  // @@protoc_insertion_point(class_scope:protocols.common.GMGetItemListRequest)
+ private:
+  inline void set_has_role_id();
+  inline void clear_has_role_id();
+  inline void set_has_type();
+  inline void clear_has_type();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::int32 role_id_;
+  ::google::protobuf::int32 type_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_game_5fserver_2eproto();
+  friend void protobuf_AssignDesc_game_5fserver_2eproto();
+  friend void protobuf_ShutdownFile_game_5fserver_2eproto();
+  
+  void InitAsDefaultInstance();
+  static GMGetItemListRequest* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class GMStartGuildCrystalTowerRequest : public ::google::protobuf::Message {
+ public:
+  GMStartGuildCrystalTowerRequest();
+  virtual ~GMStartGuildCrystalTowerRequest();
+  
+  GMStartGuildCrystalTowerRequest(const GMStartGuildCrystalTowerRequest& from);
+  
+  inline GMStartGuildCrystalTowerRequest& operator=(const GMStartGuildCrystalTowerRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const GMStartGuildCrystalTowerRequest& default_instance();
+  
+  void Swap(GMStartGuildCrystalTowerRequest* other);
+  
+  // implements Message ----------------------------------------------
+  
+  GMStartGuildCrystalTowerRequest* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const GMStartGuildCrystalTowerRequest& from);
+  void MergeFrom(const GMStartGuildCrystalTowerRequest& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required int32 guild_id = 1;
+  inline bool has_guild_id() const;
+  inline void clear_guild_id();
+  static const int kGuildIdFieldNumber = 1;
+  inline ::google::protobuf::int32 guild_id() const;
+  inline void set_guild_id(::google::protobuf::int32 value);
+  
+  // required int32 category = 2;
+  inline bool has_category() const;
+  inline void clear_category();
+  static const int kCategoryFieldNumber = 2;
+  inline ::google::protobuf::int32 category() const;
+  inline void set_category(::google::protobuf::int32 value);
+  
+  // @@protoc_insertion_point(class_scope:protocols.common.GMStartGuildCrystalTowerRequest)
+ private:
+  inline void set_has_guild_id();
+  inline void clear_has_guild_id();
+  inline void set_has_category();
+  inline void clear_has_category();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::int32 guild_id_;
+  ::google::protobuf::int32 category_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_game_5fserver_2eproto();
+  friend void protobuf_AssignDesc_game_5fserver_2eproto();
+  friend void protobuf_ShutdownFile_game_5fserver_2eproto();
+  
+  void InitAsDefaultInstance();
+  static GMStartGuildCrystalTowerRequest* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class GMStartGuildCrystalTowerResponse : public ::google::protobuf::Message {
+ public:
+  GMStartGuildCrystalTowerResponse();
+  virtual ~GMStartGuildCrystalTowerResponse();
+  
+  GMStartGuildCrystalTowerResponse(const GMStartGuildCrystalTowerResponse& from);
+  
+  inline GMStartGuildCrystalTowerResponse& operator=(const GMStartGuildCrystalTowerResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const GMStartGuildCrystalTowerResponse& default_instance();
+  
+  void Swap(GMStartGuildCrystalTowerResponse* other);
+  
+  // implements Message ----------------------------------------------
+  
+  GMStartGuildCrystalTowerResponse* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const GMStartGuildCrystalTowerResponse& from);
+  void MergeFrom(const GMStartGuildCrystalTowerResponse& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required int32 error_code = 1;
+  inline bool has_error_code() const;
+  inline void clear_error_code();
+  static const int kErrorCodeFieldNumber = 1;
+  inline ::google::protobuf::int32 error_code() const;
+  inline void set_error_code(::google::protobuf::int32 value);
+  
+  // @@protoc_insertion_point(class_scope:protocols.common.GMStartGuildCrystalTowerResponse)
+ private:
+  inline void set_has_error_code();
+  inline void clear_has_error_code();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::int32 error_code_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_game_5fserver_2eproto();
+  friend void protobuf_AssignDesc_game_5fserver_2eproto();
+  friend void protobuf_ShutdownFile_game_5fserver_2eproto();
+  
+  void InitAsDefaultInstance();
+  static GMStartGuildCrystalTowerResponse* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class GMGetItemListResponse : public ::google::protobuf::Message {
+ public:
+  GMGetItemListResponse();
+  virtual ~GMGetItemListResponse();
+  
+  GMGetItemListResponse(const GMGetItemListResponse& from);
+  
+  inline GMGetItemListResponse& operator=(const GMGetItemListResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const GMGetItemListResponse& default_instance();
+  
+  void Swap(GMGetItemListResponse* other);
+  
+  // implements Message ----------------------------------------------
+  
+  GMGetItemListResponse* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const GMGetItemListResponse& from);
+  void MergeFrom(const GMGetItemListResponse& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required int32 error_code = 1;
+  inline bool has_error_code() const;
+  inline void clear_error_code();
+  static const int kErrorCodeFieldNumber = 1;
+  inline ::google::protobuf::int32 error_code() const;
+  inline void set_error_code(::google::protobuf::int32 value);
+  
+  // repeated .protocols.common.ItemInfo item_list = 2;
+  inline int item_list_size() const;
+  inline void clear_item_list();
+  static const int kItemListFieldNumber = 2;
+  inline const ::protocols::common::ItemInfo& item_list(int index) const;
+  inline ::protocols::common::ItemInfo* mutable_item_list(int index);
+  inline ::protocols::common::ItemInfo* add_item_list();
+  inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::ItemInfo >&
+      item_list() const;
+  inline ::google::protobuf::RepeatedPtrField< ::protocols::common::ItemInfo >*
+      mutable_item_list();
+  
+  // optional int32 max_size = 3;
+  inline bool has_max_size() const;
+  inline void clear_max_size();
+  static const int kMaxSizeFieldNumber = 3;
+  inline ::google::protobuf::int32 max_size() const;
+  inline void set_max_size(::google::protobuf::int32 value);
+  
+  // @@protoc_insertion_point(class_scope:protocols.common.GMGetItemListResponse)
+ private:
+  inline void set_has_error_code();
+  inline void clear_has_error_code();
+  inline void set_has_max_size();
+  inline void clear_has_max_size();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::RepeatedPtrField< ::protocols::common::ItemInfo > item_list_;
+  ::google::protobuf::int32 error_code_;
+  ::google::protobuf::int32 max_size_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(3 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_game_5fserver_2eproto();
+  friend void protobuf_AssignDesc_game_5fserver_2eproto();
+  friend void protobuf_ShutdownFile_game_5fserver_2eproto();
+  
+  void InitAsDefaultInstance();
+  static GMGetItemListResponse* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class GMGetSkillListRequest : public ::google::protobuf::Message {
+ public:
+  GMGetSkillListRequest();
+  virtual ~GMGetSkillListRequest();
+  
+  GMGetSkillListRequest(const GMGetSkillListRequest& from);
+  
+  inline GMGetSkillListRequest& operator=(const GMGetSkillListRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const GMGetSkillListRequest& default_instance();
+  
+  void Swap(GMGetSkillListRequest* other);
+  
+  // implements Message ----------------------------------------------
+  
+  GMGetSkillListRequest* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const GMGetSkillListRequest& from);
+  void MergeFrom(const GMGetSkillListRequest& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required int64 guid = 1;
+  inline bool has_guid() const;
+  inline void clear_guid();
+  static const int kGuidFieldNumber = 1;
+  inline ::google::protobuf::int64 guid() const;
+  inline void set_guid(::google::protobuf::int64 value);
+  
+  // @@protoc_insertion_point(class_scope:protocols.common.GMGetSkillListRequest)
+ private:
+  inline void set_has_guid();
+  inline void clear_has_guid();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::int64 guid_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_game_5fserver_2eproto();
+  friend void protobuf_AssignDesc_game_5fserver_2eproto();
+  friend void protobuf_ShutdownFile_game_5fserver_2eproto();
+  
+  void InitAsDefaultInstance();
+  static GMGetSkillListRequest* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class GMGetSkillListResponse : public ::google::protobuf::Message {
+ public:
+  GMGetSkillListResponse();
+  virtual ~GMGetSkillListResponse();
+  
+  GMGetSkillListResponse(const GMGetSkillListResponse& from);
+  
+  inline GMGetSkillListResponse& operator=(const GMGetSkillListResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const GMGetSkillListResponse& default_instance();
+  
+  void Swap(GMGetSkillListResponse* other);
+  
+  // implements Message ----------------------------------------------
+  
+  GMGetSkillListResponse* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const GMGetSkillListResponse& from);
+  void MergeFrom(const GMGetSkillListResponse& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required int32 error_code = 1;
+  inline bool has_error_code() const;
+  inline void clear_error_code();
+  static const int kErrorCodeFieldNumber = 1;
+  inline ::google::protobuf::int32 error_code() const;
+  inline void set_error_code(::google::protobuf::int32 value);
+  
+  // required int64 guid = 2;
+  inline bool has_guid() const;
+  inline void clear_guid();
+  static const int kGuidFieldNumber = 2;
+  inline ::google::protobuf::int64 guid() const;
+  inline void set_guid(::google::protobuf::int64 value);
+  
+  // required int32 open_slot = 3;
+  inline bool has_open_slot() const;
+  inline void clear_open_slot();
+  static const int kOpenSlotFieldNumber = 3;
+  inline ::google::protobuf::int32 open_slot() const;
+  inline void set_open_slot(::google::protobuf::int32 value);
+  
+  // repeated .protocols.common.SkillInfo skill_list = 4;
+  inline int skill_list_size() const;
+  inline void clear_skill_list();
+  static const int kSkillListFieldNumber = 4;
+  inline const ::protocols::common::SkillInfo& skill_list(int index) const;
+  inline ::protocols::common::SkillInfo* mutable_skill_list(int index);
+  inline ::protocols::common::SkillInfo* add_skill_list();
+  inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::SkillInfo >&
+      skill_list() const;
+  inline ::google::protobuf::RepeatedPtrField< ::protocols::common::SkillInfo >*
+      mutable_skill_list();
+  
+  // optional int32 skill_exp_pool = 5;
+  inline bool has_skill_exp_pool() const;
+  inline void clear_skill_exp_pool();
+  static const int kSkillExpPoolFieldNumber = 5;
+  inline ::google::protobuf::int32 skill_exp_pool() const;
+  inline void set_skill_exp_pool(::google::protobuf::int32 value);
+  
+  // optional int32 practice_skill_limit = 6;
+  inline bool has_practice_skill_limit() const;
+  inline void clear_practice_skill_limit();
+  static const int kPracticeSkillLimitFieldNumber = 6;
+  inline ::google::protobuf::int32 practice_skill_limit() const;
+  inline void set_practice_skill_limit(::google::protobuf::int32 value);
+  
+  // @@protoc_insertion_point(class_scope:protocols.common.GMGetSkillListResponse)
+ private:
+  inline void set_has_error_code();
+  inline void clear_has_error_code();
+  inline void set_has_guid();
+  inline void clear_has_guid();
+  inline void set_has_open_slot();
+  inline void clear_has_open_slot();
+  inline void set_has_skill_exp_pool();
+  inline void clear_has_skill_exp_pool();
+  inline void set_has_practice_skill_limit();
+  inline void clear_has_practice_skill_limit();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::int64 guid_;
+  ::google::protobuf::int32 error_code_;
+  ::google::protobuf::int32 open_slot_;
+  ::google::protobuf::RepeatedPtrField< ::protocols::common::SkillInfo > skill_list_;
+  ::google::protobuf::int32 skill_exp_pool_;
+  ::google::protobuf::int32 practice_skill_limit_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(6 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_game_5fserver_2eproto();
+  friend void protobuf_AssignDesc_game_5fserver_2eproto();
+  friend void protobuf_ShutdownFile_game_5fserver_2eproto();
+  
+  void InitAsDefaultInstance();
+  static GMGetSkillListResponse* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class GMGetTitleListRequest : public ::google::protobuf::Message {
+ public:
+  GMGetTitleListRequest();
+  virtual ~GMGetTitleListRequest();
+  
+  GMGetTitleListRequest(const GMGetTitleListRequest& from);
+  
+  inline GMGetTitleListRequest& operator=(const GMGetTitleListRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const GMGetTitleListRequest& default_instance();
+  
+  void Swap(GMGetTitleListRequest* other);
+  
+  // implements Message ----------------------------------------------
+  
+  GMGetTitleListRequest* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const GMGetTitleListRequest& from);
+  void MergeFrom(const GMGetTitleListRequest& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required int32 role_id = 1;
+  inline bool has_role_id() const;
+  inline void clear_role_id();
+  static const int kRoleIdFieldNumber = 1;
+  inline ::google::protobuf::int32 role_id() const;
+  inline void set_role_id(::google::protobuf::int32 value);
+  
+  // @@protoc_insertion_point(class_scope:protocols.common.GMGetTitleListRequest)
+ private:
+  inline void set_has_role_id();
+  inline void clear_has_role_id();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::int32 role_id_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_game_5fserver_2eproto();
+  friend void protobuf_AssignDesc_game_5fserver_2eproto();
+  friend void protobuf_ShutdownFile_game_5fserver_2eproto();
+  
+  void InitAsDefaultInstance();
+  static GMGetTitleListRequest* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class GMGetTitleListResponse : public ::google::protobuf::Message {
+ public:
+  GMGetTitleListResponse();
+  virtual ~GMGetTitleListResponse();
+  
+  GMGetTitleListResponse(const GMGetTitleListResponse& from);
+  
+  inline GMGetTitleListResponse& operator=(const GMGetTitleListResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const GMGetTitleListResponse& default_instance();
+  
+  void Swap(GMGetTitleListResponse* other);
+  
+  // implements Message ----------------------------------------------
+  
+  GMGetTitleListResponse* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const GMGetTitleListResponse& from);
+  void MergeFrom(const GMGetTitleListResponse& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required int32 error_code = 1;
+  inline bool has_error_code() const;
+  inline void clear_error_code();
+  static const int kErrorCodeFieldNumber = 1;
+  inline ::google::protobuf::int32 error_code() const;
+  inline void set_error_code(::google::protobuf::int32 value);
+  
+  // repeated int32 titles = 2;
+  inline int titles_size() const;
+  inline void clear_titles();
+  static const int kTitlesFieldNumber = 2;
+  inline ::google::protobuf::int32 titles(int index) const;
+  inline void set_titles(int index, ::google::protobuf::int32 value);
+  inline void add_titles(::google::protobuf::int32 value);
+  inline const ::google::protobuf::RepeatedField< ::google::protobuf::int32 >&
+      titles() const;
+  inline ::google::protobuf::RepeatedField< ::google::protobuf::int32 >*
+      mutable_titles();
+  
+  // @@protoc_insertion_point(class_scope:protocols.common.GMGetTitleListResponse)
+ private:
+  inline void set_has_error_code();
+  inline void clear_has_error_code();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::RepeatedField< ::google::protobuf::int32 > titles_;
+  ::google::protobuf::int32 error_code_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_game_5fserver_2eproto();
+  friend void protobuf_AssignDesc_game_5fserver_2eproto();
+  friend void protobuf_ShutdownFile_game_5fserver_2eproto();
+  
+  void InitAsDefaultInstance();
+  static GMGetTitleListResponse* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class GMSetRoleTitleRequest : public ::google::protobuf::Message {
+ public:
+  GMSetRoleTitleRequest();
+  virtual ~GMSetRoleTitleRequest();
+  
+  GMSetRoleTitleRequest(const GMSetRoleTitleRequest& from);
+  
+  inline GMSetRoleTitleRequest& operator=(const GMSetRoleTitleRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const GMSetRoleTitleRequest& default_instance();
+  
+  void Swap(GMSetRoleTitleRequest* other);
+  
+  // implements Message ----------------------------------------------
+  
+  GMSetRoleTitleRequest* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const GMSetRoleTitleRequest& from);
+  void MergeFrom(const GMSetRoleTitleRequest& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required int32 role_id = 1;
+  inline bool has_role_id() const;
+  inline void clear_role_id();
+  static const int kRoleIdFieldNumber = 1;
+  inline ::google::protobuf::int32 role_id() const;
+  inline void set_role_id(::google::protobuf::int32 value);
+  
+  // required int32 title_id = 2;
+  inline bool has_title_id() const;
+  inline void clear_title_id();
+  static const int kTitleIdFieldNumber = 2;
+  inline ::google::protobuf::int32 title_id() const;
+  inline void set_title_id(::google::protobuf::int32 value);
+  
+  // @@protoc_insertion_point(class_scope:protocols.common.GMSetRoleTitleRequest)
+ private:
+  inline void set_has_role_id();
+  inline void clear_has_role_id();
+  inline void set_has_title_id();
+  inline void clear_has_title_id();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::int32 role_id_;
+  ::google::protobuf::int32 title_id_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_game_5fserver_2eproto();
+  friend void protobuf_AssignDesc_game_5fserver_2eproto();
+  friend void protobuf_ShutdownFile_game_5fserver_2eproto();
+  
+  void InitAsDefaultInstance();
+  static GMSetRoleTitleRequest* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class GMSetRoleTitleResponse : public ::google::protobuf::Message {
+ public:
+  GMSetRoleTitleResponse();
+  virtual ~GMSetRoleTitleResponse();
+  
+  GMSetRoleTitleResponse(const GMSetRoleTitleResponse& from);
+  
+  inline GMSetRoleTitleResponse& operator=(const GMSetRoleTitleResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const GMSetRoleTitleResponse& default_instance();
+  
+  void Swap(GMSetRoleTitleResponse* other);
+  
+  // implements Message ----------------------------------------------
+  
+  GMSetRoleTitleResponse* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const GMSetRoleTitleResponse& from);
+  void MergeFrom(const GMSetRoleTitleResponse& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required int32 error_code = 1;
+  inline bool has_error_code() const;
+  inline void clear_error_code();
+  static const int kErrorCodeFieldNumber = 1;
+  inline ::google::protobuf::int32 error_code() const;
+  inline void set_error_code(::google::protobuf::int32 value);
+  
+  // @@protoc_insertion_point(class_scope:protocols.common.GMSetRoleTitleResponse)
+ private:
+  inline void set_has_error_code();
+  inline void clear_has_error_code();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::int32 error_code_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_game_5fserver_2eproto();
+  friend void protobuf_AssignDesc_game_5fserver_2eproto();
+  friend void protobuf_ShutdownFile_game_5fserver_2eproto();
+  
+  void InitAsDefaultInstance();
+  static GMSetRoleTitleResponse* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class GMGetTitleInfoRequest : public ::google::protobuf::Message {
+ public:
+  GMGetTitleInfoRequest();
+  virtual ~GMGetTitleInfoRequest();
+  
+  GMGetTitleInfoRequest(const GMGetTitleInfoRequest& from);
+  
+  inline GMGetTitleInfoRequest& operator=(const GMGetTitleInfoRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const GMGetTitleInfoRequest& default_instance();
+  
+  void Swap(GMGetTitleInfoRequest* other);
+  
+  // implements Message ----------------------------------------------
+  
+  GMGetTitleInfoRequest* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const GMGetTitleInfoRequest& from);
+  void MergeFrom(const GMGetTitleInfoRequest& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required int32 title_id = 1;
+  inline bool has_title_id() const;
+  inline void clear_title_id();
+  static const int kTitleIdFieldNumber = 1;
+  inline ::google::protobuf::int32 title_id() const;
+  inline void set_title_id(::google::protobuf::int32 value);
+  
+  // @@protoc_insertion_point(class_scope:protocols.common.GMGetTitleInfoRequest)
+ private:
+  inline void set_has_title_id();
+  inline void clear_has_title_id();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::int32 title_id_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_game_5fserver_2eproto();
+  friend void protobuf_AssignDesc_game_5fserver_2eproto();
+  friend void protobuf_ShutdownFile_game_5fserver_2eproto();
+  
+  void InitAsDefaultInstance();
+  static GMGetTitleInfoRequest* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class TitleInfo : public ::google::protobuf::Message {
+ public:
+  TitleInfo();
+  virtual ~TitleInfo();
+  
+  TitleInfo(const TitleInfo& from);
+  
+  inline TitleInfo& operator=(const TitleInfo& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const TitleInfo& default_instance();
+  
+  void Swap(TitleInfo* other);
+  
+  // implements Message ----------------------------------------------
+  
+  TitleInfo* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const TitleInfo& from);
+  void MergeFrom(const TitleInfo& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required int32 title_id = 1;
+  inline bool has_title_id() const;
+  inline void clear_title_id();
+  static const int kTitleIdFieldNumber = 1;
+  inline ::google::protobuf::int32 title_id() const;
+  inline void set_title_id(::google::protobuf::int32 value);
+  
+  // required int32 role_id = 2;
+  inline bool has_role_id() const;
+  inline void clear_role_id();
+  static const int kRoleIdFieldNumber = 2;
+  inline ::google::protobuf::int32 role_id() const;
+  inline void set_role_id(::google::protobuf::int32 value);
+  
+  // @@protoc_insertion_point(class_scope:protocols.common.TitleInfo)
+ private:
+  inline void set_has_title_id();
+  inline void clear_has_title_id();
+  inline void set_has_role_id();
+  inline void clear_has_role_id();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::int32 title_id_;
+  ::google::protobuf::int32 role_id_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_game_5fserver_2eproto();
+  friend void protobuf_AssignDesc_game_5fserver_2eproto();
+  friend void protobuf_ShutdownFile_game_5fserver_2eproto();
+  
+  void InitAsDefaultInstance();
+  static TitleInfo* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class GMGetTitleInfoResponse : public ::google::protobuf::Message {
+ public:
+  GMGetTitleInfoResponse();
+  virtual ~GMGetTitleInfoResponse();
+  
+  GMGetTitleInfoResponse(const GMGetTitleInfoResponse& from);
+  
+  inline GMGetTitleInfoResponse& operator=(const GMGetTitleInfoResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const GMGetTitleInfoResponse& default_instance();
+  
+  void Swap(GMGetTitleInfoResponse* other);
+  
+  // implements Message ----------------------------------------------
+  
+  GMGetTitleInfoResponse* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const GMGetTitleInfoResponse& from);
+  void MergeFrom(const GMGetTitleInfoResponse& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required int32 error_code = 1;
+  inline bool has_error_code() const;
+  inline void clear_error_code();
+  static const int kErrorCodeFieldNumber = 1;
+  inline ::google::protobuf::int32 error_code() const;
+  inline void set_error_code(::google::protobuf::int32 value);
+  
+  // optional .protocols.common.TitleInfo title_info = 2;
+  inline bool has_title_info() const;
+  inline void clear_title_info();
+  static const int kTitleInfoFieldNumber = 2;
+  inline const ::protocols::common::TitleInfo& title_info() const;
+  inline ::protocols::common::TitleInfo* mutable_title_info();
+  inline ::protocols::common::TitleInfo* release_title_info();
+  
+  // @@protoc_insertion_point(class_scope:protocols.common.GMGetTitleInfoResponse)
+ private:
+  inline void set_has_error_code();
+  inline void clear_has_error_code();
+  inline void set_has_title_info();
+  inline void clear_has_title_info();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::protocols::common::TitleInfo* title_info_;
+  ::google::protobuf::int32 error_code_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_game_5fserver_2eproto();
+  friend void protobuf_AssignDesc_game_5fserver_2eproto();
+  friend void protobuf_ShutdownFile_game_5fserver_2eproto();
+  
+  void InitAsDefaultInstance();
+  static GMGetTitleInfoResponse* default_instance_;
+};
 // ===================================================================
 
 
 // ===================================================================
+
+// WebGetOnlineMemberRequest
+
+// -------------------------------------------------------------------
+
+// WebGetOnlineMemberResponse
+
+// required int32 error_code = 1;
+inline bool WebGetOnlineMemberResponse::has_error_code() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void WebGetOnlineMemberResponse::set_has_error_code() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void WebGetOnlineMemberResponse::clear_has_error_code() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void WebGetOnlineMemberResponse::clear_error_code() {
+  error_code_ = 0;
+  clear_has_error_code();
+}
+inline ::google::protobuf::int32 WebGetOnlineMemberResponse::error_code() const {
+  return error_code_;
+}
+inline void WebGetOnlineMemberResponse::set_error_code(::google::protobuf::int32 value) {
+  set_has_error_code();
+  error_code_ = value;
+}
+
+// required int32 online_member = 2;
+inline bool WebGetOnlineMemberResponse::has_online_member() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void WebGetOnlineMemberResponse::set_has_online_member() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void WebGetOnlineMemberResponse::clear_has_online_member() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void WebGetOnlineMemberResponse::clear_online_member() {
+  online_member_ = 0;
+  clear_has_online_member();
+}
+inline ::google::protobuf::int32 WebGetOnlineMemberResponse::online_member() const {
+  return online_member_;
+}
+inline void WebGetOnlineMemberResponse::set_online_member(::google::protobuf::int32 value) {
+  set_has_online_member();
+  online_member_ = value;
+}
+
+// -------------------------------------------------------------------
 
 // WebGetFightDataRequest
 
@@ -6976,6 +9324,58 @@ inline void GMSetDaySecondsResponse::set_error_code(::google::protobuf::int32 va
 
 // -------------------------------------------------------------------
 
+// GMSetPvPLevelRequest
+
+// required int32 level = 1;
+inline bool GMSetPvPLevelRequest::has_level() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void GMSetPvPLevelRequest::set_has_level() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void GMSetPvPLevelRequest::clear_has_level() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void GMSetPvPLevelRequest::clear_level() {
+  level_ = 0;
+  clear_has_level();
+}
+inline ::google::protobuf::int32 GMSetPvPLevelRequest::level() const {
+  return level_;
+}
+inline void GMSetPvPLevelRequest::set_level(::google::protobuf::int32 value) {
+  set_has_level();
+  level_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// GMSetPvPLevelResponse
+
+// required int32 error_code = 1;
+inline bool GMSetPvPLevelResponse::has_error_code() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void GMSetPvPLevelResponse::set_has_error_code() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void GMSetPvPLevelResponse::clear_has_error_code() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void GMSetPvPLevelResponse::clear_error_code() {
+  error_code_ = 0;
+  clear_has_error_code();
+}
+inline ::google::protobuf::int32 GMSetPvPLevelResponse::error_code() const {
+  return error_code_;
+}
+inline void GMSetPvPLevelResponse::set_error_code(::google::protobuf::int32 value) {
+  set_has_error_code();
+  error_code_ = value;
+}
+
+// -------------------------------------------------------------------
+
 // GMAddItemRequest
 
 // required int32 tid = 1;
@@ -7052,15 +9452,37 @@ inline void GMAddItemResponse::set_error_code(::google::protobuf::int32 value) {
 
 // GMAddPhyStrengthRequest
 
-// required int32 phy_str = 1;
-inline bool GMAddPhyStrengthRequest::has_phy_str() const {
+// required int32 type = 2;
+inline bool GMAddPhyStrengthRequest::has_type() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void GMAddPhyStrengthRequest::set_has_phy_str() {
+inline void GMAddPhyStrengthRequest::set_has_type() {
   _has_bits_[0] |= 0x00000001u;
 }
-inline void GMAddPhyStrengthRequest::clear_has_phy_str() {
+inline void GMAddPhyStrengthRequest::clear_has_type() {
   _has_bits_[0] &= ~0x00000001u;
+}
+inline void GMAddPhyStrengthRequest::clear_type() {
+  type_ = 0;
+  clear_has_type();
+}
+inline ::google::protobuf::int32 GMAddPhyStrengthRequest::type() const {
+  return type_;
+}
+inline void GMAddPhyStrengthRequest::set_type(::google::protobuf::int32 value) {
+  set_has_type();
+  type_ = value;
+}
+
+// required int32 phy_str = 1;
+inline bool GMAddPhyStrengthRequest::has_phy_str() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void GMAddPhyStrengthRequest::set_has_phy_str() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void GMAddPhyStrengthRequest::clear_has_phy_str() {
+  _has_bits_[0] &= ~0x00000002u;
 }
 inline void GMAddPhyStrengthRequest::clear_phy_str() {
   phy_str_ = 0;
@@ -7362,6 +9784,80 @@ inline ::google::protobuf::int32 GMAddMoneyResponse::error_code() const {
   return error_code_;
 }
 inline void GMAddMoneyResponse::set_error_code(::google::protobuf::int32 value) {
+  set_has_error_code();
+  error_code_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// ChargeMoneyRequest
+
+// required int32 type = 1;
+inline bool ChargeMoneyRequest::has_type() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void ChargeMoneyRequest::set_has_type() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void ChargeMoneyRequest::clear_has_type() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void ChargeMoneyRequest::clear_type() {
+  type_ = 0;
+  clear_has_type();
+}
+inline ::google::protobuf::int32 ChargeMoneyRequest::type() const {
+  return type_;
+}
+inline void ChargeMoneyRequest::set_type(::google::protobuf::int32 value) {
+  set_has_type();
+  type_ = value;
+}
+
+// required int32 value = 2;
+inline bool ChargeMoneyRequest::has_value() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void ChargeMoneyRequest::set_has_value() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void ChargeMoneyRequest::clear_has_value() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void ChargeMoneyRequest::clear_value() {
+  value_ = 0;
+  clear_has_value();
+}
+inline ::google::protobuf::int32 ChargeMoneyRequest::value() const {
+  return value_;
+}
+inline void ChargeMoneyRequest::set_value(::google::protobuf::int32 value) {
+  set_has_value();
+  value_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// ChargeMoneyResponse
+
+// required int32 error_code = 1;
+inline bool ChargeMoneyResponse::has_error_code() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void ChargeMoneyResponse::set_has_error_code() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void ChargeMoneyResponse::clear_has_error_code() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void ChargeMoneyResponse::clear_error_code() {
+  error_code_ = 0;
+  clear_has_error_code();
+}
+inline ::google::protobuf::int32 ChargeMoneyResponse::error_code() const {
+  return error_code_;
+}
+inline void ChargeMoneyResponse::set_error_code(::google::protobuf::int32 value) {
   set_has_error_code();
   error_code_ = value;
 }
@@ -9937,6 +12433,28 @@ GMGetPlayerInfoResponse::mutable_yingling_list() {
   return &yingling_list_;
 }
 
+// optional int32 uid = 5;
+inline bool GMGetPlayerInfoResponse::has_uid() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void GMGetPlayerInfoResponse::set_has_uid() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void GMGetPlayerInfoResponse::clear_has_uid() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void GMGetPlayerInfoResponse::clear_uid() {
+  uid_ = 0;
+  clear_has_uid();
+}
+inline ::google::protobuf::int32 GMGetPlayerInfoResponse::uid() const {
+  return uid_;
+}
+inline void GMGetPlayerInfoResponse::set_uid(::google::protobuf::int32 value) {
+  set_has_uid();
+  uid_ = value;
+}
+
 // -------------------------------------------------------------------
 
 // GMSetPlayerVipLevelRequest
@@ -10037,90 +12555,46 @@ inline void GMSetPlayerVipLevelResponse::set_error_code(::google::protobuf::int3
 
 // GMSetFlagRequest
 
-// required int32 flag = 1;
-inline bool GMSetFlagRequest::has_flag() const {
+// required int32 flag_type = 1;
+inline bool GMSetFlagRequest::has_flag_type() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void GMSetFlagRequest::set_has_flag() {
+inline void GMSetFlagRequest::set_has_flag_type() {
   _has_bits_[0] |= 0x00000001u;
 }
-inline void GMSetFlagRequest::clear_has_flag() {
+inline void GMSetFlagRequest::clear_has_flag_type() {
   _has_bits_[0] &= ~0x00000001u;
 }
-inline void GMSetFlagRequest::clear_flag() {
-  flag_ = 0;
-  clear_has_flag();
+inline void GMSetFlagRequest::clear_flag_type() {
+  flag_type_ = 0;
+  clear_has_flag_type();
 }
-inline ::google::protobuf::int32 GMSetFlagRequest::flag() const {
-  return flag_;
+inline ::google::protobuf::int32 GMSetFlagRequest::flag_type() const {
+  return flag_type_;
 }
-inline void GMSetFlagRequest::set_flag(::google::protobuf::int32 value) {
-  set_has_flag();
-  flag_ = value;
+inline void GMSetFlagRequest::set_flag_type(::google::protobuf::int32 value) {
+  set_has_flag_type();
+  flag_type_ = value;
 }
 
-// optional int32 expired = 2 [default = 0];
-inline bool GMSetFlagRequest::has_expired() const {
+// optional int32 value = 2 [default = 0];
+inline bool GMSetFlagRequest::has_value() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void GMSetFlagRequest::set_has_expired() {
+inline void GMSetFlagRequest::set_has_value() {
   _has_bits_[0] |= 0x00000002u;
 }
-inline void GMSetFlagRequest::clear_has_expired() {
+inline void GMSetFlagRequest::clear_has_value() {
   _has_bits_[0] &= ~0x00000002u;
 }
-inline void GMSetFlagRequest::clear_expired() {
-  expired_ = 0;
-  clear_has_expired();
-}
-inline ::google::protobuf::int32 GMSetFlagRequest::expired() const {
-  return expired_;
-}
-inline void GMSetFlagRequest::set_expired(::google::protobuf::int32 value) {
-  set_has_expired();
-  expired_ = value;
-}
-
-// optional int32 reason = 3 [default = 0];
-inline bool GMSetFlagRequest::has_reason() const {
-  return (_has_bits_[0] & 0x00000004u) != 0;
-}
-inline void GMSetFlagRequest::set_has_reason() {
-  _has_bits_[0] |= 0x00000004u;
-}
-inline void GMSetFlagRequest::clear_has_reason() {
-  _has_bits_[0] &= ~0x00000004u;
-}
-inline void GMSetFlagRequest::clear_reason() {
-  reason_ = 0;
-  clear_has_reason();
-}
-inline ::google::protobuf::int32 GMSetFlagRequest::reason() const {
-  return reason_;
-}
-inline void GMSetFlagRequest::set_reason(::google::protobuf::int32 value) {
-  set_has_reason();
-  reason_ = value;
-}
-
-// optional bool value = 4 [default = false];
-inline bool GMSetFlagRequest::has_value() const {
-  return (_has_bits_[0] & 0x00000008u) != 0;
-}
-inline void GMSetFlagRequest::set_has_value() {
-  _has_bits_[0] |= 0x00000008u;
-}
-inline void GMSetFlagRequest::clear_has_value() {
-  _has_bits_[0] &= ~0x00000008u;
-}
 inline void GMSetFlagRequest::clear_value() {
-  value_ = false;
+  value_ = 0;
   clear_has_value();
 }
-inline bool GMSetFlagRequest::value() const {
+inline ::google::protobuf::int32 GMSetFlagRequest::value() const {
   return value_;
 }
-inline void GMSetFlagRequest::set_value(bool value) {
+inline void GMSetFlagRequest::set_value(::google::protobuf::int32 value) {
   set_has_value();
   value_ = value;
 }
@@ -10754,6 +13228,116 @@ inline void GMSetLimitCountResponse::set_error_code(::google::protobuf::int32 va
 
 // -------------------------------------------------------------------
 
+// GmQueryPlayerFlagsRequest
+
+// required int32 player_id = 1;
+inline bool GmQueryPlayerFlagsRequest::has_player_id() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void GmQueryPlayerFlagsRequest::set_has_player_id() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void GmQueryPlayerFlagsRequest::clear_has_player_id() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void GmQueryPlayerFlagsRequest::clear_player_id() {
+  player_id_ = 0;
+  clear_has_player_id();
+}
+inline ::google::protobuf::int32 GmQueryPlayerFlagsRequest::player_id() const {
+  return player_id_;
+}
+inline void GmQueryPlayerFlagsRequest::set_player_id(::google::protobuf::int32 value) {
+  set_has_player_id();
+  player_id_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// GmQueryPlayerFlagsResponse
+
+// optional int32 error_code = 1;
+inline bool GmQueryPlayerFlagsResponse::has_error_code() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void GmQueryPlayerFlagsResponse::set_has_error_code() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void GmQueryPlayerFlagsResponse::clear_has_error_code() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void GmQueryPlayerFlagsResponse::clear_error_code() {
+  error_code_ = 0;
+  clear_has_error_code();
+}
+inline ::google::protobuf::int32 GmQueryPlayerFlagsResponse::error_code() const {
+  return error_code_;
+}
+inline void GmQueryPlayerFlagsResponse::set_error_code(::google::protobuf::int32 value) {
+  set_has_error_code();
+  error_code_ = value;
+}
+
+// optional .protocols.common.PlayerFlagDataPb flag_data = 2;
+inline bool GmQueryPlayerFlagsResponse::has_flag_data() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void GmQueryPlayerFlagsResponse::set_has_flag_data() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void GmQueryPlayerFlagsResponse::clear_has_flag_data() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void GmQueryPlayerFlagsResponse::clear_flag_data() {
+  if (flag_data_ != NULL) flag_data_->::protocols::common::PlayerFlagDataPb::Clear();
+  clear_has_flag_data();
+}
+inline const ::protocols::common::PlayerFlagDataPb& GmQueryPlayerFlagsResponse::flag_data() const {
+  return flag_data_ != NULL ? *flag_data_ : *default_instance_->flag_data_;
+}
+inline ::protocols::common::PlayerFlagDataPb* GmQueryPlayerFlagsResponse::mutable_flag_data() {
+  set_has_flag_data();
+  if (flag_data_ == NULL) flag_data_ = new ::protocols::common::PlayerFlagDataPb;
+  return flag_data_;
+}
+inline ::protocols::common::PlayerFlagDataPb* GmQueryPlayerFlagsResponse::release_flag_data() {
+  clear_has_flag_data();
+  ::protocols::common::PlayerFlagDataPb* temp = flag_data_;
+  flag_data_ = NULL;
+  return temp;
+}
+
+// optional .protocols.common.RoleDailyLimitPb limit_data = 3;
+inline bool GmQueryPlayerFlagsResponse::has_limit_data() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void GmQueryPlayerFlagsResponse::set_has_limit_data() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void GmQueryPlayerFlagsResponse::clear_has_limit_data() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void GmQueryPlayerFlagsResponse::clear_limit_data() {
+  if (limit_data_ != NULL) limit_data_->::protocols::common::RoleDailyLimitPb::Clear();
+  clear_has_limit_data();
+}
+inline const ::protocols::common::RoleDailyLimitPb& GmQueryPlayerFlagsResponse::limit_data() const {
+  return limit_data_ != NULL ? *limit_data_ : *default_instance_->limit_data_;
+}
+inline ::protocols::common::RoleDailyLimitPb* GmQueryPlayerFlagsResponse::mutable_limit_data() {
+  set_has_limit_data();
+  if (limit_data_ == NULL) limit_data_ = new ::protocols::common::RoleDailyLimitPb;
+  return limit_data_;
+}
+inline ::protocols::common::RoleDailyLimitPb* GmQueryPlayerFlagsResponse::release_limit_data() {
+  clear_has_limit_data();
+  ::protocols::common::RoleDailyLimitPb* temp = limit_data_;
+  limit_data_ = NULL;
+  return temp;
+}
+
+// -------------------------------------------------------------------
+
 // GMSetFightExpFactorRequest
 
 // required int32 exp_factor = 1;
@@ -10964,6 +13548,742 @@ inline void GMSetFightExpFactorResponse::set_error_code(::google::protobuf::int3
   error_code_ = value;
 }
 
+// -------------------------------------------------------------------
+
+// GMSetGuildDataRequest
+
+// required int32 guild_id = 1;
+inline bool GMSetGuildDataRequest::has_guild_id() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void GMSetGuildDataRequest::set_has_guild_id() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void GMSetGuildDataRequest::clear_has_guild_id() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void GMSetGuildDataRequest::clear_guild_id() {
+  guild_id_ = 0;
+  clear_has_guild_id();
+}
+inline ::google::protobuf::int32 GMSetGuildDataRequest::guild_id() const {
+  return guild_id_;
+}
+inline void GMSetGuildDataRequest::set_guild_id(::google::protobuf::int32 value) {
+  set_has_guild_id();
+  guild_id_ = value;
+}
+
+// optional int32 exp = 2;
+inline bool GMSetGuildDataRequest::has_exp() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void GMSetGuildDataRequest::set_has_exp() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void GMSetGuildDataRequest::clear_has_exp() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void GMSetGuildDataRequest::clear_exp() {
+  exp_ = 0;
+  clear_has_exp();
+}
+inline ::google::protobuf::int32 GMSetGuildDataRequest::exp() const {
+  return exp_;
+}
+inline void GMSetGuildDataRequest::set_exp(::google::protobuf::int32 value) {
+  set_has_exp();
+  exp_ = value;
+}
+
+// optional int32 money = 3;
+inline bool GMSetGuildDataRequest::has_money() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void GMSetGuildDataRequest::set_has_money() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void GMSetGuildDataRequest::clear_has_money() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void GMSetGuildDataRequest::clear_money() {
+  money_ = 0;
+  clear_has_money();
+}
+inline ::google::protobuf::int32 GMSetGuildDataRequest::money() const {
+  return money_;
+}
+inline void GMSetGuildDataRequest::set_money(::google::protobuf::int32 value) {
+  set_has_money();
+  money_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// GMSetGuildDataResponse
+
+// required int32 error_code = 1;
+inline bool GMSetGuildDataResponse::has_error_code() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void GMSetGuildDataResponse::set_has_error_code() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void GMSetGuildDataResponse::clear_has_error_code() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void GMSetGuildDataResponse::clear_error_code() {
+  error_code_ = 0;
+  clear_has_error_code();
+}
+inline ::google::protobuf::int32 GMSetGuildDataResponse::error_code() const {
+  return error_code_;
+}
+inline void GMSetGuildDataResponse::set_error_code(::google::protobuf::int32 value) {
+  set_has_error_code();
+  error_code_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// GMGetItemListRequest
+
+// required int32 role_id = 1;
+inline bool GMGetItemListRequest::has_role_id() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void GMGetItemListRequest::set_has_role_id() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void GMGetItemListRequest::clear_has_role_id() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void GMGetItemListRequest::clear_role_id() {
+  role_id_ = 0;
+  clear_has_role_id();
+}
+inline ::google::protobuf::int32 GMGetItemListRequest::role_id() const {
+  return role_id_;
+}
+inline void GMGetItemListRequest::set_role_id(::google::protobuf::int32 value) {
+  set_has_role_id();
+  role_id_ = value;
+}
+
+// required int32 type = 2;
+inline bool GMGetItemListRequest::has_type() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void GMGetItemListRequest::set_has_type() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void GMGetItemListRequest::clear_has_type() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void GMGetItemListRequest::clear_type() {
+  type_ = 0;
+  clear_has_type();
+}
+inline ::google::protobuf::int32 GMGetItemListRequest::type() const {
+  return type_;
+}
+inline void GMGetItemListRequest::set_type(::google::protobuf::int32 value) {
+  set_has_type();
+  type_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// GMStartGuildCrystalTowerRequest
+
+// required int32 guild_id = 1;
+inline bool GMStartGuildCrystalTowerRequest::has_guild_id() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void GMStartGuildCrystalTowerRequest::set_has_guild_id() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void GMStartGuildCrystalTowerRequest::clear_has_guild_id() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void GMStartGuildCrystalTowerRequest::clear_guild_id() {
+  guild_id_ = 0;
+  clear_has_guild_id();
+}
+inline ::google::protobuf::int32 GMStartGuildCrystalTowerRequest::guild_id() const {
+  return guild_id_;
+}
+inline void GMStartGuildCrystalTowerRequest::set_guild_id(::google::protobuf::int32 value) {
+  set_has_guild_id();
+  guild_id_ = value;
+}
+
+// required int32 category = 2;
+inline bool GMStartGuildCrystalTowerRequest::has_category() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void GMStartGuildCrystalTowerRequest::set_has_category() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void GMStartGuildCrystalTowerRequest::clear_has_category() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void GMStartGuildCrystalTowerRequest::clear_category() {
+  category_ = 0;
+  clear_has_category();
+}
+inline ::google::protobuf::int32 GMStartGuildCrystalTowerRequest::category() const {
+  return category_;
+}
+inline void GMStartGuildCrystalTowerRequest::set_category(::google::protobuf::int32 value) {
+  set_has_category();
+  category_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// GMStartGuildCrystalTowerResponse
+
+// required int32 error_code = 1;
+inline bool GMStartGuildCrystalTowerResponse::has_error_code() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void GMStartGuildCrystalTowerResponse::set_has_error_code() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void GMStartGuildCrystalTowerResponse::clear_has_error_code() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void GMStartGuildCrystalTowerResponse::clear_error_code() {
+  error_code_ = 0;
+  clear_has_error_code();
+}
+inline ::google::protobuf::int32 GMStartGuildCrystalTowerResponse::error_code() const {
+  return error_code_;
+}
+inline void GMStartGuildCrystalTowerResponse::set_error_code(::google::protobuf::int32 value) {
+  set_has_error_code();
+  error_code_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// GMGetItemListResponse
+
+// required int32 error_code = 1;
+inline bool GMGetItemListResponse::has_error_code() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void GMGetItemListResponse::set_has_error_code() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void GMGetItemListResponse::clear_has_error_code() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void GMGetItemListResponse::clear_error_code() {
+  error_code_ = 0;
+  clear_has_error_code();
+}
+inline ::google::protobuf::int32 GMGetItemListResponse::error_code() const {
+  return error_code_;
+}
+inline void GMGetItemListResponse::set_error_code(::google::protobuf::int32 value) {
+  set_has_error_code();
+  error_code_ = value;
+}
+
+// repeated .protocols.common.ItemInfo item_list = 2;
+inline int GMGetItemListResponse::item_list_size() const {
+  return item_list_.size();
+}
+inline void GMGetItemListResponse::clear_item_list() {
+  item_list_.Clear();
+}
+inline const ::protocols::common::ItemInfo& GMGetItemListResponse::item_list(int index) const {
+  return item_list_.Get(index);
+}
+inline ::protocols::common::ItemInfo* GMGetItemListResponse::mutable_item_list(int index) {
+  return item_list_.Mutable(index);
+}
+inline ::protocols::common::ItemInfo* GMGetItemListResponse::add_item_list() {
+  return item_list_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::ItemInfo >&
+GMGetItemListResponse::item_list() const {
+  return item_list_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::protocols::common::ItemInfo >*
+GMGetItemListResponse::mutable_item_list() {
+  return &item_list_;
+}
+
+// optional int32 max_size = 3;
+inline bool GMGetItemListResponse::has_max_size() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void GMGetItemListResponse::set_has_max_size() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void GMGetItemListResponse::clear_has_max_size() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void GMGetItemListResponse::clear_max_size() {
+  max_size_ = 0;
+  clear_has_max_size();
+}
+inline ::google::protobuf::int32 GMGetItemListResponse::max_size() const {
+  return max_size_;
+}
+inline void GMGetItemListResponse::set_max_size(::google::protobuf::int32 value) {
+  set_has_max_size();
+  max_size_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// GMGetSkillListRequest
+
+// required int64 guid = 1;
+inline bool GMGetSkillListRequest::has_guid() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void GMGetSkillListRequest::set_has_guid() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void GMGetSkillListRequest::clear_has_guid() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void GMGetSkillListRequest::clear_guid() {
+  guid_ = GOOGLE_LONGLONG(0);
+  clear_has_guid();
+}
+inline ::google::protobuf::int64 GMGetSkillListRequest::guid() const {
+  return guid_;
+}
+inline void GMGetSkillListRequest::set_guid(::google::protobuf::int64 value) {
+  set_has_guid();
+  guid_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// GMGetSkillListResponse
+
+// required int32 error_code = 1;
+inline bool GMGetSkillListResponse::has_error_code() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void GMGetSkillListResponse::set_has_error_code() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void GMGetSkillListResponse::clear_has_error_code() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void GMGetSkillListResponse::clear_error_code() {
+  error_code_ = 0;
+  clear_has_error_code();
+}
+inline ::google::protobuf::int32 GMGetSkillListResponse::error_code() const {
+  return error_code_;
+}
+inline void GMGetSkillListResponse::set_error_code(::google::protobuf::int32 value) {
+  set_has_error_code();
+  error_code_ = value;
+}
+
+// required int64 guid = 2;
+inline bool GMGetSkillListResponse::has_guid() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void GMGetSkillListResponse::set_has_guid() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void GMGetSkillListResponse::clear_has_guid() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void GMGetSkillListResponse::clear_guid() {
+  guid_ = GOOGLE_LONGLONG(0);
+  clear_has_guid();
+}
+inline ::google::protobuf::int64 GMGetSkillListResponse::guid() const {
+  return guid_;
+}
+inline void GMGetSkillListResponse::set_guid(::google::protobuf::int64 value) {
+  set_has_guid();
+  guid_ = value;
+}
+
+// required int32 open_slot = 3;
+inline bool GMGetSkillListResponse::has_open_slot() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void GMGetSkillListResponse::set_has_open_slot() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void GMGetSkillListResponse::clear_has_open_slot() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void GMGetSkillListResponse::clear_open_slot() {
+  open_slot_ = 0;
+  clear_has_open_slot();
+}
+inline ::google::protobuf::int32 GMGetSkillListResponse::open_slot() const {
+  return open_slot_;
+}
+inline void GMGetSkillListResponse::set_open_slot(::google::protobuf::int32 value) {
+  set_has_open_slot();
+  open_slot_ = value;
+}
+
+// repeated .protocols.common.SkillInfo skill_list = 4;
+inline int GMGetSkillListResponse::skill_list_size() const {
+  return skill_list_.size();
+}
+inline void GMGetSkillListResponse::clear_skill_list() {
+  skill_list_.Clear();
+}
+inline const ::protocols::common::SkillInfo& GMGetSkillListResponse::skill_list(int index) const {
+  return skill_list_.Get(index);
+}
+inline ::protocols::common::SkillInfo* GMGetSkillListResponse::mutable_skill_list(int index) {
+  return skill_list_.Mutable(index);
+}
+inline ::protocols::common::SkillInfo* GMGetSkillListResponse::add_skill_list() {
+  return skill_list_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::SkillInfo >&
+GMGetSkillListResponse::skill_list() const {
+  return skill_list_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::protocols::common::SkillInfo >*
+GMGetSkillListResponse::mutable_skill_list() {
+  return &skill_list_;
+}
+
+// optional int32 skill_exp_pool = 5;
+inline bool GMGetSkillListResponse::has_skill_exp_pool() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void GMGetSkillListResponse::set_has_skill_exp_pool() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void GMGetSkillListResponse::clear_has_skill_exp_pool() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void GMGetSkillListResponse::clear_skill_exp_pool() {
+  skill_exp_pool_ = 0;
+  clear_has_skill_exp_pool();
+}
+inline ::google::protobuf::int32 GMGetSkillListResponse::skill_exp_pool() const {
+  return skill_exp_pool_;
+}
+inline void GMGetSkillListResponse::set_skill_exp_pool(::google::protobuf::int32 value) {
+  set_has_skill_exp_pool();
+  skill_exp_pool_ = value;
+}
+
+// optional int32 practice_skill_limit = 6;
+inline bool GMGetSkillListResponse::has_practice_skill_limit() const {
+  return (_has_bits_[0] & 0x00000020u) != 0;
+}
+inline void GMGetSkillListResponse::set_has_practice_skill_limit() {
+  _has_bits_[0] |= 0x00000020u;
+}
+inline void GMGetSkillListResponse::clear_has_practice_skill_limit() {
+  _has_bits_[0] &= ~0x00000020u;
+}
+inline void GMGetSkillListResponse::clear_practice_skill_limit() {
+  practice_skill_limit_ = 0;
+  clear_has_practice_skill_limit();
+}
+inline ::google::protobuf::int32 GMGetSkillListResponse::practice_skill_limit() const {
+  return practice_skill_limit_;
+}
+inline void GMGetSkillListResponse::set_practice_skill_limit(::google::protobuf::int32 value) {
+  set_has_practice_skill_limit();
+  practice_skill_limit_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// GMGetTitleListRequest
+
+// required int32 role_id = 1;
+inline bool GMGetTitleListRequest::has_role_id() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void GMGetTitleListRequest::set_has_role_id() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void GMGetTitleListRequest::clear_has_role_id() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void GMGetTitleListRequest::clear_role_id() {
+  role_id_ = 0;
+  clear_has_role_id();
+}
+inline ::google::protobuf::int32 GMGetTitleListRequest::role_id() const {
+  return role_id_;
+}
+inline void GMGetTitleListRequest::set_role_id(::google::protobuf::int32 value) {
+  set_has_role_id();
+  role_id_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// GMGetTitleListResponse
+
+// required int32 error_code = 1;
+inline bool GMGetTitleListResponse::has_error_code() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void GMGetTitleListResponse::set_has_error_code() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void GMGetTitleListResponse::clear_has_error_code() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void GMGetTitleListResponse::clear_error_code() {
+  error_code_ = 0;
+  clear_has_error_code();
+}
+inline ::google::protobuf::int32 GMGetTitleListResponse::error_code() const {
+  return error_code_;
+}
+inline void GMGetTitleListResponse::set_error_code(::google::protobuf::int32 value) {
+  set_has_error_code();
+  error_code_ = value;
+}
+
+// repeated int32 titles = 2;
+inline int GMGetTitleListResponse::titles_size() const {
+  return titles_.size();
+}
+inline void GMGetTitleListResponse::clear_titles() {
+  titles_.Clear();
+}
+inline ::google::protobuf::int32 GMGetTitleListResponse::titles(int index) const {
+  return titles_.Get(index);
+}
+inline void GMGetTitleListResponse::set_titles(int index, ::google::protobuf::int32 value) {
+  titles_.Set(index, value);
+}
+inline void GMGetTitleListResponse::add_titles(::google::protobuf::int32 value) {
+  titles_.Add(value);
+}
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::int32 >&
+GMGetTitleListResponse::titles() const {
+  return titles_;
+}
+inline ::google::protobuf::RepeatedField< ::google::protobuf::int32 >*
+GMGetTitleListResponse::mutable_titles() {
+  return &titles_;
+}
+
+// -------------------------------------------------------------------
+
+// GMSetRoleTitleRequest
+
+// required int32 role_id = 1;
+inline bool GMSetRoleTitleRequest::has_role_id() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void GMSetRoleTitleRequest::set_has_role_id() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void GMSetRoleTitleRequest::clear_has_role_id() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void GMSetRoleTitleRequest::clear_role_id() {
+  role_id_ = 0;
+  clear_has_role_id();
+}
+inline ::google::protobuf::int32 GMSetRoleTitleRequest::role_id() const {
+  return role_id_;
+}
+inline void GMSetRoleTitleRequest::set_role_id(::google::protobuf::int32 value) {
+  set_has_role_id();
+  role_id_ = value;
+}
+
+// required int32 title_id = 2;
+inline bool GMSetRoleTitleRequest::has_title_id() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void GMSetRoleTitleRequest::set_has_title_id() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void GMSetRoleTitleRequest::clear_has_title_id() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void GMSetRoleTitleRequest::clear_title_id() {
+  title_id_ = 0;
+  clear_has_title_id();
+}
+inline ::google::protobuf::int32 GMSetRoleTitleRequest::title_id() const {
+  return title_id_;
+}
+inline void GMSetRoleTitleRequest::set_title_id(::google::protobuf::int32 value) {
+  set_has_title_id();
+  title_id_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// GMSetRoleTitleResponse
+
+// required int32 error_code = 1;
+inline bool GMSetRoleTitleResponse::has_error_code() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void GMSetRoleTitleResponse::set_has_error_code() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void GMSetRoleTitleResponse::clear_has_error_code() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void GMSetRoleTitleResponse::clear_error_code() {
+  error_code_ = 0;
+  clear_has_error_code();
+}
+inline ::google::protobuf::int32 GMSetRoleTitleResponse::error_code() const {
+  return error_code_;
+}
+inline void GMSetRoleTitleResponse::set_error_code(::google::protobuf::int32 value) {
+  set_has_error_code();
+  error_code_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// GMGetTitleInfoRequest
+
+// required int32 title_id = 1;
+inline bool GMGetTitleInfoRequest::has_title_id() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void GMGetTitleInfoRequest::set_has_title_id() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void GMGetTitleInfoRequest::clear_has_title_id() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void GMGetTitleInfoRequest::clear_title_id() {
+  title_id_ = 0;
+  clear_has_title_id();
+}
+inline ::google::protobuf::int32 GMGetTitleInfoRequest::title_id() const {
+  return title_id_;
+}
+inline void GMGetTitleInfoRequest::set_title_id(::google::protobuf::int32 value) {
+  set_has_title_id();
+  title_id_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// TitleInfo
+
+// required int32 title_id = 1;
+inline bool TitleInfo::has_title_id() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void TitleInfo::set_has_title_id() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void TitleInfo::clear_has_title_id() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void TitleInfo::clear_title_id() {
+  title_id_ = 0;
+  clear_has_title_id();
+}
+inline ::google::protobuf::int32 TitleInfo::title_id() const {
+  return title_id_;
+}
+inline void TitleInfo::set_title_id(::google::protobuf::int32 value) {
+  set_has_title_id();
+  title_id_ = value;
+}
+
+// required int32 role_id = 2;
+inline bool TitleInfo::has_role_id() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void TitleInfo::set_has_role_id() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void TitleInfo::clear_has_role_id() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void TitleInfo::clear_role_id() {
+  role_id_ = 0;
+  clear_has_role_id();
+}
+inline ::google::protobuf::int32 TitleInfo::role_id() const {
+  return role_id_;
+}
+inline void TitleInfo::set_role_id(::google::protobuf::int32 value) {
+  set_has_role_id();
+  role_id_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// GMGetTitleInfoResponse
+
+// required int32 error_code = 1;
+inline bool GMGetTitleInfoResponse::has_error_code() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void GMGetTitleInfoResponse::set_has_error_code() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void GMGetTitleInfoResponse::clear_has_error_code() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void GMGetTitleInfoResponse::clear_error_code() {
+  error_code_ = 0;
+  clear_has_error_code();
+}
+inline ::google::protobuf::int32 GMGetTitleInfoResponse::error_code() const {
+  return error_code_;
+}
+inline void GMGetTitleInfoResponse::set_error_code(::google::protobuf::int32 value) {
+  set_has_error_code();
+  error_code_ = value;
+}
+
+// optional .protocols.common.TitleInfo title_info = 2;
+inline bool GMGetTitleInfoResponse::has_title_info() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void GMGetTitleInfoResponse::set_has_title_info() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void GMGetTitleInfoResponse::clear_has_title_info() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void GMGetTitleInfoResponse::clear_title_info() {
+  if (title_info_ != NULL) title_info_->::protocols::common::TitleInfo::Clear();
+  clear_has_title_info();
+}
+inline const ::protocols::common::TitleInfo& GMGetTitleInfoResponse::title_info() const {
+  return title_info_ != NULL ? *title_info_ : *default_instance_->title_info_;
+}
+inline ::protocols::common::TitleInfo* GMGetTitleInfoResponse::mutable_title_info() {
+  set_has_title_info();
+  if (title_info_ == NULL) title_info_ = new ::protocols::common::TitleInfo;
+  return title_info_;
+}
+inline ::protocols::common::TitleInfo* GMGetTitleInfoResponse::release_title_info() {
+  clear_has_title_info();
+  ::protocols::common::TitleInfo* temp = title_info_;
+  title_info_ = NULL;
+  return temp;
+}
+
 
 // @@protoc_insertion_point(namespace_scope)
 
@@ -10983,8 +14303,16 @@ inline const EnumDescriptor* GetEnumDescriptor< protocols::common::LOG_SRC_TYPE>
   return protocols::common::LOG_SRC_TYPE_descriptor();
 }
 template <>
+inline const EnumDescriptor* GetEnumDescriptor< protocols::common::TRANSACTION_CHANNEL>() {
+  return protocols::common::TRANSACTION_CHANNEL_descriptor();
+}
+template <>
 inline const EnumDescriptor* GetEnumDescriptor< protocols::common::LOG_ACTION_TYPE>() {
   return protocols::common::LOG_ACTION_TYPE_descriptor();
+}
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< protocols::common::PAY_MAIN_CATALOG>() {
+  return protocols::common::PAY_MAIN_CATALOG_descriptor();
 }
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< protocols::common::BUY_TYPE>() {
@@ -11001,10 +14329,6 @@ inline const EnumDescriptor* GetEnumDescriptor< protocols::common::SUB_PROPS_TYP
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< protocols::common::ADD_MONEY_TYPE>() {
   return protocols::common::ADD_MONEY_TYPE_descriptor();
-}
-template <>
-inline const EnumDescriptor* GetEnumDescriptor< protocols::common::SUB_MONEY_TYPE>() {
-  return protocols::common::SUB_MONEY_TYPE_descriptor();
 }
 
 }  // namespace google

@@ -102,6 +102,19 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 const ::google::protobuf::Descriptor* ExpandStorageResponse_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   ExpandStorageResponse_reflection_ = NULL;
+const ::google::protobuf::Descriptor* BuyVipRequest_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  BuyVipRequest_reflection_ = NULL;
+const ::google::protobuf::Descriptor* BuyVipResponse_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  BuyVipResponse_reflection_ = NULL;
+const ::google::protobuf::Descriptor* WingSpiritSystemRequest_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  WingSpiritSystemRequest_reflection_ = NULL;
+const ::google::protobuf::Descriptor* WingSpiritSystemResponse_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  WingSpiritSystemResponse_reflection_ = NULL;
+const ::google::protobuf::EnumDescriptor* WingSpiritRequestType_descriptor_ = NULL;
 
 }  // namespace
 
@@ -540,8 +553,9 @@ void protobuf_AssignDesc_game_5fitem_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(OpenDepotResponse));
   ExpandStorageRequest_descriptor_ = file->message_type(26);
-  static const int ExpandStorageRequest_offsets_[1] = {
+  static const int ExpandStorageRequest_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ExpandStorageRequest, pos_type_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ExpandStorageRequest, count_),
   };
   ExpandStorageRequest_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -570,6 +584,83 @@ void protobuf_AssignDesc_game_5fitem_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(ExpandStorageResponse));
+  BuyVipRequest_descriptor_ = file->message_type(28);
+  static const int BuyVipRequest_offsets_[2] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BuyVipRequest, tid_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BuyVipRequest, vip_level_),
+  };
+  BuyVipRequest_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      BuyVipRequest_descriptor_,
+      BuyVipRequest::default_instance_,
+      BuyVipRequest_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BuyVipRequest, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BuyVipRequest, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(BuyVipRequest));
+  BuyVipResponse_descriptor_ = file->message_type(29);
+  static const int BuyVipResponse_offsets_[3] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BuyVipResponse, error_code_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BuyVipResponse, price_type_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BuyVipResponse, price_value_),
+  };
+  BuyVipResponse_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      BuyVipResponse_descriptor_,
+      BuyVipResponse::default_instance_,
+      BuyVipResponse_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BuyVipResponse, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BuyVipResponse, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(BuyVipResponse));
+  WingSpiritSystemRequest_descriptor_ = file->message_type(30);
+  static const int WingSpiritSystemRequest_offsets_[7] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(WingSpiritSystemRequest, type_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(WingSpiritSystemRequest, generator_level_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(WingSpiritSystemRequest, spirit_index_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(WingSpiritSystemRequest, source_spirit_index_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(WingSpiritSystemRequest, slot_num_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(WingSpiritSystemRequest, wing_item_id_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(WingSpiritSystemRequest, exchange_spirit_id_),
+  };
+  WingSpiritSystemRequest_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      WingSpiritSystemRequest_descriptor_,
+      WingSpiritSystemRequest::default_instance_,
+      WingSpiritSystemRequest_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(WingSpiritSystemRequest, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(WingSpiritSystemRequest, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(WingSpiritSystemRequest));
+  WingSpiritSystemResponse_descriptor_ = file->message_type(31);
+  static const int WingSpiritSystemResponse_offsets_[8] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(WingSpiritSystemResponse, error_code_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(WingSpiritSystemResponse, wings_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(WingSpiritSystemResponse, spirits_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(WingSpiritSystemResponse, generators_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(WingSpiritSystemResponse, bag_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(WingSpiritSystemResponse, fragement_num_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(WingSpiritSystemResponse, point_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(WingSpiritSystemResponse, magic_leaf_num_),
+  };
+  WingSpiritSystemResponse_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      WingSpiritSystemResponse_descriptor_,
+      WingSpiritSystemResponse::default_instance_,
+      WingSpiritSystemResponse_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(WingSpiritSystemResponse, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(WingSpiritSystemResponse, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(WingSpiritSystemResponse));
+  WingSpiritRequestType_descriptor_ = file->enum_type(0);
 }
 
 namespace {
@@ -638,6 +729,14 @@ void protobuf_RegisterTypes(const ::std::string&) {
     ExpandStorageRequest_descriptor_, &ExpandStorageRequest::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     ExpandStorageResponse_descriptor_, &ExpandStorageResponse::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    BuyVipRequest_descriptor_, &BuyVipRequest::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    BuyVipResponse_descriptor_, &BuyVipResponse::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    WingSpiritSystemRequest_descriptor_, &WingSpiritSystemRequest::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    WingSpiritSystemResponse_descriptor_, &WingSpiritSystemResponse::default_instance());
 }
 
 }  // namespace
@@ -699,6 +798,14 @@ void protobuf_ShutdownFile_game_5fitem_2eproto() {
   delete ExpandStorageRequest_reflection_;
   delete ExpandStorageResponse::default_instance_;
   delete ExpandStorageResponse_reflection_;
+  delete BuyVipRequest::default_instance_;
+  delete BuyVipRequest_reflection_;
+  delete BuyVipResponse::default_instance_;
+  delete BuyVipResponse_reflection_;
+  delete WingSpiritSystemRequest::default_instance_;
+  delete WingSpiritSystemRequest_reflection_;
+  delete WingSpiritSystemResponse::default_instance_;
+  delete WingSpiritSystemResponse_reflection_;
 }
 
 void protobuf_AddDesc_game_5fitem_2eproto() {
@@ -759,9 +866,41 @@ void protobuf_AddDesc_game_5fitem_2eproto() {
     "Request\022\016\n\006npc_id\030\001 \001(\005\"h\n\021OpenDepotResp"
     "onse\022\022\n\nerror_code\030\001 \002(\005\022-\n\titem_list\030\002 "
     "\003(\0132\032.protocols.common.ItemInfo\022\020\n\010max_s"
-    "ize\030\003 \001(\005\"(\n\024ExpandStorageRequest\022\020\n\010pos"
-    "_type\030\001 \001(\005\"=\n\025ExpandStorageResponse\022\022\n\n"
-    "error_code\030\001 \002(\005\022\020\n\010max_size\030\002 \001(\005", 2114);
+    "ize\030\003 \001(\005\":\n\024ExpandStorageRequest\022\020\n\010pos"
+    "_type\030\001 \001(\005\022\020\n\005count\030\002 \001(\005:\0011\"=\n\025ExpandS"
+    "torageResponse\022\022\n\nerror_code\030\001 \002(\005\022\020\n\010ma"
+    "x_size\030\002 \001(\005\"2\n\rBuyVipRequest\022\013\n\003tid\030\001 \002"
+    "(\005\022\024\n\tvip_level\030\002 \001(\005:\0010\"M\n\016BuyVipRespon"
+    "se\022\022\n\nerror_code\030\001 \002(\005\022\022\n\nprice_type\030\002 \001"
+    "(\005\022\023\n\013price_value\030\003 \001(\005\"\340\001\n\027WingSpiritSy"
+    "stemRequest\0225\n\004type\030\001 \002(\0162\'.protocols.co"
+    "mmon.WingSpiritRequestType\022\027\n\017generator_"
+    "level\030\002 \001(\005\022\024\n\014spirit_index\030\003 \001(\005\022\033\n\023sou"
+    "rce_spirit_index\030\004 \001(\005\022\020\n\010slot_num\030\005 \001(\005"
+    "\022\024\n\014wing_item_id\030\006 \001(\003\022\032\n\022exchange_spiri"
+    "t_id\030\007 \001(\005\"\267\002\n\030WingSpiritSystemResponse\022"
+    "\022\n\nerror_code\030\001 \002(\005\022-\n\005wings\030\002 \003(\0132\036.pro"
+    "tocols.common.WingItemInfo\0221\n\007spirits\030\003 "
+    "\003(\0132 .protocols.common.WingSpiritInfo\0229\n"
+    "\ngenerators\030\004 \003(\0132%.protocols.common.Spi"
+    "ritGeneratorInfo\022,\n\003bag\030\005 \001(\0132\037.protocol"
+    "s.common.WingSpiritBag\022\025\n\rfragement_num\030"
+    "\006 \001(\003\022\r\n\005point\030\007 \001(\003\022\026\n\016magic_leaf_num\030\010"
+    " \001(\003*\257\004\n\025WingSpiritRequestType\022\035\n\031wing_s"
+    "pirit_get_wing_list\020\000\022\037\n\033wing_spirit_get"
+    "_spirit_pool\020\004\022\"\n\036wing_spirit_get_genera"
+    "tor_list\020\005\022\036\n\032wing_spirit_get_spirit_bag"
+    "\020\010\022$\n wing_spirit_get_spirit_fragments\020\014"
+    "\022#\n\037wing_spirit_enable_generator_l4\020\006\022\037\n"
+    "\033wing_spirit_gen_wing_spirit\020\001\022\037\n\033wing_s"
+    "pirit_get_wing_spirit\020\002\022 \n\034wing_spirit_s"
+    "ell_wing_spirit\020\003\022\034\n\030wing_spirit_merge_s"
+    "pirit\020\007\022\037\n\033wing_spirit_enable_bag_slot\020\t"
+    "\022\034\n\030wing_spirit_equip_spirit\020\n\022\036\n\032wing_s"
+    "pirit_unequip_spirit\020\013\022\"\n\036wing_spirit_ex"
+    "change_fragments\020\r\022\036\n\032wing_spirit_magic_"
+    "leaf_num\020\016\022\"\n\036wing_spirit_move_spirit_in"
+    "_bag\020\017", 3366);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "game_item.proto", &protobuf_RegisterTypes);
   BuyItemRequest::default_instance_ = new BuyItemRequest();
@@ -792,6 +931,10 @@ void protobuf_AddDesc_game_5fitem_2eproto() {
   OpenDepotResponse::default_instance_ = new OpenDepotResponse();
   ExpandStorageRequest::default_instance_ = new ExpandStorageRequest();
   ExpandStorageResponse::default_instance_ = new ExpandStorageResponse();
+  BuyVipRequest::default_instance_ = new BuyVipRequest();
+  BuyVipResponse::default_instance_ = new BuyVipResponse();
+  WingSpiritSystemRequest::default_instance_ = new WingSpiritSystemRequest();
+  WingSpiritSystemResponse::default_instance_ = new WingSpiritSystemResponse();
   BuyItemRequest::default_instance_->InitAsDefaultInstance();
   BuyItemResponse::default_instance_->InitAsDefaultInstance();
   SellItemRequest::default_instance_->InitAsDefaultInstance();
@@ -820,6 +963,10 @@ void protobuf_AddDesc_game_5fitem_2eproto() {
   OpenDepotResponse::default_instance_->InitAsDefaultInstance();
   ExpandStorageRequest::default_instance_->InitAsDefaultInstance();
   ExpandStorageResponse::default_instance_->InitAsDefaultInstance();
+  BuyVipRequest::default_instance_->InitAsDefaultInstance();
+  BuyVipResponse::default_instance_->InitAsDefaultInstance();
+  WingSpiritSystemRequest::default_instance_->InitAsDefaultInstance();
+  WingSpiritSystemResponse::default_instance_->InitAsDefaultInstance();
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_game_5fitem_2eproto);
 }
 
@@ -829,6 +976,34 @@ struct StaticDescriptorInitializer_game_5fitem_2eproto {
     protobuf_AddDesc_game_5fitem_2eproto();
   }
 } static_descriptor_initializer_game_5fitem_2eproto_;
+
+const ::google::protobuf::EnumDescriptor* WingSpiritRequestType_descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return WingSpiritRequestType_descriptor_;
+}
+bool WingSpiritRequestType_IsValid(int value) {
+  switch(value) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+    case 9:
+    case 10:
+    case 11:
+    case 12:
+    case 13:
+    case 14:
+    case 15:
+      return true;
+    default:
+      return false;
+  }
+}
 
 
 // ===================================================================
@@ -7748,6 +7923,7 @@ void OpenDepotResponse::Swap(OpenDepotResponse* other) {
 
 #ifndef _MSC_VER
 const int ExpandStorageRequest::kPosTypeFieldNumber;
+const int ExpandStorageRequest::kCountFieldNumber;
 #endif  // !_MSC_VER
 
 ExpandStorageRequest::ExpandStorageRequest()
@@ -7767,6 +7943,7 @@ ExpandStorageRequest::ExpandStorageRequest(const ExpandStorageRequest& from)
 void ExpandStorageRequest::SharedCtor() {
   _cached_size_ = 0;
   pos_type_ = 0;
+  count_ = 1;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -7802,6 +7979,7 @@ ExpandStorageRequest* ExpandStorageRequest::New() const {
 void ExpandStorageRequest::Clear() {
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     pos_type_ = 0;
+    count_ = 1;
   }
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
@@ -7821,6 +7999,22 @@ bool ExpandStorageRequest::MergePartialFromCodedStream(
                    ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
                  input, &pos_type_)));
           set_has_pos_type();
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(16)) goto parse_count;
+        break;
+      }
+      
+      // optional int32 count = 2 [default = 1];
+      case 2: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_count:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &count_)));
+          set_has_count();
         } else {
           goto handle_uninterpreted;
         }
@@ -7851,6 +8045,11 @@ void ExpandStorageRequest::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteInt32(1, this->pos_type(), output);
   }
   
+  // optional int32 count = 2 [default = 1];
+  if (has_count()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(2, this->count(), output);
+  }
+  
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -7862,6 +8061,11 @@ void ExpandStorageRequest::SerializeWithCachedSizes(
   // optional int32 pos_type = 1;
   if (has_pos_type()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(1, this->pos_type(), target);
+  }
+  
+  // optional int32 count = 2 [default = 1];
+  if (has_count()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(2, this->count(), target);
   }
   
   if (!unknown_fields().empty()) {
@@ -7880,6 +8084,13 @@ int ExpandStorageRequest::ByteSize() const {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::Int32Size(
           this->pos_type());
+    }
+    
+    // optional int32 count = 2 [default = 1];
+    if (has_count()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->count());
     }
     
   }
@@ -7912,6 +8123,9 @@ void ExpandStorageRequest::MergeFrom(const ExpandStorageRequest& from) {
     if (from.has_pos_type()) {
       set_pos_type(from.pos_type());
     }
+    if (from.has_count()) {
+      set_count(from.count());
+    }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
@@ -7936,6 +8150,7 @@ bool ExpandStorageRequest::IsInitialized() const {
 void ExpandStorageRequest::Swap(ExpandStorageRequest* other) {
   if (other != this) {
     std::swap(pos_type_, other->pos_type_);
+    std::swap(count_, other->count_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
@@ -8195,6 +8410,1489 @@ void ExpandStorageResponse::Swap(ExpandStorageResponse* other) {
   ::google::protobuf::Metadata metadata;
   metadata.descriptor = ExpandStorageResponse_descriptor_;
   metadata.reflection = ExpandStorageResponse_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
+const int BuyVipRequest::kTidFieldNumber;
+const int BuyVipRequest::kVipLevelFieldNumber;
+#endif  // !_MSC_VER
+
+BuyVipRequest::BuyVipRequest()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+}
+
+void BuyVipRequest::InitAsDefaultInstance() {
+}
+
+BuyVipRequest::BuyVipRequest(const BuyVipRequest& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+}
+
+void BuyVipRequest::SharedCtor() {
+  _cached_size_ = 0;
+  tid_ = 0;
+  vip_level_ = 0;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+BuyVipRequest::~BuyVipRequest() {
+  SharedDtor();
+}
+
+void BuyVipRequest::SharedDtor() {
+  if (this != default_instance_) {
+  }
+}
+
+void BuyVipRequest::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* BuyVipRequest::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return BuyVipRequest_descriptor_;
+}
+
+const BuyVipRequest& BuyVipRequest::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_game_5fitem_2eproto();  return *default_instance_;
+}
+
+BuyVipRequest* BuyVipRequest::default_instance_ = NULL;
+
+BuyVipRequest* BuyVipRequest::New() const {
+  return new BuyVipRequest;
+}
+
+void BuyVipRequest::Clear() {
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    tid_ = 0;
+    vip_level_ = 0;
+  }
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool BuyVipRequest::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) return false
+  ::google::protobuf::uint32 tag;
+  while ((tag = input->ReadTag()) != 0) {
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // required int32 tid = 1;
+      case 1: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &tid_)));
+          set_has_tid();
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(16)) goto parse_vip_level;
+        break;
+      }
+      
+      // optional int32 vip_level = 2 [default = 0];
+      case 2: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_vip_level:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &vip_level_)));
+          set_has_vip_level();
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectAtEnd()) return true;
+        break;
+      }
+      
+      default: {
+      handle_uninterpreted:
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          return true;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+  return true;
+#undef DO_
+}
+
+void BuyVipRequest::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // required int32 tid = 1;
+  if (has_tid()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(1, this->tid(), output);
+  }
+  
+  // optional int32 vip_level = 2 [default = 0];
+  if (has_vip_level()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(2, this->vip_level(), output);
+  }
+  
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+}
+
+::google::protobuf::uint8* BuyVipRequest::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // required int32 tid = 1;
+  if (has_tid()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(1, this->tid(), target);
+  }
+  
+  // optional int32 vip_level = 2 [default = 0];
+  if (has_vip_level()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(2, this->vip_level(), target);
+  }
+  
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  return target;
+}
+
+int BuyVipRequest::ByteSize() const {
+  int total_size = 0;
+  
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    // required int32 tid = 1;
+    if (has_tid()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->tid());
+    }
+    
+    // optional int32 vip_level = 2 [default = 0];
+    if (has_vip_level()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->vip_level());
+    }
+    
+  }
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void BuyVipRequest::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const BuyVipRequest* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const BuyVipRequest*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void BuyVipRequest::MergeFrom(const BuyVipRequest& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_tid()) {
+      set_tid(from.tid());
+    }
+    if (from.has_vip_level()) {
+      set_vip_level(from.vip_level());
+    }
+  }
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void BuyVipRequest::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void BuyVipRequest::CopyFrom(const BuyVipRequest& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool BuyVipRequest::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
+  
+  return true;
+}
+
+void BuyVipRequest::Swap(BuyVipRequest* other) {
+  if (other != this) {
+    std::swap(tid_, other->tid_);
+    std::swap(vip_level_, other->vip_level_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata BuyVipRequest::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = BuyVipRequest_descriptor_;
+  metadata.reflection = BuyVipRequest_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
+const int BuyVipResponse::kErrorCodeFieldNumber;
+const int BuyVipResponse::kPriceTypeFieldNumber;
+const int BuyVipResponse::kPriceValueFieldNumber;
+#endif  // !_MSC_VER
+
+BuyVipResponse::BuyVipResponse()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+}
+
+void BuyVipResponse::InitAsDefaultInstance() {
+}
+
+BuyVipResponse::BuyVipResponse(const BuyVipResponse& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+}
+
+void BuyVipResponse::SharedCtor() {
+  _cached_size_ = 0;
+  error_code_ = 0;
+  price_type_ = 0;
+  price_value_ = 0;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+BuyVipResponse::~BuyVipResponse() {
+  SharedDtor();
+}
+
+void BuyVipResponse::SharedDtor() {
+  if (this != default_instance_) {
+  }
+}
+
+void BuyVipResponse::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* BuyVipResponse::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return BuyVipResponse_descriptor_;
+}
+
+const BuyVipResponse& BuyVipResponse::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_game_5fitem_2eproto();  return *default_instance_;
+}
+
+BuyVipResponse* BuyVipResponse::default_instance_ = NULL;
+
+BuyVipResponse* BuyVipResponse::New() const {
+  return new BuyVipResponse;
+}
+
+void BuyVipResponse::Clear() {
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    error_code_ = 0;
+    price_type_ = 0;
+    price_value_ = 0;
+  }
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool BuyVipResponse::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) return false
+  ::google::protobuf::uint32 tag;
+  while ((tag = input->ReadTag()) != 0) {
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // required int32 error_code = 1;
+      case 1: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &error_code_)));
+          set_has_error_code();
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(16)) goto parse_price_type;
+        break;
+      }
+      
+      // optional int32 price_type = 2;
+      case 2: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_price_type:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &price_type_)));
+          set_has_price_type();
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(24)) goto parse_price_value;
+        break;
+      }
+      
+      // optional int32 price_value = 3;
+      case 3: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_price_value:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &price_value_)));
+          set_has_price_value();
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectAtEnd()) return true;
+        break;
+      }
+      
+      default: {
+      handle_uninterpreted:
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          return true;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+  return true;
+#undef DO_
+}
+
+void BuyVipResponse::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // required int32 error_code = 1;
+  if (has_error_code()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(1, this->error_code(), output);
+  }
+  
+  // optional int32 price_type = 2;
+  if (has_price_type()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(2, this->price_type(), output);
+  }
+  
+  // optional int32 price_value = 3;
+  if (has_price_value()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(3, this->price_value(), output);
+  }
+  
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+}
+
+::google::protobuf::uint8* BuyVipResponse::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // required int32 error_code = 1;
+  if (has_error_code()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(1, this->error_code(), target);
+  }
+  
+  // optional int32 price_type = 2;
+  if (has_price_type()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(2, this->price_type(), target);
+  }
+  
+  // optional int32 price_value = 3;
+  if (has_price_value()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(3, this->price_value(), target);
+  }
+  
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  return target;
+}
+
+int BuyVipResponse::ByteSize() const {
+  int total_size = 0;
+  
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    // required int32 error_code = 1;
+    if (has_error_code()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->error_code());
+    }
+    
+    // optional int32 price_type = 2;
+    if (has_price_type()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->price_type());
+    }
+    
+    // optional int32 price_value = 3;
+    if (has_price_value()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->price_value());
+    }
+    
+  }
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void BuyVipResponse::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const BuyVipResponse* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const BuyVipResponse*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void BuyVipResponse::MergeFrom(const BuyVipResponse& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_error_code()) {
+      set_error_code(from.error_code());
+    }
+    if (from.has_price_type()) {
+      set_price_type(from.price_type());
+    }
+    if (from.has_price_value()) {
+      set_price_value(from.price_value());
+    }
+  }
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void BuyVipResponse::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void BuyVipResponse::CopyFrom(const BuyVipResponse& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool BuyVipResponse::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
+  
+  return true;
+}
+
+void BuyVipResponse::Swap(BuyVipResponse* other) {
+  if (other != this) {
+    std::swap(error_code_, other->error_code_);
+    std::swap(price_type_, other->price_type_);
+    std::swap(price_value_, other->price_value_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata BuyVipResponse::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = BuyVipResponse_descriptor_;
+  metadata.reflection = BuyVipResponse_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
+const int WingSpiritSystemRequest::kTypeFieldNumber;
+const int WingSpiritSystemRequest::kGeneratorLevelFieldNumber;
+const int WingSpiritSystemRequest::kSpiritIndexFieldNumber;
+const int WingSpiritSystemRequest::kSourceSpiritIndexFieldNumber;
+const int WingSpiritSystemRequest::kSlotNumFieldNumber;
+const int WingSpiritSystemRequest::kWingItemIdFieldNumber;
+const int WingSpiritSystemRequest::kExchangeSpiritIdFieldNumber;
+#endif  // !_MSC_VER
+
+WingSpiritSystemRequest::WingSpiritSystemRequest()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+}
+
+void WingSpiritSystemRequest::InitAsDefaultInstance() {
+}
+
+WingSpiritSystemRequest::WingSpiritSystemRequest(const WingSpiritSystemRequest& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+}
+
+void WingSpiritSystemRequest::SharedCtor() {
+  _cached_size_ = 0;
+  type_ = 0;
+  generator_level_ = 0;
+  spirit_index_ = 0;
+  source_spirit_index_ = 0;
+  slot_num_ = 0;
+  wing_item_id_ = GOOGLE_LONGLONG(0);
+  exchange_spirit_id_ = 0;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+WingSpiritSystemRequest::~WingSpiritSystemRequest() {
+  SharedDtor();
+}
+
+void WingSpiritSystemRequest::SharedDtor() {
+  if (this != default_instance_) {
+  }
+}
+
+void WingSpiritSystemRequest::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* WingSpiritSystemRequest::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return WingSpiritSystemRequest_descriptor_;
+}
+
+const WingSpiritSystemRequest& WingSpiritSystemRequest::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_game_5fitem_2eproto();  return *default_instance_;
+}
+
+WingSpiritSystemRequest* WingSpiritSystemRequest::default_instance_ = NULL;
+
+WingSpiritSystemRequest* WingSpiritSystemRequest::New() const {
+  return new WingSpiritSystemRequest;
+}
+
+void WingSpiritSystemRequest::Clear() {
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    type_ = 0;
+    generator_level_ = 0;
+    spirit_index_ = 0;
+    source_spirit_index_ = 0;
+    slot_num_ = 0;
+    wing_item_id_ = GOOGLE_LONGLONG(0);
+    exchange_spirit_id_ = 0;
+  }
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool WingSpiritSystemRequest::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) return false
+  ::google::protobuf::uint32 tag;
+  while ((tag = input->ReadTag()) != 0) {
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // required .protocols.common.WingSpiritRequestType type = 1;
+      case 1: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          if (protocols::common::WingSpiritRequestType_IsValid(value)) {
+            set_type(static_cast< protocols::common::WingSpiritRequestType >(value));
+          } else {
+            mutable_unknown_fields()->AddVarint(1, value);
+          }
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(16)) goto parse_generator_level;
+        break;
+      }
+      
+      // optional int32 generator_level = 2;
+      case 2: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_generator_level:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &generator_level_)));
+          set_has_generator_level();
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(24)) goto parse_spirit_index;
+        break;
+      }
+      
+      // optional int32 spirit_index = 3;
+      case 3: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_spirit_index:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &spirit_index_)));
+          set_has_spirit_index();
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(32)) goto parse_source_spirit_index;
+        break;
+      }
+      
+      // optional int32 source_spirit_index = 4;
+      case 4: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_source_spirit_index:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &source_spirit_index_)));
+          set_has_source_spirit_index();
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(40)) goto parse_slot_num;
+        break;
+      }
+      
+      // optional int32 slot_num = 5;
+      case 5: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_slot_num:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &slot_num_)));
+          set_has_slot_num();
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(48)) goto parse_wing_item_id;
+        break;
+      }
+      
+      // optional int64 wing_item_id = 6;
+      case 6: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_wing_item_id:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int64, ::google::protobuf::internal::WireFormatLite::TYPE_INT64>(
+                 input, &wing_item_id_)));
+          set_has_wing_item_id();
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(56)) goto parse_exchange_spirit_id;
+        break;
+      }
+      
+      // optional int32 exchange_spirit_id = 7;
+      case 7: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_exchange_spirit_id:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &exchange_spirit_id_)));
+          set_has_exchange_spirit_id();
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectAtEnd()) return true;
+        break;
+      }
+      
+      default: {
+      handle_uninterpreted:
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          return true;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+  return true;
+#undef DO_
+}
+
+void WingSpiritSystemRequest::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // required .protocols.common.WingSpiritRequestType type = 1;
+  if (has_type()) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      1, this->type(), output);
+  }
+  
+  // optional int32 generator_level = 2;
+  if (has_generator_level()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(2, this->generator_level(), output);
+  }
+  
+  // optional int32 spirit_index = 3;
+  if (has_spirit_index()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(3, this->spirit_index(), output);
+  }
+  
+  // optional int32 source_spirit_index = 4;
+  if (has_source_spirit_index()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(4, this->source_spirit_index(), output);
+  }
+  
+  // optional int32 slot_num = 5;
+  if (has_slot_num()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(5, this->slot_num(), output);
+  }
+  
+  // optional int64 wing_item_id = 6;
+  if (has_wing_item_id()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt64(6, this->wing_item_id(), output);
+  }
+  
+  // optional int32 exchange_spirit_id = 7;
+  if (has_exchange_spirit_id()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(7, this->exchange_spirit_id(), output);
+  }
+  
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+}
+
+::google::protobuf::uint8* WingSpiritSystemRequest::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // required .protocols.common.WingSpiritRequestType type = 1;
+  if (has_type()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
+      1, this->type(), target);
+  }
+  
+  // optional int32 generator_level = 2;
+  if (has_generator_level()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(2, this->generator_level(), target);
+  }
+  
+  // optional int32 spirit_index = 3;
+  if (has_spirit_index()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(3, this->spirit_index(), target);
+  }
+  
+  // optional int32 source_spirit_index = 4;
+  if (has_source_spirit_index()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(4, this->source_spirit_index(), target);
+  }
+  
+  // optional int32 slot_num = 5;
+  if (has_slot_num()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(5, this->slot_num(), target);
+  }
+  
+  // optional int64 wing_item_id = 6;
+  if (has_wing_item_id()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt64ToArray(6, this->wing_item_id(), target);
+  }
+  
+  // optional int32 exchange_spirit_id = 7;
+  if (has_exchange_spirit_id()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(7, this->exchange_spirit_id(), target);
+  }
+  
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  return target;
+}
+
+int WingSpiritSystemRequest::ByteSize() const {
+  int total_size = 0;
+  
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    // required .protocols.common.WingSpiritRequestType type = 1;
+    if (has_type()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::EnumSize(this->type());
+    }
+    
+    // optional int32 generator_level = 2;
+    if (has_generator_level()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->generator_level());
+    }
+    
+    // optional int32 spirit_index = 3;
+    if (has_spirit_index()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->spirit_index());
+    }
+    
+    // optional int32 source_spirit_index = 4;
+    if (has_source_spirit_index()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->source_spirit_index());
+    }
+    
+    // optional int32 slot_num = 5;
+    if (has_slot_num()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->slot_num());
+    }
+    
+    // optional int64 wing_item_id = 6;
+    if (has_wing_item_id()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int64Size(
+          this->wing_item_id());
+    }
+    
+    // optional int32 exchange_spirit_id = 7;
+    if (has_exchange_spirit_id()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->exchange_spirit_id());
+    }
+    
+  }
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void WingSpiritSystemRequest::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const WingSpiritSystemRequest* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const WingSpiritSystemRequest*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void WingSpiritSystemRequest::MergeFrom(const WingSpiritSystemRequest& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_type()) {
+      set_type(from.type());
+    }
+    if (from.has_generator_level()) {
+      set_generator_level(from.generator_level());
+    }
+    if (from.has_spirit_index()) {
+      set_spirit_index(from.spirit_index());
+    }
+    if (from.has_source_spirit_index()) {
+      set_source_spirit_index(from.source_spirit_index());
+    }
+    if (from.has_slot_num()) {
+      set_slot_num(from.slot_num());
+    }
+    if (from.has_wing_item_id()) {
+      set_wing_item_id(from.wing_item_id());
+    }
+    if (from.has_exchange_spirit_id()) {
+      set_exchange_spirit_id(from.exchange_spirit_id());
+    }
+  }
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void WingSpiritSystemRequest::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void WingSpiritSystemRequest::CopyFrom(const WingSpiritSystemRequest& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool WingSpiritSystemRequest::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
+  
+  return true;
+}
+
+void WingSpiritSystemRequest::Swap(WingSpiritSystemRequest* other) {
+  if (other != this) {
+    std::swap(type_, other->type_);
+    std::swap(generator_level_, other->generator_level_);
+    std::swap(spirit_index_, other->spirit_index_);
+    std::swap(source_spirit_index_, other->source_spirit_index_);
+    std::swap(slot_num_, other->slot_num_);
+    std::swap(wing_item_id_, other->wing_item_id_);
+    std::swap(exchange_spirit_id_, other->exchange_spirit_id_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata WingSpiritSystemRequest::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = WingSpiritSystemRequest_descriptor_;
+  metadata.reflection = WingSpiritSystemRequest_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
+const int WingSpiritSystemResponse::kErrorCodeFieldNumber;
+const int WingSpiritSystemResponse::kWingsFieldNumber;
+const int WingSpiritSystemResponse::kSpiritsFieldNumber;
+const int WingSpiritSystemResponse::kGeneratorsFieldNumber;
+const int WingSpiritSystemResponse::kBagFieldNumber;
+const int WingSpiritSystemResponse::kFragementNumFieldNumber;
+const int WingSpiritSystemResponse::kPointFieldNumber;
+const int WingSpiritSystemResponse::kMagicLeafNumFieldNumber;
+#endif  // !_MSC_VER
+
+WingSpiritSystemResponse::WingSpiritSystemResponse()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+}
+
+void WingSpiritSystemResponse::InitAsDefaultInstance() {
+  bag_ = const_cast< ::protocols::common::WingSpiritBag*>(&::protocols::common::WingSpiritBag::default_instance());
+}
+
+WingSpiritSystemResponse::WingSpiritSystemResponse(const WingSpiritSystemResponse& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+}
+
+void WingSpiritSystemResponse::SharedCtor() {
+  _cached_size_ = 0;
+  error_code_ = 0;
+  bag_ = NULL;
+  fragement_num_ = GOOGLE_LONGLONG(0);
+  point_ = GOOGLE_LONGLONG(0);
+  magic_leaf_num_ = GOOGLE_LONGLONG(0);
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+WingSpiritSystemResponse::~WingSpiritSystemResponse() {
+  SharedDtor();
+}
+
+void WingSpiritSystemResponse::SharedDtor() {
+  if (this != default_instance_) {
+    delete bag_;
+  }
+}
+
+void WingSpiritSystemResponse::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* WingSpiritSystemResponse::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return WingSpiritSystemResponse_descriptor_;
+}
+
+const WingSpiritSystemResponse& WingSpiritSystemResponse::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_game_5fitem_2eproto();  return *default_instance_;
+}
+
+WingSpiritSystemResponse* WingSpiritSystemResponse::default_instance_ = NULL;
+
+WingSpiritSystemResponse* WingSpiritSystemResponse::New() const {
+  return new WingSpiritSystemResponse;
+}
+
+void WingSpiritSystemResponse::Clear() {
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    error_code_ = 0;
+    if (has_bag()) {
+      if (bag_ != NULL) bag_->::protocols::common::WingSpiritBag::Clear();
+    }
+    fragement_num_ = GOOGLE_LONGLONG(0);
+    point_ = GOOGLE_LONGLONG(0);
+    magic_leaf_num_ = GOOGLE_LONGLONG(0);
+  }
+  wings_.Clear();
+  spirits_.Clear();
+  generators_.Clear();
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool WingSpiritSystemResponse::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) return false
+  ::google::protobuf::uint32 tag;
+  while ((tag = input->ReadTag()) != 0) {
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // required int32 error_code = 1;
+      case 1: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &error_code_)));
+          set_has_error_code();
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(18)) goto parse_wings;
+        break;
+      }
+      
+      // repeated .protocols.common.WingItemInfo wings = 2;
+      case 2: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_wings:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_wings()));
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(18)) goto parse_wings;
+        if (input->ExpectTag(26)) goto parse_spirits;
+        break;
+      }
+      
+      // repeated .protocols.common.WingSpiritInfo spirits = 3;
+      case 3: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_spirits:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_spirits()));
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(26)) goto parse_spirits;
+        if (input->ExpectTag(34)) goto parse_generators;
+        break;
+      }
+      
+      // repeated .protocols.common.SpiritGeneratorInfo generators = 4;
+      case 4: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_generators:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_generators()));
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(34)) goto parse_generators;
+        if (input->ExpectTag(42)) goto parse_bag;
+        break;
+      }
+      
+      // optional .protocols.common.WingSpiritBag bag = 5;
+      case 5: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_bag:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_bag()));
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(48)) goto parse_fragement_num;
+        break;
+      }
+      
+      // optional int64 fragement_num = 6;
+      case 6: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_fragement_num:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int64, ::google::protobuf::internal::WireFormatLite::TYPE_INT64>(
+                 input, &fragement_num_)));
+          set_has_fragement_num();
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(56)) goto parse_point;
+        break;
+      }
+      
+      // optional int64 point = 7;
+      case 7: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_point:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int64, ::google::protobuf::internal::WireFormatLite::TYPE_INT64>(
+                 input, &point_)));
+          set_has_point();
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(64)) goto parse_magic_leaf_num;
+        break;
+      }
+      
+      // optional int64 magic_leaf_num = 8;
+      case 8: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_magic_leaf_num:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int64, ::google::protobuf::internal::WireFormatLite::TYPE_INT64>(
+                 input, &magic_leaf_num_)));
+          set_has_magic_leaf_num();
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectAtEnd()) return true;
+        break;
+      }
+      
+      default: {
+      handle_uninterpreted:
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          return true;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+  return true;
+#undef DO_
+}
+
+void WingSpiritSystemResponse::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // required int32 error_code = 1;
+  if (has_error_code()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(1, this->error_code(), output);
+  }
+  
+  // repeated .protocols.common.WingItemInfo wings = 2;
+  for (int i = 0; i < this->wings_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      2, this->wings(i), output);
+  }
+  
+  // repeated .protocols.common.WingSpiritInfo spirits = 3;
+  for (int i = 0; i < this->spirits_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      3, this->spirits(i), output);
+  }
+  
+  // repeated .protocols.common.SpiritGeneratorInfo generators = 4;
+  for (int i = 0; i < this->generators_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      4, this->generators(i), output);
+  }
+  
+  // optional .protocols.common.WingSpiritBag bag = 5;
+  if (has_bag()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      5, this->bag(), output);
+  }
+  
+  // optional int64 fragement_num = 6;
+  if (has_fragement_num()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt64(6, this->fragement_num(), output);
+  }
+  
+  // optional int64 point = 7;
+  if (has_point()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt64(7, this->point(), output);
+  }
+  
+  // optional int64 magic_leaf_num = 8;
+  if (has_magic_leaf_num()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt64(8, this->magic_leaf_num(), output);
+  }
+  
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+}
+
+::google::protobuf::uint8* WingSpiritSystemResponse::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // required int32 error_code = 1;
+  if (has_error_code()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(1, this->error_code(), target);
+  }
+  
+  // repeated .protocols.common.WingItemInfo wings = 2;
+  for (int i = 0; i < this->wings_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        2, this->wings(i), target);
+  }
+  
+  // repeated .protocols.common.WingSpiritInfo spirits = 3;
+  for (int i = 0; i < this->spirits_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        3, this->spirits(i), target);
+  }
+  
+  // repeated .protocols.common.SpiritGeneratorInfo generators = 4;
+  for (int i = 0; i < this->generators_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        4, this->generators(i), target);
+  }
+  
+  // optional .protocols.common.WingSpiritBag bag = 5;
+  if (has_bag()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        5, this->bag(), target);
+  }
+  
+  // optional int64 fragement_num = 6;
+  if (has_fragement_num()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt64ToArray(6, this->fragement_num(), target);
+  }
+  
+  // optional int64 point = 7;
+  if (has_point()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt64ToArray(7, this->point(), target);
+  }
+  
+  // optional int64 magic_leaf_num = 8;
+  if (has_magic_leaf_num()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt64ToArray(8, this->magic_leaf_num(), target);
+  }
+  
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  return target;
+}
+
+int WingSpiritSystemResponse::ByteSize() const {
+  int total_size = 0;
+  
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    // required int32 error_code = 1;
+    if (has_error_code()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->error_code());
+    }
+    
+    // optional .protocols.common.WingSpiritBag bag = 5;
+    if (has_bag()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          this->bag());
+    }
+    
+    // optional int64 fragement_num = 6;
+    if (has_fragement_num()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int64Size(
+          this->fragement_num());
+    }
+    
+    // optional int64 point = 7;
+    if (has_point()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int64Size(
+          this->point());
+    }
+    
+    // optional int64 magic_leaf_num = 8;
+    if (has_magic_leaf_num()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int64Size(
+          this->magic_leaf_num());
+    }
+    
+  }
+  // repeated .protocols.common.WingItemInfo wings = 2;
+  total_size += 1 * this->wings_size();
+  for (int i = 0; i < this->wings_size(); i++) {
+    total_size +=
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        this->wings(i));
+  }
+  
+  // repeated .protocols.common.WingSpiritInfo spirits = 3;
+  total_size += 1 * this->spirits_size();
+  for (int i = 0; i < this->spirits_size(); i++) {
+    total_size +=
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        this->spirits(i));
+  }
+  
+  // repeated .protocols.common.SpiritGeneratorInfo generators = 4;
+  total_size += 1 * this->generators_size();
+  for (int i = 0; i < this->generators_size(); i++) {
+    total_size +=
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        this->generators(i));
+  }
+  
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void WingSpiritSystemResponse::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const WingSpiritSystemResponse* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const WingSpiritSystemResponse*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void WingSpiritSystemResponse::MergeFrom(const WingSpiritSystemResponse& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  wings_.MergeFrom(from.wings_);
+  spirits_.MergeFrom(from.spirits_);
+  generators_.MergeFrom(from.generators_);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_error_code()) {
+      set_error_code(from.error_code());
+    }
+    if (from.has_bag()) {
+      mutable_bag()->::protocols::common::WingSpiritBag::MergeFrom(from.bag());
+    }
+    if (from.has_fragement_num()) {
+      set_fragement_num(from.fragement_num());
+    }
+    if (from.has_point()) {
+      set_point(from.point());
+    }
+    if (from.has_magic_leaf_num()) {
+      set_magic_leaf_num(from.magic_leaf_num());
+    }
+  }
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void WingSpiritSystemResponse::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void WingSpiritSystemResponse::CopyFrom(const WingSpiritSystemResponse& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool WingSpiritSystemResponse::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
+  
+  return true;
+}
+
+void WingSpiritSystemResponse::Swap(WingSpiritSystemResponse* other) {
+  if (other != this) {
+    std::swap(error_code_, other->error_code_);
+    wings_.Swap(&other->wings_);
+    spirits_.Swap(&other->spirits_);
+    generators_.Swap(&other->generators_);
+    std::swap(bag_, other->bag_);
+    std::swap(fragement_num_, other->fragement_num_);
+    std::swap(point_, other->point_);
+    std::swap(magic_leaf_num_, other->magic_leaf_num_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata WingSpiritSystemResponse::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = WingSpiritSystemResponse_descriptor_;
+  metadata.reflection = WingSpiritSystemResponse_reflection_;
   return metadata;
 }
 

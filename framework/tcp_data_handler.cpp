@@ -23,6 +23,7 @@ tcp_data_handler::tcp_data_handler():m_reactor(NULL)
 
     m_id.fd = -1 ;
     m_id.timestamp = 0 ;
+    m_max_write_size = MAX_WRITE_SIZE ;
 }
 
 tcp_data_handler::~tcp_data_handler()
@@ -175,7 +176,8 @@ void tcp_data_handler::on_write(int fd)
 {
     if(m_sbuf.data_size() > 0 )
     {
-        int send_size = ::send(fd,m_sbuf.data(),m_sbuf.data_size(),0) ;
+        int to_send = m_sbuf.data_size() > m_max_write_size ? m_max_write_size : m_sbuf.data_size();
+        int send_size = ::send(fd,m_sbuf.data(),to_send,0) ;
         if(send_size >0)
         {
             m_sbuf.pop_data(send_size) ;

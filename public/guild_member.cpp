@@ -15,6 +15,9 @@ guild_member::guild_member()
     title = 0;
     login_time = 0;
     gender = 0;
+    total_donate = 0;
+    recent_donate = 0;
+    last_donate_time = 0;
     memset(dirty,1,sizeof(dirty));
 }
 void guild_member::load(const char** data)
@@ -33,6 +36,9 @@ void guild_member::load(const char** data)
     role_name.assign(data[11]);
     login_time = (int32_t)atoi(data[12]);
     gender = (int8_t)atoi(data[13]);
+    total_donate = (int32_t)atoi(data[14]);
+    recent_donate = (int32_t)atoi(data[15]);
+    last_donate_time = (int32_t)atoi(data[16]);
     memset(dirty,0,sizeof(dirty));
 }
 void guild_member::load(const vector<string>& data)
@@ -51,6 +57,9 @@ void guild_member::load(const vector<string>& data)
     role_name.assign(data[11].c_str());
     login_time = (int32_t)atoi(data[12].c_str());
     gender = (int8_t)atoi(data[13].c_str());
+    total_donate = (int32_t)atoi(data[14].c_str());
+    recent_donate = (int32_t)atoi(data[15].c_str());
+    last_donate_time = (int32_t)atoi(data[16].c_str());
     memset(dirty,0,sizeof(dirty));
 }
 int guild_member::sql_key(char* buf,int size) const
@@ -149,6 +158,24 @@ int guild_member::sql_data(char* buf,int size) const
     {
         if(first_flag==0) {memcpy(buf,",",1); buf+= 1 ; size-= 1 ;}
         len =sql_gender(buf,size);
+        buf += len ; size -= len ;first_flag=0;
+    }
+    if(dirty[14])
+    {
+        if(first_flag==0) {memcpy(buf,",",1); buf+= 1 ; size-= 1 ;}
+        len =sql_total_donate(buf,size);
+        buf += len ; size -= len ;first_flag=0;
+    }
+    if(dirty[15])
+    {
+        if(first_flag==0) {memcpy(buf,",",1); buf+= 1 ; size-= 1 ;}
+        len =sql_recent_donate(buf,size);
+        buf += len ; size -= len ;first_flag=0;
+    }
+    if(dirty[16])
+    {
+        if(first_flag==0) {memcpy(buf,",",1); buf+= 1 ; size-= 1 ;}
+        len =sql_last_donate_time(buf,size);
         buf += len ; size -= len ;first_flag=0;
     }
     return origin_size - size ; 

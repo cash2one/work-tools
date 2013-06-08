@@ -6,6 +6,7 @@
 #include "../config/instance.pb.h"
 #include "../config/instance_npc.pb.h"
 #include "instance_wanted.pb.h"
+#include "common_util.h"
 
 typedef std::map<int, InstanceNPCData> InstanceNPCContainer ;
 
@@ -48,13 +49,14 @@ public:
 	bool InitInstanceWantedData(const char* data_file);
 	const InstanceWantedConfigList*  GetInstanceWantedConfigList(int instance_id);
 
+    void fill_auto_instance_drop_ids(int instance_id, int grade, IntIdArray& id_array);
+
 private:
     typedef std::map<int,InstanceConfig> Prototypes;
 
     Prototypes prototypes_;
 
-	// ??????
-	
+	// ¹Ø¿¨Í¨¼©
 	InstanceWantedConfigMap    m_instance_wanted_map;
 
     //DECLARE_SINGLETON_CONSTRUCTER(InstancePrototypeMgr);

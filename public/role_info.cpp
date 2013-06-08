@@ -59,6 +59,20 @@ role_info::role_info()
     instance_reset_count = 0;
     last_instance_reset_time = 0;
     follow_buddy_id = 0;
+    total_online_time = 0;
+    wing_tid = 0;
+    daily_first_charge_value = 0;
+    daily_first_charge_time = 0;
+    last_map_id = 0;
+    last_map_x = 0;
+    last_map_y = 0;
+    alien_boss_diamond_buff = 0;
+    alien_boss_coin_buff = 0;
+    killed_time = 0;
+    title = 0;
+    cur_auto_instance_count = 0;
+    max_auto_instance_count = 0;
+    last_auto_instance_time = 0;
     memset(dirty,1,sizeof(dirty));
 }
 void role_info::load(const char** data)
@@ -127,6 +141,21 @@ void role_info::load(const char** data)
     instance_reset_count = (int32_t)atoi(data[61]);
     last_instance_reset_time = (int32_t)atoi(data[62]);
     follow_buddy_id = (int32_t)atoi(data[63]);
+    total_online_time = (int32_t)atoi(data[64]);
+    learned_guild_skills.assign(data[65]);
+    wing_tid = (int32_t)atoi(data[66]);
+    daily_first_charge_value = (int32_t)atoi(data[67]);
+    daily_first_charge_time = (int32_t)atoi(data[68]);
+    last_map_id = (int16_t)atoi(data[69]);
+    last_map_x = (int16_t)atoi(data[70]);
+    last_map_y = (int16_t)atoi(data[71]);
+    alien_boss_diamond_buff = (int32_t)atoi(data[72]);
+    alien_boss_coin_buff = (int32_t)atoi(data[73]);
+    killed_time = (int32_t)atoi(data[74]);
+    title = (int32_t)atoi(data[75]);
+    cur_auto_instance_count = (int32_t)atoi(data[76]);
+    max_auto_instance_count = (int32_t)atoi(data[77]);
+    last_auto_instance_time = (int32_t)atoi(data[78]);
     memset(dirty,0,sizeof(dirty));
 }
 void role_info::load(const vector<string>& data)
@@ -195,6 +224,21 @@ void role_info::load(const vector<string>& data)
     instance_reset_count = (int32_t)atoi(data[61].c_str());
     last_instance_reset_time = (int32_t)atoi(data[62].c_str());
     follow_buddy_id = (int32_t)atoi(data[63].c_str());
+    total_online_time = (int32_t)atoi(data[64].c_str());
+    learned_guild_skills.assign(data[65].c_str());
+    wing_tid = (int32_t)atoi(data[66].c_str());
+    daily_first_charge_value = (int32_t)atoi(data[67].c_str());
+    daily_first_charge_time = (int32_t)atoi(data[68].c_str());
+    last_map_id = (int16_t)atoi(data[69].c_str());
+    last_map_x = (int16_t)atoi(data[70].c_str());
+    last_map_y = (int16_t)atoi(data[71].c_str());
+    alien_boss_diamond_buff = (int32_t)atoi(data[72].c_str());
+    alien_boss_coin_buff = (int32_t)atoi(data[73].c_str());
+    killed_time = (int32_t)atoi(data[74].c_str());
+    title = (int32_t)atoi(data[75].c_str());
+    cur_auto_instance_count = (int32_t)atoi(data[76].c_str());
+    max_auto_instance_count = (int32_t)atoi(data[77].c_str());
+    last_auto_instance_time = (int32_t)atoi(data[78].c_str());
     memset(dirty,0,sizeof(dirty));
 }
 int role_info::sql_key(char* buf,int size) const
@@ -590,6 +634,96 @@ int role_info::sql_data(char* buf,int size) const
     {
         if(first_flag==0) {memcpy(buf,",",1); buf+= 1 ; size-= 1 ;}
         len =sql_follow_buddy_id(buf,size);
+        buf += len ; size -= len ;first_flag=0;
+    }
+    if(dirty[64])
+    {
+        if(first_flag==0) {memcpy(buf,",",1); buf+= 1 ; size-= 1 ;}
+        len =sql_total_online_time(buf,size);
+        buf += len ; size -= len ;first_flag=0;
+    }
+    if(dirty[65])
+    {
+        if(first_flag==0) {memcpy(buf,",",1); buf+= 1 ; size-= 1 ;}
+        len =sql_learned_guild_skills(buf,size);
+        buf += len ; size -= len ;first_flag=0;
+    }
+    if(dirty[66])
+    {
+        if(first_flag==0) {memcpy(buf,",",1); buf+= 1 ; size-= 1 ;}
+        len =sql_wing_tid(buf,size);
+        buf += len ; size -= len ;first_flag=0;
+    }
+    if(dirty[67])
+    {
+        if(first_flag==0) {memcpy(buf,",",1); buf+= 1 ; size-= 1 ;}
+        len =sql_daily_first_charge_value(buf,size);
+        buf += len ; size -= len ;first_flag=0;
+    }
+    if(dirty[68])
+    {
+        if(first_flag==0) {memcpy(buf,",",1); buf+= 1 ; size-= 1 ;}
+        len =sql_daily_first_charge_time(buf,size);
+        buf += len ; size -= len ;first_flag=0;
+    }
+    if(dirty[69])
+    {
+        if(first_flag==0) {memcpy(buf,",",1); buf+= 1 ; size-= 1 ;}
+        len =sql_last_map_id(buf,size);
+        buf += len ; size -= len ;first_flag=0;
+    }
+    if(dirty[70])
+    {
+        if(first_flag==0) {memcpy(buf,",",1); buf+= 1 ; size-= 1 ;}
+        len =sql_last_map_x(buf,size);
+        buf += len ; size -= len ;first_flag=0;
+    }
+    if(dirty[71])
+    {
+        if(first_flag==0) {memcpy(buf,",",1); buf+= 1 ; size-= 1 ;}
+        len =sql_last_map_y(buf,size);
+        buf += len ; size -= len ;first_flag=0;
+    }
+    if(dirty[72])
+    {
+        if(first_flag==0) {memcpy(buf,",",1); buf+= 1 ; size-= 1 ;}
+        len =sql_alien_boss_diamond_buff(buf,size);
+        buf += len ; size -= len ;first_flag=0;
+    }
+    if(dirty[73])
+    {
+        if(first_flag==0) {memcpy(buf,",",1); buf+= 1 ; size-= 1 ;}
+        len =sql_alien_boss_coin_buff(buf,size);
+        buf += len ; size -= len ;first_flag=0;
+    }
+    if(dirty[74])
+    {
+        if(first_flag==0) {memcpy(buf,",",1); buf+= 1 ; size-= 1 ;}
+        len =sql_killed_time(buf,size);
+        buf += len ; size -= len ;first_flag=0;
+    }
+    if(dirty[75])
+    {
+        if(first_flag==0) {memcpy(buf,",",1); buf+= 1 ; size-= 1 ;}
+        len =sql_title(buf,size);
+        buf += len ; size -= len ;first_flag=0;
+    }
+    if(dirty[76])
+    {
+        if(first_flag==0) {memcpy(buf,",",1); buf+= 1 ; size-= 1 ;}
+        len =sql_cur_auto_instance_count(buf,size);
+        buf += len ; size -= len ;first_flag=0;
+    }
+    if(dirty[77])
+    {
+        if(first_flag==0) {memcpy(buf,",",1); buf+= 1 ; size-= 1 ;}
+        len =sql_max_auto_instance_count(buf,size);
+        buf += len ; size -= len ;first_flag=0;
+    }
+    if(dirty[78])
+    {
+        if(first_flag==0) {memcpy(buf,",",1); buf+= 1 ; size-= 1 ;}
+        len =sql_last_auto_instance_time(buf,size);
         buf += len ; size -= len ;first_flag=0;
     }
     return origin_size - size ; 

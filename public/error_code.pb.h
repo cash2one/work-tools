@@ -79,11 +79,16 @@ enum ErrorCode {
   EC_PLAYER_FREEZE = 41,
   EC_PHY_STR_NOT_ENOUGH = 42,
   EC_NOT_VIP = 43,
-  EC_VIP_LEVEL_LIMIT = 44
+  EC_VIP_LEVEL_LIMIT = 44,
+  EC_NOT_ENOUGH_YOULI = 45,
+  EC_PLAYER_IS_DEAD = 46,
+  EC_CONFIG_INVALID = 47,
+  EC_NEW_MEMORY_FAILED = 48,
+  EC_SCORE_IS_FULL = 49
 };
 bool ErrorCode_IsValid(int value);
 const ErrorCode ErrorCode_MIN = EC_SUCCESS;
-const ErrorCode ErrorCode_MAX = EC_VIP_LEVEL_LIMIT;
+const ErrorCode ErrorCode_MAX = EC_SCORE_IS_FULL;
 const int ErrorCode_ARRAYSIZE = ErrorCode_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* ErrorCode_descriptor();
@@ -201,11 +206,23 @@ enum ItemErrorCode {
   EC_INHERIT_NOT_ENOUGH_MATERIAL = 327,
   EC_MAKE_SOCKET_REACH_MAX = 330,
   EC_NOT_ENOUGH_MATERIAL = 331,
-  EC_GEM_NO_INSERT_EQUIP = 332
+  EC_GEM_NO_INSERT_EQUIP = 332,
+  EC_PICKUP_NO_THIS_ITEM = 335,
+  EC_PICKUP_ALREADY_PICKED = 336,
+  EC_PICKUP_BE_PICKING = 337,
+  EC_ONLY_LEADER_CAN_START_CRYSTAL = 338,
+  EC_WING_SYSTEM_ENABLE_L4_ALREADY_OPEND = 339,
+  EC_WING_SYSTEM_ENABLE_L4_NOT_ENOUGH = 340,
+  EC_WING_SYSTEM_LEVEL_DENIED = 341,
+  EC_WING_SYSTEM_SPIRIT_POOL_FULL = 342,
+  EC_WING_SYSTEM_SPIRIT_BAG_FULL = 343,
+  EC_WING_SYSTEM_SPIRIT_CANNOT_PICKED = 344,
+  EC_WING_SYSTEM_SPIRIT_MERGE_TOP_MAX = 345,
+  EC_WING_SYSTEM_SPIRIT_EXCHANGE_NOT_ENOUGH_FRAGMENT = 346
 };
 bool ItemErrorCode_IsValid(int value);
 const ItemErrorCode ItemErrorCode_MIN = EC_ITEM_SUCCESS;
-const ItemErrorCode ItemErrorCode_MAX = EC_GEM_NO_INSERT_EQUIP;
+const ItemErrorCode ItemErrorCode_MAX = EC_WING_SYSTEM_SPIRIT_EXCHANGE_NOT_ENOUGH_FRAGMENT;
 const int ItemErrorCode_ARRAYSIZE = ItemErrorCode_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* ItemErrorCode_descriptor();
@@ -290,11 +307,14 @@ enum QuestErrorCode {
   EC_XUNLUO_QUEST_ACCEPT_LESS_TEAM_MEMBER = 616,
   EC_XUNLUO_QUEST_ACCEPT_MEMBER_LEVEL_LESS = 617,
   EC_XUNLUO_QUEST_ACCEPT_MEMBER_ALREADY_ACCEPT = 618,
-  EC_XUNLUO_QUEST_ACCEPT_MEMBER_STILL_COOLDOWN = 619
+  EC_XUNLUO_QUEST_ACCEPT_MEMBER_STILL_COOLDOWN = 619,
+  EC_XUNLUO_QUEST_LIMIT_COUNT = 620,
+  EC_YOULI_RESET_MAP_NOT_ALLOWED = 650,
+  EC_YOULI_RESET_MAP_LIMIT_COUNT = 651
 };
 bool QuestErrorCode_IsValid(int value);
 const QuestErrorCode QuestErrorCode_MIN = EC_QUEST_ALREADY_ACCEPTED;
-const QuestErrorCode QuestErrorCode_MAX = EC_XUNLUO_QUEST_ACCEPT_MEMBER_STILL_COOLDOWN;
+const QuestErrorCode QuestErrorCode_MAX = EC_YOULI_RESET_MAP_LIMIT_COUNT;
 const int QuestErrorCode_ARRAYSIZE = QuestErrorCode_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* QuestErrorCode_descriptor();
@@ -325,11 +345,12 @@ enum TeamErrorCode {
   EC_CANT_CHALLENGE_IN_TEAM = 715,
   EC_TEAM_NOT_AT_SAME_MAP = 716,
   EC_TEAM_NOT_ALLOWED_IN_INSTANCE = 717,
-  EC_TEAM_MEMBER_ACTION_DENY = 718
+  EC_TEAM_MEMBER_ACTION_DENY = 718,
+  EC_TEAM_GUILD_WAR_PVP = 719
 };
 bool TeamErrorCode_IsValid(int value);
 const TeamErrorCode TeamErrorCode_MIN = EC_TEAM_INVALID_REQUEST;
-const TeamErrorCode TeamErrorCode_MAX = EC_TEAM_MEMBER_ACTION_DENY;
+const TeamErrorCode TeamErrorCode_MAX = EC_TEAM_GUILD_WAR_PVP;
 const int TeamErrorCode_ARRAYSIZE = TeamErrorCode_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* TeamErrorCode_descriptor();
@@ -352,7 +373,6 @@ enum FightErrorCode {
   EC_PLAYER_FIGHT_IN_COOL_DOWN = 807,
   EC_PLAYER_NO_FREE_SKIP_FIGHT = 808,
   EC_PLAYER_NOT_IN_AUTO_FIGHT = 809,
-  EC_BATTLE_GROUP_CONFIG_NOT_FOUND = 817,
   EC_ALREADY_IN_AUTO_FIGHT = 810,
   EC_SCENE_AUTO_FIGHT_LIMIT = 811,
   EC_SCENE_AUTO_FIGHT_LEVEL_LIMIT = 812,
@@ -361,6 +381,8 @@ enum FightErrorCode {
   EC_SERVER_CREATE_AUTO_FIGHT_TIMER_FAILED = 815,
   EC_CANT_JOIN_TEAM_WHILE_IN_AUTO_FIGHT = 817,
   EC_SPEED_UP_VIP_LIMIT = 816,
+  EC_BATTLE_GROUP_CONFIG_NOT_FOUND = 818,
+  EC_ALIEN_BOSS_FIGHTER_NOT_FOUND = 819,
   EC_SENDER_IN_FIGHT = 820,
   EC_INVITEE_IN_FIGHT = 821,
   EC_SENDER_NOT_IN_FIGHT_SCENE = 822,
@@ -369,11 +391,14 @@ enum FightErrorCode {
   EC_INVITEE_NO_RESPONSE = 825,
   EC_INVITEE_NOT_ONLINE = 826,
   EC_TEAM_MEMBER_CANT_ACCEPT_FIGHT = 827,
-  EC_CANT_FIGHT_WITH_OWN_TEAM = 828
+  EC_CANT_FIGHT_WITH_OWN_TEAM = 828,
+  EC_GUILD_WAR_PVP_YOU_IN_CD = 840,
+  EC_GUILD_WAR_PVP_OTHER_IN_CD = 841,
+  EC_GUILD_WAR_PVP_SAME_GUILD = 842
 };
 bool FightErrorCode_IsValid(int value);
 const FightErrorCode FightErrorCode_MIN = EC_FIGHT_ERROR;
-const FightErrorCode FightErrorCode_MAX = EC_CANT_FIGHT_WITH_OWN_TEAM;
+const FightErrorCode FightErrorCode_MAX = EC_GUILD_WAR_PVP_SAME_GUILD;
 const int FightErrorCode_ARRAYSIZE = FightErrorCode_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* FightErrorCode_descriptor();
@@ -446,11 +471,34 @@ enum GuildErrorCode {
   EC_INVITE_MEMBER_ALREADY_IN_GUILD = 1110,
   EC_GUILD_JOIN_LEVEL_LIMIT = 1111,
   EC_GUILD_MEMBER_FULL = 1112,
-  EC_GUILD_TIME_LIMIT = 1113
+  EC_GUILD_TIME_LIMIT = 1113,
+  EC_SKILL_LEVEL_GREAT_THAN_COLLEGE_LEVEL = 1114,
+  EC_RESEARCH_SKILL_COUNT_LIMIT = 1115,
+  EC_GUILD_SKILL_CONFIG_NOT_FOUND = 1116,
+  EC_GUILD_EXP_NOT_ENOUGH = 1117,
+  EC_GUILD_MONEY_NOT_ENOUGH = 1118,
+  EC_GUILD_SKILL_MAX_LEVEL = 1119,
+  EC_GUILD_SKILL_NOT_FOUND = 1120,
+  EC_GUILD_SKILL_IS_RESEARCHING = 1121,
+  EC_GUILD_COLLEGE_NOT_EXIST = 1122,
+  EC_GUILD_CONTRIBUTION_NOT_ENOUGH = 1123,
+  EC_GUILD_BUILDING_GRADE_LIMIT = 1124,
+  EC_GUILD_NOT_IN_GUILD = 1125,
+  EC_GUILD_NOT_IN_APPLY_LIST = 1126,
+  EC_GUILD_NOT_IN_INVITE_LIST = 1127,
+  EC_GUILD_TEAM_NOT_ALL_MEMBER = 1128,
+  EC_GUILD_CRYSTAL_TOWER_TIME_LIMIT = 1129,
+  EC_GUILD_LEARN_NOT_RESEARCH = 1130,
+  EC_GUILD_LEARN_INVALID_LEVEL = 1131,
+  EC_GUILD_WAR_BOSS_NPC_NOT_FOUND = 1132,
+  EC_GUILD_WAR_PVP_ENTER_NOT_OPEN = 1140,
+  EC_GUILD_WAR_PVP_ENTER_ALREADY_STARTED = 1141,
+  EC_GUILD_WAR_PVP_ENTER_IN_TEAM = 1142,
+  EC_GUILD_WAR_PVP_ENTER_GUILD_NOT_IN = 1143
 };
 bool GuildErrorCode_IsValid(int value);
 const GuildErrorCode GuildErrorCode_MIN = EC_GUILD_CREATE_LEVEL_NOT_ENOUGH;
-const GuildErrorCode GuildErrorCode_MAX = EC_GUILD_TIME_LIMIT;
+const GuildErrorCode GuildErrorCode_MAX = EC_GUILD_WAR_PVP_ENTER_GUILD_NOT_IN;
 const int GuildErrorCode_ARRAYSIZE = GuildErrorCode_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* GuildErrorCode_descriptor();
@@ -466,11 +514,43 @@ inline bool GuildErrorCode_Parse(
 enum GiftErrorCode {
   EC_INVALID_EXCHANGE_CODE = 1201,
   EC_USED_EXCHANGE_CODE = 1202,
-  EC_ALREADY_EXCHANGED_THIS_TYPE = 1203
+  EC_ALREADY_EXCHANGED_THIS_TYPE = 1203,
+  EC_NO_GIFT_TO_TAKE = 1204,
+  EC_ACTIVITY_EXPIRED = 1205,
+  EC_ACTIVITY_NOT_OPEN = 1206,
+  EC_BOSS_ENCOURAGE_FAILED = 1207,
+  EC_BOSS_BUFF_FULL = 1208,
+  EC_BOSS_MAP_CANT_TEAM = 1209,
+  EC_NO_LUCKY_TIME_LEFT = 1210,
+  EC_NO_ENOUGH_CREDITS = 1211,
+  EC_ACT_NOT_ALLOWED_FROM_INSTANCE = 1212,
+  EC_ACT_NOT_ALLOWED_FROM_GUILD = 1213,
+  EC_NO_MAP_BORN_PLACE_CONFIG = 1214,
+  EC_PVP_MAP_CANT_TEAM = 1215,
+  EC_PVP_PLAYER_IN_PROTECTED = 1216,
+  EC_PVP_PLAYER_IN_INSTANCE = 1217,
+  EC_PLAYER_NOT_IN_PVP_MAP = 1218,
+  EC_DEFENDER_LEVEL_LIMIT = 1219,
+  EC_PVP_DEFENDER_IN_INSTANCE = 1220,
+  EC_PVP_DEFENDER_IN_PROTECTED = 1221,
+  EC_DEFENDER_NOT_IN_PVP_MAP = 1222,
+  EC_PLAYER_NOT_IN_SAME_PVP_LEVEL = 1223,
+  EC_PVP_LEVEL_DATA_NOT_FOUND = 1224,
+  EC_PVP_ROBOT_LINEUP_INVALID = 1225,
+  EC_PVP_TOP_LEVEL = 1226,
+  EC_PVP_NOT_IN_TOP_LEVEL = 1227,
+  EC_PVP_WINNER_BONUS_DATA_NOT_FOUND = 1228,
+  EC_PVP_NOT_ALLOWED_FROM_BOSS = 1229,
+  EC_BOSS_NOT_ALLOWED_FROM_PVP = 1230,
+  EC_GUILD_WAR_BOSS_DAMAGE_BUFF_FULL = 1231,
+  EC_GUILD_WAR_BOSS_DEFENCE_BUFF_FULL = 1232,
+  EC_ALREADY_TAKE_BONUS = 1233,
+  EC_TREASURE_BOX_TIMEOUT = 1234,
+  EC_GUILD_WAR_BOSS_DEAD = 1235
 };
 bool GiftErrorCode_IsValid(int value);
 const GiftErrorCode GiftErrorCode_MIN = EC_INVALID_EXCHANGE_CODE;
-const GiftErrorCode GiftErrorCode_MAX = EC_ALREADY_EXCHANGED_THIS_TYPE;
+const GiftErrorCode GiftErrorCode_MAX = EC_GUILD_WAR_BOSS_DEAD;
 const int GiftErrorCode_ARRAYSIZE = GiftErrorCode_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* GiftErrorCode_descriptor();
@@ -535,11 +615,17 @@ enum InstanceErrorCode {
   EC_INSTANCE_CARD_ALREADY_FLIPPED = 1308,
   EC_NO_INSTANCE_WANTED_CONFIG_DATA = 1309,
   EC_WRONG_INSTANCE_WANTED_CONFIG_DATA = 1310,
-  EC_INSTANCE_USE_ITEM_DENY = 1311
+  EC_INSTANCE_USE_ITEM_DENY = 1311,
+  EC_NO_INSTANCE_CONFIG_DATA = 1312,
+  EC_TEAM_INSTANCE_NOT_ALLOWED_AUTO_FIGHT = 1313,
+  EC_ALREADY_IN_AUTO_FIGHT_INSTANCE = 1314,
+  EC_AUTO_FIGHT_INSTANCE_TIME_NOT_FOUND = 1315,
+  EC_NOT_IN_AUTO_INSTANCE_FIGHT = 1316,
+  EC_INSTANCE_NOT_PASSED = 1317
 };
 bool InstanceErrorCode_IsValid(int value);
 const InstanceErrorCode InstanceErrorCode_MIN = EC_INSTANCE_TELEPORT_LIMIT;
-const InstanceErrorCode InstanceErrorCode_MAX = EC_INSTANCE_USE_ITEM_DENY;
+const InstanceErrorCode InstanceErrorCode_MAX = EC_INSTANCE_NOT_PASSED;
 const int InstanceErrorCode_ARRAYSIZE = InstanceErrorCode_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* InstanceErrorCode_descriptor();
@@ -551,6 +637,28 @@ inline bool InstanceErrorCode_Parse(
     const ::std::string& name, InstanceErrorCode* value) {
   return ::google::protobuf::internal::ParseNamedEnum<InstanceErrorCode>(
     InstanceErrorCode_descriptor(), name, value);
+}
+enum PassTeamErrorCode {
+  EC_PASS_ROOM_NOT_EXIST = 1401,
+  EC_PASS_ROOM_FULL = 1402,
+  EC_NO_SUITE_PASS_ROOM = 1403,
+  EC_FAIL_PWD = 1404,
+  EC_NOT_ALL_READY = 1405
+};
+bool PassTeamErrorCode_IsValid(int value);
+const PassTeamErrorCode PassTeamErrorCode_MIN = EC_PASS_ROOM_NOT_EXIST;
+const PassTeamErrorCode PassTeamErrorCode_MAX = EC_NOT_ALL_READY;
+const int PassTeamErrorCode_ARRAYSIZE = PassTeamErrorCode_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* PassTeamErrorCode_descriptor();
+inline const ::std::string& PassTeamErrorCode_Name(PassTeamErrorCode value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    PassTeamErrorCode_descriptor(), value);
+}
+inline bool PassTeamErrorCode_Parse(
+    const ::std::string& name, PassTeamErrorCode* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<PassTeamErrorCode>(
+    PassTeamErrorCode_descriptor(), name, value);
 }
 // ===================================================================
 
@@ -633,6 +741,10 @@ inline const EnumDescriptor* GetEnumDescriptor< protocols::common::ConfigErrorCo
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< protocols::common::InstanceErrorCode>() {
   return protocols::common::InstanceErrorCode_descriptor();
+}
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< protocols::common::PassTeamErrorCode>() {
+  return protocols::common::PassTeamErrorCode_descriptor();
 }
 
 }  // namespace google

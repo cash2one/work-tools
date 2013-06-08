@@ -91,6 +91,7 @@ public:
         }
         
         size = sizeof(ss_head) + output.tellp() ;
+        if(size >= 65535 ) return -1 ;
         ss_head* head = (ss_head*)data ;
         head->length = hton_int16(size) ;
         head->msgid = hton_int16(PT) ;
@@ -186,6 +187,7 @@ public:
         }
         
         size = cs_head_size(PT) + output.tellp() ;
+        if(size >= 65535 ) return -1 ;
         cs_head_plus* head = (cs_head_plus*)data ;
         head->length = hton_int16(size) ;
         head->msgid = hton_int16(PT) ;
@@ -269,6 +271,7 @@ public:
         std::ostream output(&sbuf) ;
         if(!body->SerializeToOstream(&output) || output.tellp() < 0 ) return -1 ;
         size = sizeof(ss_head) + output.tellp() ;
+        if(size >= 65535 ) return -1 ;
         ss_head* head = (ss_head*)data ;
         head->length = hton_int16(size) ;
         head->msgid = hton_int16(PT) ;

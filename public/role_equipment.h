@@ -65,17 +65,22 @@ public:
     void set_slot_data(const char* value) { if(strcmp(slot_data.c_str(),value)!=0) {dirty[9] = 1; slot_data.assign(value);} }; 
     int sql_slot_data(char* buf,int size) const{return snprintf(buf,size,"slot_data='%s'",slot_data.c_str());}
 
+    const string& get_reserved_attr_value_data() const { return reserved_attr_value_data;} ; 
+    void set_reserved_attr_value_data(const string& value) { if(reserved_attr_value_data!= value){dirty[10] = 1; reserved_attr_value_data.assign(value);} }; 
+    void set_reserved_attr_value_data(const char* value) { if(strcmp(reserved_attr_value_data.c_str(),value)!=0) {dirty[10] = 1; reserved_attr_value_data.assign(value);} }; 
+    int sql_reserved_attr_value_data(char* buf,int size) const{return snprintf(buf,size,"reserved_attr_value_data='%s'",reserved_attr_value_data.c_str());}
+
     int32_t get_create_time() const { return create_time;} ; 
-    void set_create_time(int32_t value) { if(create_time!= value){dirty[10] = 1; create_time = value;} } ; 
+    void set_create_time(int32_t value) { if(create_time!= value){dirty[11] = 1; create_time = value;} } ; 
     int sql_create_time(char* buf,int size) const{return snprintf(buf,size,"create_time='%ld'",(int64_t)create_time);}
 
     int32_t get_mark() const { return mark;} ; 
-    void set_mark(int32_t value) { if(mark!= value){dirty[11] = 1; mark = value;} } ; 
+    void set_mark(int32_t value) { if(mark!= value){dirty[12] = 1; mark = value;} } ; 
     int sql_mark(char* buf,int size) const{return snprintf(buf,size,"mark='%ld'",(int64_t)mark);}
 
     const string& get_db_stone_data() const { return db_stone_data;} ; 
-    void set_db_stone_data(const string& value) { if(db_stone_data!= value){dirty[12] = 1; db_stone_data.assign(value);} }; 
-    void set_db_stone_data(const char* value) { if(strcmp(db_stone_data.c_str(),value)!=0) {dirty[12] = 1; db_stone_data.assign(value);} }; 
+    void set_db_stone_data(const string& value) { if(db_stone_data!= value){dirty[13] = 1; db_stone_data.assign(value);} }; 
+    void set_db_stone_data(const char* value) { if(strcmp(db_stone_data.c_str(),value)!=0) {dirty[13] = 1; db_stone_data.assign(value);} }; 
     int sql_db_stone_data(char* buf,int size) const{return snprintf(buf,size,"db_stone_data='%s'",db_stone_data.c_str());}
 
 private:
@@ -90,12 +95,13 @@ private:
     string extra_attr_data ; 
     string strength_attr_data ; 
     string slot_data ; 
+    string reserved_attr_value_data ; 
     int32_t create_time ; 
     int32_t mark ; 
     string db_stone_data ; 
 private:
     //dirty flag for update
-    enum { FIELD_COUNT = 13 } ; 
+    enum { FIELD_COUNT = 14 } ; 
     int8_t dirty[FIELD_COUNT] ; 
 };
 #endif

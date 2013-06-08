@@ -19,17 +19,17 @@ namespace kingnet
 {
 
 #define error_exit(num,fmt,args...)  \
-    do{fprintf(stderr,"%ld,%s:%d,%d:%s,"fmt"\n",time(NULL),__FILE__,__LINE__,errno,strerror(errno),##args);exit(num);} while(0)
+    do{fprintf(stderr,"%ld,%s:%d,%d:%s," fmt "\n",time(NULL),__FILE__,__LINE__,errno,strerror(errno),##args);exit(num);} while(0)
 
 #define error_return(num,fmt,args...)  \
-    do{fprintf(stderr,"%ld,%s:%d,%d:%s,"fmt"\n",time(NULL),__FILE__,__LINE__,errno,strerror(errno),##args);return(num);} while(0)
+    do{fprintf(stderr,"%ld,%s:%d,%d:%s," fmt "\n",time(NULL),__FILE__,__LINE__,errno,strerror(errno),##args);return(num);} while(0)
 
 #ifdef NDEBUG
 #define debug_format(fmt,args...)
 
 #else
 #define debug_format(fmt,args...)  \
-    do{fprintf(stdout,"%ld,%s:%d,"fmt"\n",time(NULL),__FILE__,__LINE__,##args);}while(0)
+    do{fprintf(stdout,"%ld,%s:%d," fmt "\n",time(NULL),__FILE__,__LINE__,##args);}while(0)
 
 #endif
 

@@ -1,18 +1,17 @@
 #include <assert.h>
 #include <fstream>
+#include <string>
+#include "combine_string_parser.h"
 #include "instance_prototype.h"
 
 #define INSTANCE_KEY(instance_id,grade) ((instance_id) << 8 | (grade) )
+
+using namespace std;
 
 void InstancePrototypeMgr::clear()
 {
     prototypes_.clear() ;
 
-	m_instance_wanted_map.clear();
-
-}
-InstancePrototypeMgr::~InstancePrototypeMgr()
-{
 	InstanceWantedConfigMap::iterator  map_itor = m_instance_wanted_map.begin();
 	for (; map_itor != m_instance_wanted_map.end(); ++map_itor)
 	{
@@ -23,8 +22,13 @@ InstancePrototypeMgr::~InstancePrototypeMgr()
 			config_list = NULL;
 		}
 	}
-
+	
 	m_instance_wanted_map.clear();
+
+}
+InstancePrototypeMgr::~InstancePrototypeMgr()
+{
+	clear();
 }
 
 
@@ -49,6 +53,27 @@ bool InstancePrototypeMgr::InitInstance( const char* data_file )
 
     return true;
 }
+
+void InstancePrototypeMgr::fill_auto_instance_drop_ids(int instance_id, int grade, IntIdArray& id_array)
+{
+    const InstanceConfig* config = GetInstanceConfig(instance_id, grade);
+    if (config == NULL) return ;
+
+    const string  orig_string = config->instance_data.hanging_drop_bags();
+    
+    std::vector<std::string>  raw_strings;
+    combine_string_parser::split_by(orig_string, '|', raw_strings);
+    
+    for (auto itor = raw_strings.begin();
+        itor != raw_strings.end(); ++itor)
+    {
+        string id_str = *itor;
+        int drop_id = atoi(id_str.c_str());
+
+        id_array.push_back(drop_id);
+    }
+}
+
 
 bool InstancePrototypeMgr::InitInstanceNPC( const char* data_file )
 {

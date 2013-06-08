@@ -4,6 +4,11 @@
 #include <map>
 #include "singleton.h"
 #include "../config/vip_bonus.pb.h"
+#include "game_common.pb.h"
+
+
+using namespace protocols::common;
+using namespace std;
 
 class VipSettingsPrototype
 {
@@ -32,7 +37,13 @@ public:
 		else
 			return 0;
 	}
+
+	//added by cliff
+	bool is_vip_function_opened(int vip_level, FunctionLimitType function_id);
+
 private:
+	map<int, map <int, bool> > function_list_;
+
 	VipBonusDataGroup vip_bonus_data_group_;
 	VipBonusDataContainer vip_bonus_data_container_;
 

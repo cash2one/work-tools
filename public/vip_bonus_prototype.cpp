@@ -34,6 +34,17 @@ int VipSettingsPrototype::InitVipBonusData( const char* data_file )
 			continue;
 		}	
 
+		//added by cliff
+		if (d.bonus_type() == 2) {
+			int vip_level = d.vip_level();
+			auto p_level = function_list_.find(vip_level);
+			if (p_level == function_list_.end()) {
+				function_list_[vip_level] = map<int, bool> ();
+			}
+
+			function_list_[vip_level][d.bonus_id()] = (d.bonus_value() == 1);
+		}
+
 		VipBonusDataContainer::iterator it = vip_bonus_data_container_.find(d.vip_level());
 		if (it == vip_bonus_data_container_.end())
 		{
@@ -45,5 +56,17 @@ int VipSettingsPrototype::InitVipBonusData( const char* data_file )
 	}
 
 	return true;
+}
+
+bool VipSettingsPrototype::is_vip_function_opened(int vip_level, FunctionLimitType function_id)
+{
+	auto p_level = function_list_.find(vip_level);
+	if (p_level != function_list_.end()) {
+		auto p_func = p_level->second.find(static_cast<int>(function_id));
+		if (p_func != p_level->second.end()) {
+			return p_func->second;
+		}
+	}
+	return false;
 }
 

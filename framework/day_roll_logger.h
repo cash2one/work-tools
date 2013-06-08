@@ -111,16 +111,16 @@ private:
 #define write_log_string(logger,level,content) \
     do{ logger.write_string(level,content);} while(0)
 #else
-#define write_log_format(logger,level,fmt,args...) \
-    do{ logger.write_format(level,"[%s:%d]"fmt,__FILE__,__LINE__,##args);} while(0)
+#define write_log_format(logger,level, fmt,args...) \
+    do{ logger.write_format(level,"[%s:%d]" fmt , __FILE__,__LINE__,##args);} while(0)
 #define write_log_string(logger,level,content) \
     do{ logger.write_format(level,"[%s:%d]%s",__FILE__,__LINE__,content);} while(0)
 #endif
 
 
-#define error_log_format(logger,fmt,args...) write_log_format(logger,kingnet::day_roll_logger::LOG_LEVEL_ERROR,fmt,##args)
-#define warn_log_format(logger,fmt,args...) write_log_format(logger,kingnet::day_roll_logger::LOG_LEVEL_WARN,fmt,##args)
-#define info_log_format(logger,fmt,args...) write_log_format(logger,kingnet::day_roll_logger::LOG_LEVEL_INFO,fmt,##args)
+#define error_log_format(logger, fmt ,args...) write_log_format(logger,kingnet::day_roll_logger::LOG_LEVEL_ERROR, fmt,##args)
+#define warn_log_format(logger, fmt ,args...) write_log_format(logger,kingnet::day_roll_logger::LOG_LEVEL_WARN, fmt,##args)
+#define info_log_format(logger, fmt ,args...) write_log_format(logger,kingnet::day_roll_logger::LOG_LEVEL_INFO, fmt,##args)
 
 #define error_log_string(logger,content) write_log_string(logger,kingnet::day_roll_logger::LOG_LEVEL_ERROR,content)
 #define warn_log_string(logger,content) write_log_string(logger,kingnet::day_roll_logger::LOG_LEVEL_WARN,content)

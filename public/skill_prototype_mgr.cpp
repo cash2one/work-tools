@@ -133,3 +133,31 @@ const SkillPracticeModeData* SkillPrototypeMgr::GetSkillPracticeModeData(int mod
 	return NULL;
 }
 
+bool SkillPrototypeMgr::InitBattleSkillUpgrade( const char* data_file )
+{
+	////assert(skill_practice_prototypes_.size() == 0);
+	std::fstream  fs( data_file, std::ios::in | std::ios::binary );
+	//assert(fs);
+	if (fs.fail())
+	{
+		//LOG_ERROR("open file %s failed.", fs);
+		return false;
+	}
+
+	BattleSkillUpgradeDataGroup data_group;
+	if (!data_group.ParseFromIstream(&fs))
+	{
+		//LOG_ERROR("parse file %s failed.", fs);
+		return false;
+	}
+
+	for (int i=0; i<data_group.data_size(); ++i)
+	{
+		const BattleSkillUpgradeData& d = data_group.data(i);
+		skill_upgrade_data_.insert(std::make_pair(
+			std::make_pair(d.battle_skill_id(), d.level()), d.need_youli()));
+	}
+
+	return true;
+}
+

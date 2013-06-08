@@ -123,10 +123,11 @@ void protobuf_AssignDesc_game_5fchat_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(CloseChannelResponse));
   TalkChannelRequest_descriptor_ = file->message_type(4);
-  static const int TalkChannelRequest_offsets_[3] = {
+  static const int TalkChannelRequest_offsets_[4] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TalkChannelRequest, channel_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TalkChannelRequest, content_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TalkChannelRequest, flag_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TalkChannelRequest, data_),
   };
   TalkChannelRequest_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -155,7 +156,7 @@ void protobuf_AssignDesc_game_5fchat_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(TalkChannelResponse));
   TalkChannelNotify_descriptor_ = file->message_type(6);
-  static const int TalkChannelNotify_offsets_[8] = {
+  static const int TalkChannelNotify_offsets_[9] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TalkChannelNotify, src_guid_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TalkChannelNotify, src_name_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TalkChannelNotify, channel_),
@@ -164,6 +165,7 @@ void protobuf_AssignDesc_game_5fchat_2eproto() {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TalkChannelNotify, gender_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TalkChannelNotify, src_server_id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TalkChannelNotify, vip_level_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TalkChannelNotify, data_),
   };
   TalkChannelNotify_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -177,10 +179,11 @@ void protobuf_AssignDesc_game_5fchat_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(TalkChannelNotify));
   TalkPlayerRequest_descriptor_ = file->message_type(7);
-  static const int TalkPlayerRequest_offsets_[3] = {
+  static const int TalkPlayerRequest_offsets_[4] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TalkPlayerRequest, dst_guid_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TalkPlayerRequest, content_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TalkPlayerRequest, flag_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TalkPlayerRequest, data_),
   };
   TalkPlayerRequest_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -209,7 +212,7 @@ void protobuf_AssignDesc_game_5fchat_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(TalkPlayerResponse));
   TalkPlayerNotify_descriptor_ = file->message_type(9);
-  static const int TalkPlayerNotify_offsets_[7] = {
+  static const int TalkPlayerNotify_offsets_[8] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TalkPlayerNotify, src_guid_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TalkPlayerNotify, src_name_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TalkPlayerNotify, content_),
@@ -217,6 +220,7 @@ void protobuf_AssignDesc_game_5fchat_2eproto() {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TalkPlayerNotify, gender_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TalkPlayerNotify, src_server_id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TalkPlayerNotify, vip_level_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TalkPlayerNotify, data_),
   };
   TalkPlayerNotify_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -339,38 +343,39 @@ void protobuf_AddDesc_game_5fchat_2eproto() {
     "r_code\030\001 \002(\005\"J\n\023CloseChannelRequest\0223\n\014c"
     "hannel_list\030\001 \003(\0162\035.protocols.common.Cha"
     "nnelType\"*\n\024CloseChannelResponse\022\022\n\nerro"
-    "r_code\030\001 \002(\005\"f\n\022TalkChannelRequest\022.\n\007ch"
+    "r_code\030\001 \002(\005\"t\n\022TalkChannelRequest\022.\n\007ch"
     "annel\030\001 \002(\0162\035.protocols.common.ChannelTy"
-    "pe\022\017\n\007content\030\002 \002(\t\022\017\n\004flag\030\003 \001(\005:\0010\")\n\023"
-    "TalkChannelResponse\022\022\n\nerror_code\030\001 \002(\005\""
-    "\351\001\n\021TalkChannelNotify\022\020\n\010src_guid\030\001 \002(\003\022"
-    "\020\n\010src_name\030\002 \001(\t\022.\n\007channel\030\003 \001(\0162\035.pro"
-    "tocols.common.ChannelType\022\017\n\007content\030\004 \002"
-    "(\t\022\017\n\004flag\030\005 \001(\005:\0010\022.\n\006gender\030\006 \001(\0162\030.pr"
-    "otocols.common.Gender:\004MALE\022\030\n\rsrc_serve"
-    "r_id\030\007 \001(\005:\0010\022\024\n\tvip_level\030\010 \001(\005:\0010\"G\n\021T"
-    "alkPlayerRequest\022\020\n\010dst_guid\030\001 \002(\003\022\017\n\007co"
-    "ntent\030\002 \002(\t\022\017\n\004flag\030\003 \001(\005:\0010\"(\n\022TalkPlay"
-    "erResponse\022\022\n\nerror_code\030\001 \002(\005\"\270\001\n\020TalkP"
-    "layerNotify\022\020\n\010src_guid\030\001 \002(\003\022\020\n\010src_nam"
-    "e\030\002 \001(\t\022\017\n\007content\030\003 \001(\t\022\017\n\004flag\030\004 \001(\005:\001"
-    "0\022.\n\006gender\030\005 \001(\0162\030.protocols.common.Gen"
-    "der:\004MALE\022\030\n\rsrc_server_id\030\006 \001(\005:\0010\022\024\n\tv"
-    "ip_level\030\007 \001(\005:\0010\"\256\003\n\032FightResultBroadca"
-    "stNotify\022\024\n\014channel_type\030\001 \002(\005\022\021\n\tfight_"
-    "key\030\002 \002(\003\022\022\n\nfight_type\030\014 \001(\005\022\025\n\rattacke"
-    "r_guid\030\003 \002(\003\022\025\n\rattacker_name\030\004 \002(\t\022\027\n\017a"
-    "ttacker_gender\030\r \001(\005\022\030\n\020attacker_in_team"
-    "\030\005 \002(\005\022\032\n\022attacker_vip_level\030\006 \001(\005\022\025\n\rde"
-    "fender_guid\030\016 \002(\003\022\025\n\rdefender_name\030\017 \002(\t"
-    "\022\030\n\020defender_in_team\030\t \002(\005\022\032\n\022defender_v"
-    "ip_level\030\n \001(\005\022\027\n\017is_attacker_win\030\013 \001(\005\022"
-    "\023\n\013sender_guid\030\020 \001(\003\022\025\n\rsender_gender\030\021 "
-    "\001(\005\022\030\n\020sender_vip_level\030\022 \001(\005\022\023\n\013sender_"
-    "name\030\023 \001(\t*\202\001\n\013ChannelType\022\022\n\016CHANNEL_SY"
-    "STEM\020\001\022\020\n\014CHANNEL_TEAM\020\002\022\020\n\014CHANNEL_VIEW"
-    "\020\003\022\021\n\rCHANNEL_GUILD\020\004\022\021\n\rCHANNEL_WORLD\020\005"
-    "\022\025\n\021CHANNEL_BROADCAST\020\006", 1543);
+    "pe\022\017\n\007content\030\002 \002(\t\022\017\n\004flag\030\003 \001(\005:\0010\022\014\n\004"
+    "data\030\004 \001(\t\")\n\023TalkChannelResponse\022\022\n\nerr"
+    "or_code\030\001 \002(\005\"\367\001\n\021TalkChannelNotify\022\020\n\010s"
+    "rc_guid\030\001 \002(\003\022\020\n\010src_name\030\002 \001(\t\022.\n\007chann"
+    "el\030\003 \001(\0162\035.protocols.common.ChannelType\022"
+    "\017\n\007content\030\004 \002(\t\022\017\n\004flag\030\005 \001(\005:\0010\022.\n\006gen"
+    "der\030\006 \001(\0162\030.protocols.common.Gender:\004MAL"
+    "E\022\030\n\rsrc_server_id\030\007 \001(\005:\0010\022\024\n\tvip_level"
+    "\030\010 \001(\005:\0010\022\014\n\004data\030\t \001(\t\"U\n\021TalkPlayerReq"
+    "uest\022\020\n\010dst_guid\030\001 \002(\003\022\017\n\007content\030\002 \002(\t\022"
+    "\017\n\004flag\030\003 \001(\005:\0010\022\014\n\004data\030\004 \001(\t\"(\n\022TalkPl"
+    "ayerResponse\022\022\n\nerror_code\030\001 \002(\005\"\306\001\n\020Tal"
+    "kPlayerNotify\022\020\n\010src_guid\030\001 \002(\003\022\020\n\010src_n"
+    "ame\030\002 \001(\t\022\017\n\007content\030\003 \001(\t\022\017\n\004flag\030\004 \001(\005"
+    ":\0010\022.\n\006gender\030\005 \001(\0162\030.protocols.common.G"
+    "ender:\004MALE\022\030\n\rsrc_server_id\030\006 \001(\005:\0010\022\024\n"
+    "\tvip_level\030\007 \001(\005:\0010\022\014\n\004data\030\010 \001(\t\"\256\003\n\032Fi"
+    "ghtResultBroadcastNotify\022\024\n\014channel_type"
+    "\030\001 \002(\005\022\021\n\tfight_key\030\002 \002(\003\022\022\n\nfight_type\030"
+    "\014 \001(\005\022\025\n\rattacker_guid\030\003 \002(\003\022\025\n\rattacker"
+    "_name\030\004 \002(\t\022\027\n\017attacker_gender\030\r \001(\005\022\030\n\020"
+    "attacker_in_team\030\005 \002(\005\022\032\n\022attacker_vip_l"
+    "evel\030\006 \001(\005\022\025\n\rdefender_guid\030\016 \002(\003\022\025\n\rdef"
+    "ender_name\030\017 \002(\t\022\030\n\020defender_in_team\030\t \002"
+    "(\005\022\032\n\022defender_vip_level\030\n \001(\005\022\027\n\017is_att"
+    "acker_win\030\013 \001(\005\022\023\n\013sender_guid\030\020 \001(\003\022\025\n\r"
+    "sender_gender\030\021 \001(\005\022\030\n\020sender_vip_level\030"
+    "\022 \001(\005\022\023\n\013sender_name\030\023 \001(\t*\202\001\n\013ChannelTy"
+    "pe\022\022\n\016CHANNEL_SYSTEM\020\001\022\020\n\014CHANNEL_TEAM\020\002"
+    "\022\020\n\014CHANNEL_VIEW\020\003\022\021\n\rCHANNEL_GUILD\020\004\022\021\n"
+    "\rCHANNEL_WORLD\020\005\022\025\n\021CHANNEL_BROADCAST\020\006", 1599);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "game_chat.proto", &protobuf_RegisterTypes);
   OpenChannelRequest::default_instance_ = new OpenChannelRequest();
@@ -1280,6 +1285,7 @@ void CloseChannelResponse::Swap(CloseChannelResponse* other) {
 const int TalkChannelRequest::kChannelFieldNumber;
 const int TalkChannelRequest::kContentFieldNumber;
 const int TalkChannelRequest::kFlagFieldNumber;
+const int TalkChannelRequest::kDataFieldNumber;
 #endif  // !_MSC_VER
 
 TalkChannelRequest::TalkChannelRequest()
@@ -1301,6 +1307,7 @@ void TalkChannelRequest::SharedCtor() {
   channel_ = 1;
   content_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   flag_ = 0;
+  data_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -1311,6 +1318,9 @@ TalkChannelRequest::~TalkChannelRequest() {
 void TalkChannelRequest::SharedDtor() {
   if (content_ != &::google::protobuf::internal::kEmptyString) {
     delete content_;
+  }
+  if (data_ != &::google::protobuf::internal::kEmptyString) {
+    delete data_;
   }
   if (this != default_instance_) {
   }
@@ -1345,6 +1355,11 @@ void TalkChannelRequest::Clear() {
       }
     }
     flag_ = 0;
+    if (has_data()) {
+      if (data_ != &::google::protobuf::internal::kEmptyString) {
+        data_->clear();
+      }
+    }
   }
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
@@ -1405,6 +1420,23 @@ bool TalkChannelRequest::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
+        if (input->ExpectTag(34)) goto parse_data;
+        break;
+      }
+      
+      // optional string data = 4;
+      case 4: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_data:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_data()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+            this->data().data(), this->data().length(),
+            ::google::protobuf::internal::WireFormat::PARSE);
+        } else {
+          goto handle_uninterpreted;
+        }
         if (input->ExpectAtEnd()) return true;
         break;
       }
@@ -1447,6 +1479,15 @@ void TalkChannelRequest::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteInt32(3, this->flag(), output);
   }
   
+  // optional string data = 4;
+  if (has_data()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->data().data(), this->data().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    ::google::protobuf::internal::WireFormatLite::WriteString(
+      4, this->data(), output);
+  }
+  
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -1474,6 +1515,16 @@ void TalkChannelRequest::SerializeWithCachedSizes(
   // optional int32 flag = 3 [default = 0];
   if (has_flag()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(3, this->flag(), target);
+  }
+  
+  // optional string data = 4;
+  if (has_data()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->data().data(), this->data().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        4, this->data(), target);
   }
   
   if (!unknown_fields().empty()) {
@@ -1505,6 +1556,13 @@ int TalkChannelRequest::ByteSize() const {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::Int32Size(
           this->flag());
+    }
+    
+    // optional string data = 4;
+    if (has_data()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->data());
     }
     
   }
@@ -1543,6 +1601,9 @@ void TalkChannelRequest::MergeFrom(const TalkChannelRequest& from) {
     if (from.has_flag()) {
       set_flag(from.flag());
     }
+    if (from.has_data()) {
+      set_data(from.data());
+    }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
@@ -1570,6 +1631,7 @@ void TalkChannelRequest::Swap(TalkChannelRequest* other) {
     std::swap(channel_, other->channel_);
     std::swap(content_, other->content_);
     std::swap(flag_, other->flag_);
+    std::swap(data_, other->data_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
@@ -1804,6 +1866,7 @@ const int TalkChannelNotify::kFlagFieldNumber;
 const int TalkChannelNotify::kGenderFieldNumber;
 const int TalkChannelNotify::kSrcServerIdFieldNumber;
 const int TalkChannelNotify::kVipLevelFieldNumber;
+const int TalkChannelNotify::kDataFieldNumber;
 #endif  // !_MSC_VER
 
 TalkChannelNotify::TalkChannelNotify()
@@ -1830,6 +1893,7 @@ void TalkChannelNotify::SharedCtor() {
   gender_ = 1;
   src_server_id_ = 0;
   vip_level_ = 0;
+  data_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -1843,6 +1907,9 @@ void TalkChannelNotify::SharedDtor() {
   }
   if (content_ != &::google::protobuf::internal::kEmptyString) {
     delete content_;
+  }
+  if (data_ != &::google::protobuf::internal::kEmptyString) {
+    delete data_;
   }
   if (this != default_instance_) {
   }
@@ -1886,6 +1953,13 @@ void TalkChannelNotify::Clear() {
     gender_ = 1;
     src_server_id_ = 0;
     vip_level_ = 0;
+  }
+  if (_has_bits_[8 / 32] & (0xffu << (8 % 32))) {
+    if (has_data()) {
+      if (data_ != &::google::protobuf::internal::kEmptyString) {
+        data_->clear();
+      }
+    }
   }
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
@@ -2032,6 +2106,23 @@ bool TalkChannelNotify::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
+        if (input->ExpectTag(74)) goto parse_data;
+        break;
+      }
+      
+      // optional string data = 9;
+      case 9: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_data:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_data()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+            this->data().data(), this->data().length(),
+            ::google::protobuf::internal::WireFormat::PARSE);
+        } else {
+          goto handle_uninterpreted;
+        }
         if (input->ExpectAtEnd()) return true;
         break;
       }
@@ -2104,6 +2195,15 @@ void TalkChannelNotify::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteInt32(8, this->vip_level(), output);
   }
   
+  // optional string data = 9;
+  if (has_data()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->data().data(), this->data().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    ::google::protobuf::internal::WireFormatLite::WriteString(
+      9, this->data(), output);
+  }
+  
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -2162,6 +2262,16 @@ void TalkChannelNotify::SerializeWithCachedSizes(
   // optional int32 vip_level = 8 [default = 0];
   if (has_vip_level()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(8, this->vip_level(), target);
+  }
+  
+  // optional string data = 9;
+  if (has_data()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->data().data(), this->data().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        9, this->data(), target);
   }
   
   if (!unknown_fields().empty()) {
@@ -2230,6 +2340,15 @@ int TalkChannelNotify::ByteSize() const {
     }
     
   }
+  if (_has_bits_[8 / 32] & (0xffu << (8 % 32))) {
+    // optional string data = 9;
+    if (has_data()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->data());
+    }
+    
+  }
   if (!unknown_fields().empty()) {
     total_size +=
       ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
@@ -2281,6 +2400,11 @@ void TalkChannelNotify::MergeFrom(const TalkChannelNotify& from) {
       set_vip_level(from.vip_level());
     }
   }
+  if (from._has_bits_[8 / 32] & (0xffu << (8 % 32))) {
+    if (from.has_data()) {
+      set_data(from.data());
+    }
+  }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
 
@@ -2312,6 +2436,7 @@ void TalkChannelNotify::Swap(TalkChannelNotify* other) {
     std::swap(gender_, other->gender_);
     std::swap(src_server_id_, other->src_server_id_);
     std::swap(vip_level_, other->vip_level_);
+    std::swap(data_, other->data_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
@@ -2333,6 +2458,7 @@ void TalkChannelNotify::Swap(TalkChannelNotify* other) {
 const int TalkPlayerRequest::kDstGuidFieldNumber;
 const int TalkPlayerRequest::kContentFieldNumber;
 const int TalkPlayerRequest::kFlagFieldNumber;
+const int TalkPlayerRequest::kDataFieldNumber;
 #endif  // !_MSC_VER
 
 TalkPlayerRequest::TalkPlayerRequest()
@@ -2354,6 +2480,7 @@ void TalkPlayerRequest::SharedCtor() {
   dst_guid_ = GOOGLE_LONGLONG(0);
   content_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   flag_ = 0;
+  data_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -2364,6 +2491,9 @@ TalkPlayerRequest::~TalkPlayerRequest() {
 void TalkPlayerRequest::SharedDtor() {
   if (content_ != &::google::protobuf::internal::kEmptyString) {
     delete content_;
+  }
+  if (data_ != &::google::protobuf::internal::kEmptyString) {
+    delete data_;
   }
   if (this != default_instance_) {
   }
@@ -2398,6 +2528,11 @@ void TalkPlayerRequest::Clear() {
       }
     }
     flag_ = 0;
+    if (has_data()) {
+      if (data_ != &::google::protobuf::internal::kEmptyString) {
+        data_->clear();
+      }
+    }
   }
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
@@ -2453,6 +2588,23 @@ bool TalkPlayerRequest::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
+        if (input->ExpectTag(34)) goto parse_data;
+        break;
+      }
+      
+      // optional string data = 4;
+      case 4: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_data:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_data()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+            this->data().data(), this->data().length(),
+            ::google::protobuf::internal::WireFormat::PARSE);
+        } else {
+          goto handle_uninterpreted;
+        }
         if (input->ExpectAtEnd()) return true;
         break;
       }
@@ -2494,6 +2646,15 @@ void TalkPlayerRequest::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteInt32(3, this->flag(), output);
   }
   
+  // optional string data = 4;
+  if (has_data()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->data().data(), this->data().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    ::google::protobuf::internal::WireFormatLite::WriteString(
+      4, this->data(), output);
+  }
+  
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -2520,6 +2681,16 @@ void TalkPlayerRequest::SerializeWithCachedSizes(
   // optional int32 flag = 3 [default = 0];
   if (has_flag()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(3, this->flag(), target);
+  }
+  
+  // optional string data = 4;
+  if (has_data()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->data().data(), this->data().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        4, this->data(), target);
   }
   
   if (!unknown_fields().empty()) {
@@ -2552,6 +2723,13 @@ int TalkPlayerRequest::ByteSize() const {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::Int32Size(
           this->flag());
+    }
+    
+    // optional string data = 4;
+    if (has_data()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->data());
     }
     
   }
@@ -2590,6 +2768,9 @@ void TalkPlayerRequest::MergeFrom(const TalkPlayerRequest& from) {
     if (from.has_flag()) {
       set_flag(from.flag());
     }
+    if (from.has_data()) {
+      set_data(from.data());
+    }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
@@ -2617,6 +2798,7 @@ void TalkPlayerRequest::Swap(TalkPlayerRequest* other) {
     std::swap(dst_guid_, other->dst_guid_);
     std::swap(content_, other->content_);
     std::swap(flag_, other->flag_);
+    std::swap(data_, other->data_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
@@ -2850,6 +3032,7 @@ const int TalkPlayerNotify::kFlagFieldNumber;
 const int TalkPlayerNotify::kGenderFieldNumber;
 const int TalkPlayerNotify::kSrcServerIdFieldNumber;
 const int TalkPlayerNotify::kVipLevelFieldNumber;
+const int TalkPlayerNotify::kDataFieldNumber;
 #endif  // !_MSC_VER
 
 TalkPlayerNotify::TalkPlayerNotify()
@@ -2875,6 +3058,7 @@ void TalkPlayerNotify::SharedCtor() {
   gender_ = 1;
   src_server_id_ = 0;
   vip_level_ = 0;
+  data_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -2888,6 +3072,9 @@ void TalkPlayerNotify::SharedDtor() {
   }
   if (content_ != &::google::protobuf::internal::kEmptyString) {
     delete content_;
+  }
+  if (data_ != &::google::protobuf::internal::kEmptyString) {
+    delete data_;
   }
   if (this != default_instance_) {
   }
@@ -2930,6 +3117,11 @@ void TalkPlayerNotify::Clear() {
     gender_ = 1;
     src_server_id_ = 0;
     vip_level_ = 0;
+    if (has_data()) {
+      if (data_ != &::google::protobuf::internal::kEmptyString) {
+        data_->clear();
+      }
+    }
   }
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
@@ -3055,6 +3247,23 @@ bool TalkPlayerNotify::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
+        if (input->ExpectTag(66)) goto parse_data;
+        break;
+      }
+      
+      // optional string data = 8;
+      case 8: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_data:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_data()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+            this->data().data(), this->data().length(),
+            ::google::protobuf::internal::WireFormat::PARSE);
+        } else {
+          goto handle_uninterpreted;
+        }
         if (input->ExpectAtEnd()) return true;
         break;
       }
@@ -3121,6 +3330,15 @@ void TalkPlayerNotify::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteInt32(7, this->vip_level(), output);
   }
   
+  // optional string data = 8;
+  if (has_data()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->data().data(), this->data().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    ::google::protobuf::internal::WireFormatLite::WriteString(
+      8, this->data(), output);
+  }
+  
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -3173,6 +3391,16 @@ void TalkPlayerNotify::SerializeWithCachedSizes(
   // optional int32 vip_level = 7 [default = 0];
   if (has_vip_level()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(7, this->vip_level(), target);
+  }
+  
+  // optional string data = 8;
+  if (has_data()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->data().data(), this->data().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        8, this->data(), target);
   }
   
   if (!unknown_fields().empty()) {
@@ -3234,6 +3462,13 @@ int TalkPlayerNotify::ByteSize() const {
           this->vip_level());
     }
     
+    // optional string data = 8;
+    if (has_data()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->data());
+    }
+    
   }
   if (!unknown_fields().empty()) {
     total_size +=
@@ -3282,6 +3517,9 @@ void TalkPlayerNotify::MergeFrom(const TalkPlayerNotify& from) {
     if (from.has_vip_level()) {
       set_vip_level(from.vip_level());
     }
+    if (from.has_data()) {
+      set_data(from.data());
+    }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
@@ -3313,6 +3551,7 @@ void TalkPlayerNotify::Swap(TalkPlayerNotify* other) {
     std::swap(gender_, other->gender_);
     std::swap(src_server_id_, other->src_server_id_);
     std::swap(vip_level_, other->vip_level_);
+    std::swap(data_, other->data_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);

@@ -3,8 +3,8 @@
 
 #include <map>
 #include <vector>
-#include <ext/hash_map>
-//#include <unordered_map>
+//#include <ext/hash_map>
+#include <unordered_map>
 #include "singleton.h"
 #include "battle_npc.pb.h"
 #include "battle_group.pb.h"
@@ -22,7 +22,8 @@ typedef std::vector< std::pair<int,int> >  MonsterWeightContainer;
 typedef std::map<int, MonsterWeightContainer >  RandomBattleGroupMap;
 
 // level => [min_level, max_level]
-typedef __gnu_cxx::hash_map<int, IntPair >  LevelIndexMap;
+//typedef __gnu_cxx::hash_map<int, IntPair >  LevelIndexMap;
+typedef std::unordered_map<int, IntPair >  LevelIndexMap;
 
 // id, [min_level, max_level] 
 typedef std::pair<int, IntPair>  LevelBattleGroupKey;

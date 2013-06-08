@@ -9,8 +9,8 @@
 #define DAY_ROLL_BILL_H_
 
 #include <time.h>
+#include "game_server.pb.h"
 
-//class FightStatData; 
 
 class day_roll_bill
 {
@@ -45,7 +45,7 @@ public:
     int write_sql(int seq,int result,const char* sql);
 
 
-    int write_transaction() ;
+    int write_transaction(protocols::common::SendLogNotify*  notify) ;
 
 	int write_trade(int seq, int role_id, int action_type, int trans_type, int money_type, int cost_value);
 

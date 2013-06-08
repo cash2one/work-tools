@@ -39,8 +39,6 @@ class InstanceWantedInfo;
 class BuffInfo;
 class Fighter;
 class SkillBonus;
-class Bonus;
-class FightResult;
 class PlayerPhyStrengthInfo;
 class PlayerInfo;
 class NPCInfo;
@@ -51,17 +49,23 @@ class BattleSkillInfo;
 class BankInfo;
 class YinglingInfo;
 class BuddyDetailInfo;
+class PBIntPair;
 class Relation;
 class PlayerRelationData;
 class InstanceInfo;
 class InstanceDetail;
 class MonsterInfo;
+class WingSpiritInfo;
+class WingSlotInfo;
+class WingItemInfo;
+class WingSpiritBag;
+class SpiritGeneratorInfo;
 class EquipInfo;
 class AttributeData;
-class EquipDetail;
 class EquipStoneData;
 class EquipStoneData_StoneData;
 class DBSlotData;
+class EquipDetail;
 class FighterInfo;
 class LineupInfo;
 class Money1;
@@ -73,6 +77,10 @@ class QuestPreCondition;
 class QuestRewards;
 class QuestRewards_QuestRewardItem;
 class QuestProtoype;
+class GuildCrystalReward;
+class TreasureBoxReward;
+class GuildCrystalTowerActivityData;
+class PlayerPosBeforeInstance;
 class TeamMemberInfo;
 class TeamInfo;
 class CoolDown;
@@ -80,11 +88,17 @@ class RoleCoolDownPb;
 class DailyCountLimit;
 class RoleDailyLimitPb;
 class DBRoleLimitDataPb;
+class HiredYinglingCount;
+class RoleHiredYinglingCount;
+class StrengthEquipCount;
+class RoleStrengthEquipCount;
 class DailyQuest;
 class DailyQuestPb;
 class XunluoQuestPb;
+class GuildCircleQuestPb;
 class PlayerFlagPb;
 class PlayerFlagDataPb;
+class TrainAttribute;
 class ArenaPlayerInfo;
 class TreasureBox;
 class UsedName;
@@ -96,6 +110,12 @@ class NpcPosition;
 class OpenedFunctionNotify;
 class GetBuddyTemplateAttributeRequest;
 class GetBuddyTemplateAttributeResponse;
+class YouLiMapData;
+class YouLiMapData_GridData;
+class YinglingComboStatus_ComboMember;
+class YinglingComboStatus_Combo;
+class YinglingComboStatus;
+class YinglingTrainStatus;
 
 enum MessageModule {
   MSG_MODULE_GAME = 0,
@@ -157,6 +177,32 @@ inline bool ItemPositionType_Parse(
   return ::google::protobuf::internal::ParseNamedEnum<ItemPositionType>(
     ItemPositionType_descriptor(), name, value);
 }
+enum DirectionType {
+  DT_NORTH_WEST = 4,
+  DT_NORTH = 5,
+  DT_NORTH_EAST = 6,
+  DT_WEST = 3,
+  DT_SELF = 0,
+  DT_EAST = 7,
+  DT_SOUTH_WEST = 2,
+  DT_SOUTH = 1,
+  DT_SOUTH_EAST = 8
+};
+bool DirectionType_IsValid(int value);
+const DirectionType DirectionType_MIN = DT_SELF;
+const DirectionType DirectionType_MAX = DT_SOUTH_EAST;
+const int DirectionType_ARRAYSIZE = DirectionType_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* DirectionType_descriptor();
+inline const ::std::string& DirectionType_Name(DirectionType value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    DirectionType_descriptor(), value);
+}
+inline bool DirectionType_Parse(
+    const ::std::string& name, DirectionType* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<DirectionType>(
+    DirectionType_descriptor(), name, value);
+}
 enum MessageAction {
   MSG_ACTION_ACC_LOGIN = 1,
   MSG_ACTION_PLAYER_LOGIN = 2,
@@ -213,6 +259,7 @@ enum MessageAction {
   MSG_ACTION_USE_ITEM = 55,
   MSG_ACTION_EQUIP_ITEM = 56,
   MSG_ACTION_SWAP_ITEM = 57,
+  MSG_ACTION_TAKE_GIFT = 58,
   MSG_ACTION_EXCHANGE_ITEM = 59,
   MSG_ACTION_QUEST_LIST = 60,
   MSG_ACTION_QUEST_ACCEPT_QUEST = 61,
@@ -280,6 +327,10 @@ enum MessageAction {
   MSG_ACTION_SEND_FIGHT_TO_WORLD = 126,
   MSG_ACTION_GET_FIGHT_DATA = 127,
   MSG_ACTION_FIGHT_RESULT_BROADCAST = 501,
+  MSG_ACTION_GET_GUILD_SKILL_LIST = 128,
+  MSG_ACTION_GUILD_RESEARCH_SKILL = 129,
+  MSG_ACTION_GUILD_LEARN_SKILL = 132,
+  MSG_ACTION_GUILD_SKILL_RESEARCH_FINISH_NOTIFY = 508,
   MSG_ACTION_BUDDY_LIST_NOTIFY = 130,
   MSG_ACTION_BAG_ITEMS_NOTIFY = 131,
   MSG_ACTION_GET_MAIL_LIST = 134,
@@ -303,10 +354,21 @@ enum MessageAction {
   MSG_ACTION_CHALLENGE_PLAYER = 152,
   MSG_ACTION_TAKE_TREASURE_BOX = 155,
   MSG_ACTION_GET_ARENA_RANK_LIST = 156,
+  MSG_ACTION_ACT_LUCKY_ONCE = 157,
   MSG_ACTION_TAKE_TIME_BONUS = 158,
+  MSG_ACTION_ACT_EXCHANGE_ITEM = 159,
   MSG_ACTION_HIRED_YINGLING_SLOT = 160,
+  MSG_ACTION_ENTER_PVP = 161,
+  MSG_ACTION_LEAVE_PVP = 162,
+  MSG_ACTION_GET_PVP_INFO = 163,
+  MSG_ACTION_CLEAR_PVP_CD = 164,
+  MSG_ACTION_PVP_ACT_NOTIFY = 513,
+  MSG_ACTION_PVP_ROBOT_NOTIFY = 514,
+  MSG_ACTION_PVP_CD = 515,
+  MSG_ACTION_PVP_BONUS = 516,
   MSG_ACTION_GET_LINGLI = 165,
   MSG_ACTION_CONVERT_LINGLI = 166,
+  MSG_ACTION_TAKE_PVP_GIFT = 167,
   MSG_ACTION_GET_DAILY_QUEST = 170,
   MSG_ACTION_GENERATE_DAILY_QUEST = 171,
   MSG_ACTION_GET_COOL_DOWN = 175,
@@ -325,6 +387,7 @@ enum MessageAction {
   MSG_ACTION_ADD_PLAYER_REQUEST = 200,
   MSG_ACTION_ADD_PLAYER_RESPONSE = 201,
   MSG_ACTION_ERROR_NOTIFY = 202,
+  MSG_ACTION_BUY_VIP = 203,
   MSG_ACTION_SYNC_TEAM_INFO = 204,
   MSG_FUNCTION_LIMIT = 205,
   MSG_ACTION_GET_DAILY_GIFT_INFO = 206,
@@ -348,12 +411,26 @@ enum MessageAction {
   MSG_ACTION_GET_GUILD_APPLY_LIST = 225,
   MSG_ACTION_ENTER_GUILD_MAP = 226,
   MSG_ACTION_LEAVE_GUILD_MAP = 227,
+  MSG_ACTION_UPGRADE_GUILD = 228,
+  MSG_ACTION_BUY_GUILD_ITEM = 229,
+  MSG_ACTION_GET_GUILD_MAP_INFO = 230,
+  MSG_ACTION_GET_GUILD_DONATE_LIST = 231,
+  MSG_ACTION_GET_GUILD_INFO = 232,
   MSG_ACTION_UPDATE_BIT = 239,
   MSG_ACTION_GET_LIVENESS_INFO = 240,
   MSG_ACTION_TAKE_LIVENESS_AWARD = 241,
   MSG_ACTION_LIVENESS_UPDAE_NOTIFY = 242,
   MSG_ACTION_GET_PLAYER_CONFIG = 243,
   MSG_ACTION_SET_PLAYER_CONFIG = 244,
+  MSG_ACTION_ALIEN_BOSS_ACT_NOTIFY = 509,
+  MSG_ACTION_ALIEN_BOSS_HURT_RANK = 510,
+  MSG_ACTION_ALIEN_BOSS_REWARDS = 511,
+  MSG_ACTION_UPDATE_BOSS_BUFF = 512,
+  MSG_ACTION_ENCOURAGE_BUFF = 245,
+  MSG_ACTION_QUICK_RESPAWN = 246,
+  MSG_ACTION_ENTER_ALIEN_BOSS_MAP = 247,
+  MSG_ACTION_LEAVE_ALIEN_BOSS_MAP = 248,
+  MSG_ACTION_GET_BOSS_MAP_INFO = 249,
   MSG_ACTION_EQUIP_INHERIT = 251,
   MSG_ACTION_GEM_UPGRADE = 252,
   MSG_ACTION_GEM_INSERT = 253,
@@ -363,6 +440,35 @@ enum MessageAction {
   MSG_ACTION_FIGHT_WITH_OTHER_PLAYER = 260,
   MSG_ACTION_SEND_FIGHT_INVITATION = 502,
   MSG_ACTION_FIGHT_INVITE_REPLY = 261,
+  MSG_ACTION_SPEED_UP_PRACTICE_SKILL = 262,
+  MSG_ACTION_CRYSTAL_TOWER_ACTIVITY = 265,
+  MSG_ACTION_CRYSTAL_TOWER_PICK_REWARD = 266,
+  MSG_ACTION_GUILD_DONATE = 267,
+  MSG_ACTION_CRYSTAL_TOWER_ACTIVITY_STATUS = 268,
+  MSG_ACTION_STARTUP_ACTIVITIES_STATUS = 270,
+  MSG_ACTION_AUTO_REFRESH_HIRABLE_YINGLING = 271,
+  MSG_ACTION_YOULI_MAP_DATA = 272,
+  MSG_ACTION_YOULI_MAP_DICE = 273,
+  MSG_ACTION_YOULI_MAP_RESET_MAP = 274,
+  MSG_ACTION_UPGRADE_BATTLE_SKILL = 275,
+  MSG_ACTION_UPDATE_YOULI_NOTIFY = 276,
+  MSG_ACTION_CHECK_GUILD_XUNHUAN_QUEST = 277,
+  MSG_ACTION_ENTER_GUILD_WAR_MAP = 278,
+  MSG_ACTION_LEAVE_GUILD_WAR_MAP = 279,
+  MSG_ACTION_GET_GUILD_WAR_MAP_INFO = 280,
+  MSG_ACTION_GUILD_WAR_NOTIFY = 517,
+  MSG_ACTION_GUILD_WAR_SCHEDULE = 518,
+  MSG_ACTION_GUILD_WAR_ADD_BUFF = 281,
+  MSG_ACTION_GUILD_WAR_CONTRIBUTION_RANK = 282,
+  MSG_ACTION_TREASURE_BOX_BONUS = 283,
+  MSG_ACTION_GET_AUTO_INSTANCE_STATUS = 284,
+  MSG_ACTION_START_AUTO_FIGHT_INSTANCE = 285,
+  MSG_ACTION_STOP_AUTO_FIGHT_INSTANCE = 286,
+  MSG_ACTION_FINISH_AUTO_FIGHT_INSTANCE = 288,
+  MSG_ACTION_AUTO_FIGHT_INSTANCE_NOTIFY = 289,
+  MSG_ACTION_GUILD_WAR_COMPETITION_INFO = 287,
+  MSG_ACTION_GET_OPENED_ACTIVITY = 290,
+  MSG_ACTION_ACTIVITY_MANAGER_NOTIFY = 519,
   MSG_ACTION_PUBLISH_QUSETION = 504,
   MSG_ACTION_SEND_QA_RESULT = 505,
   MSG_ACTION_UPDATE_PHY_STRENGTH = 506,
@@ -372,16 +478,43 @@ enum MessageAction {
   MSG_ACTION_ARENA_SELF_NOTICE = 301,
   MSG_ACTION_ARENA_PUBLIC_NOTICE = 302,
   MSG_ACTION_SYSTEM_NOTICE = 303,
+  MSG_ACTION_GUILD_INFO = 309,
   MSG_ACTION_VIP_INFO = 310,
   MSG_ACTION_ANNOUNCE = 312,
   MSG_ACTION_SKILL_POOL_CHANGE_NOTIFY = 313,
   MSG_ACTION_SERVER_SHUT_DOWN_NOTIFY = 314,
   MSG_ACTION_UPDATE_MONSTER_BUFF = 315,
-  MSG_ACTION_TEAM_CHANNEL_MEMBER_NOTIFY = 316
+  MSG_ACTION_TEAM_CHANNEL_MEMBER_NOTIFY = 316,
+  MSG_ACTION_ATTR_CHANGE_NOTIFY = 317,
+  MSG_ACTION_GUILD_CRYSTAL_TOWER_NOTIFY = 318,
+  MSG_ACTION_GET_TITLE_LIST = 319,
+  MSG_ACTION_SET_ROLE_TITLE = 320,
+  MSG_ACTION_YINGLING_COMBO = 321,
+  MSG_ACTION_YINGLING_COMBO_UPGRADE = 322,
+  MSG_ACTION_GET_OFFLINE_GIFT = 323,
+  MSG_ACTION_GET_TRAIN = 324,
+  MSG_ACTION_TRAIN = 325,
+  MSG_ACTION_TRAIN_SAVE = 326,
+  MSG_ACTION_PRACTICE_EXP = 327,
+  MSG_ACTION_SOUL_EXCHANGE = 328,
+  MSG_ACTION_HIT_YELLOW_DUCK = 333,
+  MSG_ACTION_UNEQUIP_ALL = 338,
+  MSG_ACTION_YOULI_MAP_AUTO_DICE = 339,
+  MSG_ACTION_ROOM_INFO_UPDATE = 345,
+  MSG_ACTION_ROOM_INVITE_NTF = 346,
+  MSG_ACTION_LOBBY_PLAYER_LIST = 347,
+  MSG_ACTION_ROOM_INVITE_PLAYER = 348,
+  MSG_ACTION_QUIRE_PASS_TEAM_GEN_INFO = 349,
+  MSG_ACTION_ENTER_PASS_ROOM = 350,
+  MSG_ACTION_CREATE_ROOM = 351,
+  MSG_ACTION_OPERATE_ROOM = 352,
+  MSG_ACTION_PLAYER_KICK_NTF = 353,
+  MSG_ACTION_ROOM_START_INSTANCE = 354,
+  MSG_ACTION_WING_SYSTEM = 520
 };
 bool MessageAction_IsValid(int value);
 const MessageAction MessageAction_MIN = MSG_ACTION_ACC_LOGIN;
-const MessageAction MessageAction_MAX = MSG_ACTION_ARENA_RECENT_MSGS_NOTIFY;
+const MessageAction MessageAction_MAX = MSG_ACTION_WING_SYSTEM;
 const int MessageAction_ARRAYSIZE = MessageAction_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* MessageAction_descriptor();
@@ -393,6 +526,24 @@ inline bool MessageAction_Parse(
     const ::std::string& name, MessageAction* value) {
   return ::google::protobuf::internal::ParseNamedEnum<MessageAction>(
     MessageAction_descriptor(), name, value);
+}
+enum AttrChangeType {
+  AttrChangeType_LineupCapacity = 1
+};
+bool AttrChangeType_IsValid(int value);
+const AttrChangeType AttrChangeType_MIN = AttrChangeType_LineupCapacity;
+const AttrChangeType AttrChangeType_MAX = AttrChangeType_LineupCapacity;
+const int AttrChangeType_ARRAYSIZE = AttrChangeType_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* AttrChangeType_descriptor();
+inline const ::std::string& AttrChangeType_Name(AttrChangeType value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    AttrChangeType_descriptor(), value);
+}
+inline bool AttrChangeType_Parse(
+    const ::std::string& name, AttrChangeType* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<AttrChangeType>(
+    AttrChangeType_descriptor(), name, value);
 }
 enum ARENA_SELF_NOTICE_TYPE {
   ARENA_CHALLENGE_WIN_WITH_RANK_CHANGE = 1,
@@ -579,11 +730,17 @@ inline bool PRACTICE_MODE_Parse(
     PRACTICE_MODE_descriptor(), name, value);
 }
 enum PAY_FUNCTION_TYPE {
-  PAY_FUNCTION_SKIP_FIGHT = 1
+  PAY_FUNCTION_SKIP_FIGHT = 1,
+  PAY_FUNCTION_UNLOCK_BAG = 2,
+  PAY_FUNCTION_DICE_MAP_DIAMOND = 3,
+  PAY_FUNCTION_DICE_MAP_NORMAL = 4,
+  PAY_FUNCTION_FAST_DICE_MAP_NORMAL = 5,
+  PAY_FUNCTION_FAST_DICE_MAP_DIAMOND = 6,
+  PAY_FUNCTION_FAST_AUTO_INSTANCE_UNIT_PRICE = 7
 };
 bool PAY_FUNCTION_TYPE_IsValid(int value);
 const PAY_FUNCTION_TYPE PAY_FUNCTION_TYPE_MIN = PAY_FUNCTION_SKIP_FIGHT;
-const PAY_FUNCTION_TYPE PAY_FUNCTION_TYPE_MAX = PAY_FUNCTION_SKIP_FIGHT;
+const PAY_FUNCTION_TYPE PAY_FUNCTION_TYPE_MAX = PAY_FUNCTION_FAST_AUTO_INSTANCE_UNIT_PRICE;
 const int PAY_FUNCTION_TYPE_ARRAYSIZE = PAY_FUNCTION_TYPE_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* PAY_FUNCTION_TYPE_descriptor();
@@ -711,11 +868,17 @@ enum FIGHT_TYPE {
   CHALLENGE_SOUL_YINGLING = 3,
   CHALLENGE_PLAYER = 4,
   FIGHT_OTHER_PLAYER_OR_TEAM = 6,
-  FIGHT_RANDOM_MONSTER = 7
+  FIGHT_RANDOM_MONSTER = 7,
+  FIGHT_ALIEN_BOSS = 8,
+  FIGHT_GUILD_BOSS = 9,
+  FIGHT_PVP_PLAYER = 10,
+  FIGHT_PVP_ROBOT = 11,
+  FIGHT_GUILD_WAR_BOSS = 12,
+  FIGHT_GUILD_WAR_PLAYER_OR_TEAM = 13
 };
 bool FIGHT_TYPE_IsValid(int value);
 const FIGHT_TYPE FIGHT_TYPE_MIN = NORMAL_FIGHT_MONSTER;
-const FIGHT_TYPE FIGHT_TYPE_MAX = FIGHT_RANDOM_MONSTER;
+const FIGHT_TYPE FIGHT_TYPE_MAX = FIGHT_GUILD_WAR_PLAYER_OR_TEAM;
 const int FIGHT_TYPE_ARRAYSIZE = FIGHT_TYPE_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* FIGHT_TYPE_descriptor();
@@ -798,17 +961,22 @@ inline bool RefreshYinglingListType_Parse(
 enum AnnounceType {
   AnnounceType_GET_ITEM_BY_CLEAR_MISSION = 1,
   AnnounceType_GET_ITEM_BY_OPEN_GIFT = 2,
+  AnnounceType_ARENA_TOP_3 = 3,
+  AnnounceType_ARENA_CONT_WIN = 4,
+  AnnounceType_ARENA_LOSE_CONT_WIN = 5,
+  AnnounceType_ACT_EXCHANGE_YINGLING = 6,
   AnnounceType_STRENGTH_EQUIP = 101,
   AnnounceType_HIRE_YINGLING = 201,
   AnnounceType_CHALLENGE_SPACETIME_SELF = 301,
   AnnounceType_CHALLENGE_SPACETIME = 401,
   AnnounceType_INJECT_SOUL_SELF = 501,
   AnnounceType_INJECT_SOUL = 601,
-  AnnounceType_CLEAR_MISSION = 701
+  AnnounceType_CLEAR_MISSION = 701,
+  AnnounceType_WING_SPIRIT = 702
 };
 bool AnnounceType_IsValid(int value);
 const AnnounceType AnnounceType_MIN = AnnounceType_GET_ITEM_BY_CLEAR_MISSION;
-const AnnounceType AnnounceType_MAX = AnnounceType_CLEAR_MISSION;
+const AnnounceType AnnounceType_MAX = AnnounceType_WING_SPIRIT;
 const int AnnounceType_ARRAYSIZE = AnnounceType_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* AnnounceType_descriptor();
@@ -831,11 +999,14 @@ enum ItemType {
   IT_TASK = 7,
   IT_GIFT = 8,
   IT_YINGLING = 9,
-  IT_CONSUMPTION = 10
+  IT_CONSUMPTION = 10,
+  IT_MONEY = 11,
+  IT_VIP = 12,
+  IT_LIMIT_COUNT = 13
 };
 bool ItemType_IsValid(int value);
 const ItemType ItemType_MIN = IT_EQUIPMENT;
-const ItemType ItemType_MAX = IT_CONSUMPTION;
+const ItemType ItemType_MAX = IT_LIMIT_COUNT;
 const int ItemType_ARRAYSIZE = ItemType_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* ItemType_descriptor();
@@ -861,7 +1032,8 @@ enum EquipPosition {
   ET_RING = 9,
   ET_WEAPON = 10,
   ET_ASSIST = 11,
-  ET_END = 12
+  ET_WING = 12,
+  ET_END = 13
 };
 bool EquipPosition_IsValid(int value);
 const EquipPosition EquipPosition_MIN = ET_RING2;
@@ -1017,11 +1189,12 @@ enum QuestType {
   QuestType_ZHIXIAN = 3,
   QuestType_RICHANG = 4,
   QuestType_XUNLUO = 5,
-  QuestType_BANGHUI = 6
+  QuestType_BANGHUI_XUNLUO = 6,
+  QuestType_BANGHUI_CRYSTAL = 7
 };
 bool QuestType_IsValid(int value);
 const QuestType QuestType_MIN = QuestType_DEFAULT;
-const QuestType QuestType_MAX = QuestType_BANGHUI;
+const QuestType QuestType_MAX = QuestType_BANGHUI_CRYSTAL;
 const int QuestType_ARRAYSIZE = QuestType_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* QuestType_descriptor();
@@ -1033,6 +1206,47 @@ inline bool QuestType_Parse(
     const ::std::string& name, QuestType* value) {
   return ::google::protobuf::internal::ParseNamedEnum<QuestType>(
     QuestType_descriptor(), name, value);
+}
+enum TreasureBoxBonusType {
+  TreasureBoxBonusType_GUILD_WAR_BOSS = 1,
+  TreasureBoxBonusType_GUILD_WAR_PvP = 2
+};
+bool TreasureBoxBonusType_IsValid(int value);
+const TreasureBoxBonusType TreasureBoxBonusType_MIN = TreasureBoxBonusType_GUILD_WAR_BOSS;
+const TreasureBoxBonusType TreasureBoxBonusType_MAX = TreasureBoxBonusType_GUILD_WAR_PvP;
+const int TreasureBoxBonusType_ARRAYSIZE = TreasureBoxBonusType_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* TreasureBoxBonusType_descriptor();
+inline const ::std::string& TreasureBoxBonusType_Name(TreasureBoxBonusType value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    TreasureBoxBonusType_descriptor(), value);
+}
+inline bool TreasureBoxBonusType_Parse(
+    const ::std::string& name, TreasureBoxBonusType* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<TreasureBoxBonusType>(
+    TreasureBoxBonusType_descriptor(), name, value);
+}
+enum ActivityStatus {
+  ActivityStatus_NOT_AVAIL = 0,
+  ActivityStatus_AVAIL = 1,
+  ActivityStatus_START = 2,
+  ActivityStatus_REWARD = 3,
+  ActivityStatus_FINISH = 4
+};
+bool ActivityStatus_IsValid(int value);
+const ActivityStatus ActivityStatus_MIN = ActivityStatus_NOT_AVAIL;
+const ActivityStatus ActivityStatus_MAX = ActivityStatus_FINISH;
+const int ActivityStatus_ARRAYSIZE = ActivityStatus_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* ActivityStatus_descriptor();
+inline const ::std::string& ActivityStatus_Name(ActivityStatus value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    ActivityStatus_descriptor(), value);
+}
+inline bool ActivityStatus_Parse(
+    const ::std::string& name, ActivityStatus* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<ActivityStatus>(
+    ActivityStatus_descriptor(), name, value);
 }
 enum DIFFICULTY_LEVEL {
   EASY = 1,
@@ -1159,11 +1373,12 @@ enum SERVER_SYNC_TEAM_TYPE {
   CREATE_TEAM = 1,
   DELETE_TEAM = 2,
   MEMBER_CHANGE = 3,
-  LEADER_CHANGE = 4
+  LEADER_CHANGE = 4,
+  LOAD_TEAM = 5
 };
 bool SERVER_SYNC_TEAM_TYPE_IsValid(int value);
 const SERVER_SYNC_TEAM_TYPE SERVER_SYNC_TEAM_TYPE_MIN = CREATE_TEAM;
-const SERVER_SYNC_TEAM_TYPE SERVER_SYNC_TEAM_TYPE_MAX = LEADER_CHANGE;
+const SERVER_SYNC_TEAM_TYPE SERVER_SYNC_TEAM_TYPE_MAX = LOAD_TEAM;
 const int SERVER_SYNC_TEAM_TYPE_ARRAYSIZE = SERVER_SYNC_TEAM_TYPE_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* SERVER_SYNC_TEAM_TYPE_descriptor();
@@ -1216,11 +1431,18 @@ enum RoleLimitType {
   RoleLimitType_CARRYON_DEPOT = 39,
   RoleLimitType_HUNT_LIMIT = 40,
   RoleLimitType_XUNLUO_QUEST_COOLDOWN = 41,
-  RoleLimitType_PHY_STRENGTH_BUY_LIMIT = 42
+  RoleLimitType_PHY_STRENGTH_BUY_LIMIT = 42,
+  RoleLimitType_VIP_FAST_PRACTICE_SKILL_LIMIT = 43,
+  RoleLimitType_YOULI_MAP_FINISH = 44,
+  RoleLimitType_YOULI_MAP_RESET = 45,
+  RoleLimitType_YOULI_MAP_DICE = 46,
+  RoleLimitType_GUILD_CIRCLE_QUEST = 47,
+  RoleLimitType_HIT_YELLOW_DUCK_LIMIT = 48,
+  RoleLimitType_WING_SPIRIT_GENERATOR = 49
 };
 bool RoleLimitType_IsValid(int value);
 const RoleLimitType RoleLimitType_MIN = RoleLimitType_DAILY_QUEST;
-const RoleLimitType RoleLimitType_MAX = RoleLimitType_PHY_STRENGTH_BUY_LIMIT;
+const RoleLimitType RoleLimitType_MAX = RoleLimitType_WING_SPIRIT_GENERATOR;
 const int RoleLimitType_ARRAYSIZE = RoleLimitType_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* RoleLimitType_descriptor();
@@ -1239,6 +1461,8 @@ enum FunctionLimitType {
   FunctionLimitType_SENIOR_PRACTICE_SKILL = 3,
   FunctionLimitType_CARRYON_SHOP = 4,
   FunctionLimitType_CARRYON_DEPOT = 5,
+  FunctionLimitType_WING_SPIRIT_ENABLE_LV4 = 6,
+  FunctionLimitType_WING_SPIRIT_BULK_GENERATE = 7,
   FunctionLimitType_MAXVALUE = 100
 };
 bool FunctionLimitType_IsValid(int value);
@@ -1255,6 +1479,56 @@ inline bool FunctionLimitType_Parse(
     const ::std::string& name, FunctionLimitType* value) {
   return ::google::protobuf::internal::ParseNamedEnum<FunctionLimitType>(
     FunctionLimitType_descriptor(), name, value);
+}
+enum NumberLimitType {
+  NumberLimit_MAX_PLAYER_LEVEL = 1,
+  NumberLimit_INIT_YOULI_NUM = 2,
+  NumberLimit_HIRE_YINGLING_K = 3,
+  NumberLimit_HIRE_YINGLING_E = 4,
+  NumberLimit_HIRE_YINGLING_N = 5,
+  NumberLimit_HIRE_YINGLING_PROTECT_NUM = 6,
+  NumberLimit_LUCKY_ONCE_DIAMOND = 7,
+  NumberLimit_GUILD_CRYSTAL_DURATION = 8,
+  NumberLimit_GUILD_CRYSTAL_REWARD_COUNTDOWN = 9,
+  NumberLimit_PVP_ENTER_LEVEL_LIMIT = 10,
+  NumberLimit_PVP_MAX_LEVEL = 11,
+  NumberLimit_PVP_NEW_LEVEL_CD = 12,
+  NumberLimit_PVP_FIGHT_CD = 13,
+  NumberLimit_PVP_RE_ENTER_CD = 14,
+  NumberLimit_PVP_ROBOT_TIMEOUT = 15,
+  NumberLimit_PVP_LEVEL_UP_TIMEOUT = 16,
+  NumberLimit_PVP_SHOW_CONT_WIN_RANK_LEVEL = 17,
+  NumberLimit_PVP_FIGHT_AUTO_SKIP_TIME = 18,
+  NumberLimit_PVP_TOP_5_ANNOUNCE_LEVEL = 19,
+  NumberLimit_PVP_ROBOT_CHECK_TIME = 20,
+  NumberLimit_TRAIN_COIN_K = 21,
+  NumberLimit_TRAIN_MIDDLE_COST_YB = 22,
+  NumberLimit_TRAIN_HIGH_COST_YB = 23,
+  NumberLimit_TRAIN_MIDDLE_ALTER_ITEM_ID = 24,
+  NumberLimit_TRAIN_MIDDLE_ALTER_ITEM_NUM = 25,
+  NumberLimit_TRAIN_FUNCTION_OPEN_LEVEL = 26,
+  NumberLimit_HIRE_HERO_YINGLING_PROTECT_NUM = 27,
+  NumberLimit_VIP_0_AUTO_INSTANCE_TIME = 28,
+  NumberLimit_VIP_1_AUTO_INSTANCE_TIME = 29,
+  NumberLimit_VIP_2_AUTO_INSTANCE_TIME = 30,
+  NumberLimit_VIP_3_AUTO_INSTANCE_TIME = 31,
+  NumberLimit_VIP_4_AUTO_INSTANCE_TIME = 32,
+  NumberLimit_VIP_5_AUTO_INSTANCE_TIME = 33
+};
+bool NumberLimitType_IsValid(int value);
+const NumberLimitType NumberLimitType_MIN = NumberLimit_MAX_PLAYER_LEVEL;
+const NumberLimitType NumberLimitType_MAX = NumberLimit_VIP_5_AUTO_INSTANCE_TIME;
+const int NumberLimitType_ARRAYSIZE = NumberLimitType_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* NumberLimitType_descriptor();
+inline const ::std::string& NumberLimitType_Name(NumberLimitType value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    NumberLimitType_descriptor(), value);
+}
+inline bool NumberLimitType_Parse(
+    const ::std::string& name, NumberLimitType* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<NumberLimitType>(
+    NumberLimitType_descriptor(), name, value);
 }
 enum VipSettingsType {
   VipSettingsType_EXP_BONUS = 1,
@@ -1301,32 +1575,122 @@ inline bool PlayerBitType_Parse(
 }
 enum PlayerFlagType {
   PlayerFlagType_FIRST_GENERATE_YINGLING = 1,
-  PlayerFlagType_APPLIED_STACKABLE_ONLINE_GIFT_DAY_1 = 2,
-  PlayerFlagType_APPLIED_STACKABLE_ONLINE_GIFT_DAY_2 = 3,
-  PlayerFlagType_APPLIED_STACKABLE_ONLINE_GIFT_DAY_3 = 4,
-  PlayerFlagType_APPLIED_STACKABLE_ONLINE_GIFT_DAY_4 = 5,
-  PlayerFlagType_APPLIED_STACKABLE_ONLINE_GIFT_DAY_5 = 6,
-  PlayerFlagType_APPLIED_STACKABLE_ONLINE_GIFT_DAY_6 = 7,
-  PlayerFlagType_APPLIED_STACKABLE_ONLINE_GIFT_DAY_7 = 8,
-  PlayerFlagType_APPLIED_STACKABLE_ONLINE_GIFT_DAY_8 = 9,
-  PlayerFlagType_APPLIED_STACKABLE_ONLINE_GIFT_DAY_9 = 10,
-  PlayerFlagType_APPLIED_STACKABLE_ONLINE_GIFT_DAY_10 = 11,
-  PlayerFlagType_FIST_VIP_BONUS_1 = 12,
-  PlayerFlagType_FIST_VIP_BONUS_2 = 13,
-  PlayerFlagType_FIST_VIP_BONUS_3 = 14,
-  PlayerFlagType_FIST_VIP_BONUS_4 = 15,
-  PlayerFlagType_FIST_VIP_BONUS_5 = 16,
-  PlayerFlagType_FIST_VIP_BONUS_6 = 17,
-  PlayerFlagType_FIST_VIP_BONUS_7 = 18,
-  PlayerFlagType_FIST_VIP_BONUS_8 = 19,
-  PlayerFlagType_FIST_VIP_BONUS_9 = 20,
-  PlayerFlagType_FIST_VIP_BONUS_10 = 21,
+  PlayerFlagType_CONTINIUS_LOGIN_DAYS = 2,
+  PlayerFlagType_ACTIVITY_START_HIRE_YINGLING = 3,
+  PlayerFlagType_ACTIVITY_END_HIRE_YINGLING = 4,
+  PlayerFlagType_ACTIVITY_START_STRENGTH_EQUIP = 5,
+  PlayerFlagType_ACTIVITY_END_STRENGTH_EQUIP = 6,
+  PlayerFlagType_CURRENT_STACKABLE_HIRE_YINGLING_COST = 7,
+  PlayerFlagType_CURRENT_STACKABLE_HIRE_HERO_YINGLING_COST = 8,
   PlayerFlagType_FUNCTION_LIMIT_START = 22,
-  PlayerFlagType_FUNCTION_LIMIT_END = 100
+  PlayerFlagType_FUNCTION_OPEN_1 = 23,
+  PlayerFlagType_FUNCTION_OPEN_2 = 24,
+  PlayerFlagType_FUNCTION_OPEN_3 = 25,
+  PlayerFlagType_FUNCTION_OPEN_4 = 26,
+  PlayerFlagType_FUNCTION_OPEN_5 = 27,
+  PlayerFlagType_FUNCTION_OPEN_6 = 28,
+  PlayerFlagType_FUNCTION_OPEN_7 = 29,
+  PlayerFlagType_FUNCTION_OPEN_8 = 30,
+  PlayerFlagType_LEVELUP_GIFT_ID = 31,
+  PlayerFlagType_ADD_FAVORITE = 32,
+  PlayerFlagType_FIRST_CHARGE = 33,
+  PlayerFlagType_WEIXIN_VERIFY = 34,
+  PlayerFlagType_DAILY_FIRST_CHARGE = 35,
+  PlayerFlagType_DAILY_FIRST_CHARGE_NUM = 36,
+  PlayerFlagType_DAILY_FIRST_CHARGE_CUR = 37,
+  PlayerFlagType_ACC_CONSUME_DIAMOND = 38,
+  PlayerFlagType_LUCKY_ONCE_DIAMOND = 39,
+  PlayerFlagType_EXCHANGE_YINGLING_1_STATUS = 40,
+  PlayerFlagType_EXCHANGE_YINGLING_2_STATUS = 41,
+  PlayerFlagType_LUCKY_CREDITS = 42,
+  PlayerFlagType_LUCKY_ONCE_MORE = 43,
+  PlayerFlagType_LAST_ADD_EXTRA_LUCKY_TIME = 44,
+  PlayerFlagType_OFFLINE_GIFT = 45,
+  PlayerFlagType_IS_IN_AUTO_INSTANCE = 46,
+  PlayerFlagType_INSTANCE_ID = 47,
+  PlayerFlagType_INSTANCE_GRADE = 48,
+  PlayerFlagType_STOP_ON_BAG_FULL = 49,
+  PlayerFlagType_SOUL_EXCHANGE = 99,
+  PlayerFlagType_FUNCTION_LIMIT_END = 100,
+  PlayerFlagType_GIFT_START_ID = 101,
+  PlayerFlagType_APPLIED_STACKABLE_ONLINE_GIFT_DAY_1 = 102,
+  PlayerFlagType_APPLIED_STACKABLE_ONLINE_GIFT_DAY_2 = 103,
+  PlayerFlagType_APPLIED_STACKABLE_ONLINE_GIFT_DAY_3 = 104,
+  PlayerFlagType_APPLIED_STACKABLE_ONLINE_GIFT_DAY_4 = 105,
+  PlayerFlagType_APPLIED_STACKABLE_ONLINE_GIFT_DAY_5 = 106,
+  PlayerFlagType_APPLIED_STACKABLE_ONLINE_GIFT_DAY_6 = 107,
+  PlayerFlagType_APPLIED_STACKABLE_ONLINE_GIFT_DAY_7 = 108,
+  PlayerFlagType_APPLIED_STACKABLE_ONLINE_GIFT_DAY_8 = 109,
+  PlayerFlagType_APPLIED_STACKABLE_ONLINE_GIFT_DAY_9 = 110,
+  PlayerFlagType_APPLIED_STACKABLE_ONLINE_GIFT_DAY_10 = 111,
+  PlayerFlagType_FIST_VIP_BONUS_1 = 112,
+  PlayerFlagType_FIST_VIP_BONUS_2 = 113,
+  PlayerFlagType_FIST_VIP_BONUS_3 = 114,
+  PlayerFlagType_FIST_VIP_BONUS_4 = 115,
+  PlayerFlagType_FIST_VIP_BONUS_5 = 116,
+  PlayerFlagType_FIST_VIP_BONUS_6 = 117,
+  PlayerFlagType_FIST_VIP_BONUS_7 = 118,
+  PlayerFlagType_FIST_VIP_BONUS_8 = 119,
+  PlayerFlagType_FIST_VIP_BONUS_9 = 120,
+  PlayerFlagType_FIST_VIP_BONUS_10 = 121,
+  PlayerFlagType_EQUIP_STRENGTH_TIME = 130,
+  PlayerFlagType_ARENA_WIN_COUNT = 131,
+  PlayerFlagType_TASK_WANTED_COUNT = 132,
+  PlayerFlagType_PRACTICE_DAY_1 = 134,
+  PlayerFlagType_PRACTICE_DAY_2 = 135,
+  PlayerFlagType_PRACTICE_DAY_3 = 136,
+  PlayerFlagType_PRACTICE_DAY_4 = 137,
+  PlayerFlagType_PRACTICE_DAY_5 = 138,
+  PlayerFlagType_PRACTICE_DAY_6 = 139,
+  PlayerFlagType_PRACTICE_DAY_7 = 140,
+  PlayerFlagType_FIGHT_CAPACITY_INC_1 = 141,
+  PlayerFlagType_FIGHT_CAPACITY_INC_2 = 142,
+  PlayerFlagType_FIGHT_CAPACITY_INC_3 = 143,
+  PlayerFlagType_FIGHT_CAPACITY_INC_4 = 144,
+  PlayerFlagType_FIGHT_CAPACITY_INC_5 = 145,
+  PlayerFlagType_FIGHT_CAPACITY_INC_6 = 146,
+  PlayerFlagType_FIGHT_CAPACITY_INC_7 = 147,
+  PlayerFlagType_FIGHT_CAPACITY_INC_8 = 148,
+  PlayerFlagType_FIGHT_CAPACITY_INC_9 = 149,
+  PlayerFlagType_FIGHT_CAPACITY_INC_10 = 150,
+  PlayerFlagType_FIGHT_CAPACITY_INC_11 = 151,
+  PlayerFlagType_FIGHT_CAPACITY_INC_12 = 152,
+  PlayerFlagType_FIGHT_CAPACITY_INC_13 = 153,
+  PlayerFlagType_FIGHT_CAPACITY_INC_14 = 154,
+  PlayerFlagType_FIGHT_CAPACITY_INC_15 = 155,
+  PlayerFlagType_HIRED_YINGLING_GIFT_FLAG_1 = 160,
+  PlayerFlagType_HIRED_YINGLING_GIFT_FLAG_2 = 161,
+  PlayerFlagType_HIRED_YINGLING_GIFT_FLAG_3 = 162,
+  PlayerFlagType_HIRED_YINGLING_GIFT_FLAG_4 = 163,
+  PlayerFlagType_HIRED_YINGLING_GIFT_FLAG_5 = 164,
+  PlayerFlagType_HIRED_YINGLING_GIFT_FLAG_6 = 165,
+  PlayerFlagType_HIRED_YINGLING_GIFT_FLAG_7 = 166,
+  PlayerFlagType_HIRED_YINGLING_GIFT_FLAG_8 = 167,
+  PlayerFlagType_HIRED_YINGLING_GIFT_FLAG_9 = 168,
+  PlayerFlagType_HIRED_YINGLING_GIFT_FLAG_10 = 169,
+  PlayerFlagType_STRENGTH_EQUIP_GIFT_FLAG_1 = 170,
+  PlayerFlagType_STRENGTH_EQUIP_GIFT_FLAG_2 = 171,
+  PlayerFlagType_STRENGTH_EQUIP_GIFT_FLAG_3 = 172,
+  PlayerFlagType_STRENGTH_EQUIP_GIFT_FLAG_4 = 173,
+  PlayerFlagType_STRENGTH_EQUIP_GIFT_FLAG_5 = 174,
+  PlayerFlagType_STRENGTH_EQUIP_GIFT_FLAG_6 = 175,
+  PlayerFlagType_STRENGTH_EQUIP_GIFT_FLAG_7 = 176,
+  PlayerFlagType_STRENGTH_EQUIP_GIFT_FLAG_8 = 177,
+  PlayerFlagType_STRENGTH_EQUIP_GIFT_FLAG_9 = 178,
+  PlayerFlagType_STRENGTH_EQUIP_GIFT_FLAG_10 = 179,
+  PlayerFlagType_CHARGE_LEVEL_1 = 181,
+  PlayerFlagType_CHARGE_LEVEL_2 = 182,
+  PlayerFlagType_CHARGE_LEVEL_3 = 183,
+  PlayerFlagType_CHARGE_LEVEL_4 = 184,
+  PlayerFlagType_CHARGE_LEVEL_5 = 185,
+  PlayerFlagType_CHARGE_LEVEL_6 = 186,
+  PlayerFlagType_CHARGE_LEVEL_7 = 187,
+  PlayerFlagType_CHARGE_LEVEL_8 = 188,
+  PlayerFlagType_GIFT_END_ID = 599
 };
 bool PlayerFlagType_IsValid(int value);
 const PlayerFlagType PlayerFlagType_MIN = PlayerFlagType_FIRST_GENERATE_YINGLING;
-const PlayerFlagType PlayerFlagType_MAX = PlayerFlagType_FUNCTION_LIMIT_END;
+const PlayerFlagType PlayerFlagType_MAX = PlayerFlagType_GIFT_END_ID;
 const int PlayerFlagType_ARRAYSIZE = PlayerFlagType_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* PlayerFlagType_descriptor();
@@ -1338,6 +1702,41 @@ inline bool PlayerFlagType_Parse(
     const ::std::string& name, PlayerFlagType* value) {
   return ::google::protobuf::internal::ParseNamedEnum<PlayerFlagType>(
     PlayerFlagType_descriptor(), name, value);
+}
+enum StartupActivityType {
+  StartupActivityType_HIRE_YINGLING = 1,
+  StartupActivityType_STRENGTH_EQUIP = 2,
+  StartupActivityType_SINGLE_CHARGE = 3,
+  StartupActivityType_VIP_PRIVILEGES = 4,
+  StartupActivityType_FIGHT_CAPACITY = 5,
+  StartupActivityType_ADD_FAVORITE = 6,
+  StartupActivityType_LEVEL_UP = 7,
+  StartupActivityType_ALIEN_BOSS = 8,
+  StartupActivityType_LUCKY_WHEEL = 9,
+  StartupActivityType_PVP_ACT = 10,
+  StartupActivityType_Preliminaries = 11,
+  StartupActivityType_Quarter_Finals = 12,
+  StartupActivityType_Semi_Finals = 13,
+  StartupActivityType_Finals = 14,
+  StartupActivityType_Preliminary_Advanced_Notification = 15,
+  StartupActivityType_Preliminary_Hourly_Notification = 16,
+  StartupActivityType_Preliminary_CountDown_Notification = 17,
+  StartupActivityType_Quarter_Competitor_Notification = 18
+};
+bool StartupActivityType_IsValid(int value);
+const StartupActivityType StartupActivityType_MIN = StartupActivityType_HIRE_YINGLING;
+const StartupActivityType StartupActivityType_MAX = StartupActivityType_Quarter_Competitor_Notification;
+const int StartupActivityType_ARRAYSIZE = StartupActivityType_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* StartupActivityType_descriptor();
+inline const ::std::string& StartupActivityType_Name(StartupActivityType value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    StartupActivityType_descriptor(), value);
+}
+inline bool StartupActivityType_Parse(
+    const ::std::string& name, StartupActivityType* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<StartupActivityType>(
+    StartupActivityType_descriptor(), name, value);
 }
 enum ClientPlayerFlagType {
   PlayerFlagType_CLIENT_SCENE_START_ID = 10000,
@@ -1362,6 +1761,27 @@ inline bool ClientPlayerFlagType_Parse(
   return ::google::protobuf::internal::ParseNamedEnum<ClientPlayerFlagType>(
     ClientPlayerFlagType_descriptor(), name, value);
 }
+enum TrainType {
+  TrainType_DEFAULT = 0,
+  TrainType_NORMAL = 1,
+  TrainType_MIDDLE = 2,
+  TrainType_HIGH = 3
+};
+bool TrainType_IsValid(int value);
+const TrainType TrainType_MIN = TrainType_DEFAULT;
+const TrainType TrainType_MAX = TrainType_HIGH;
+const int TrainType_ARRAYSIZE = TrainType_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* TrainType_descriptor();
+inline const ::std::string& TrainType_Name(TrainType value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    TrainType_descriptor(), value);
+}
+inline bool TrainType_Parse(
+    const ::std::string& name, TrainType* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<TrainType>(
+    TrainType_descriptor(), name, value);
+}
 enum BUY_MORE_TIMES_TYPE {
   BUY_ARENA_CHALLENGE_TIME = 1
 };
@@ -1381,11 +1801,12 @@ inline bool BUY_MORE_TIMES_TYPE_Parse(
     BUY_MORE_TIMES_TYPE_descriptor(), name, value);
 }
 enum BUY_CLEAR_CD_TYPE {
-  BUY_CLEAR_CHALLENGE_CD = 1
+  BUY_CLEAR_CHALLENGE_CD = 1,
+  BUY_SPEED_UP_RACTICE_SKILL_CD = 2
 };
 bool BUY_CLEAR_CD_TYPE_IsValid(int value);
 const BUY_CLEAR_CD_TYPE BUY_CLEAR_CD_TYPE_MIN = BUY_CLEAR_CHALLENGE_CD;
-const BUY_CLEAR_CD_TYPE BUY_CLEAR_CD_TYPE_MAX = BUY_CLEAR_CHALLENGE_CD;
+const BUY_CLEAR_CD_TYPE BUY_CLEAR_CD_TYPE_MAX = BUY_SPEED_UP_RACTICE_SKILL_CD;
 const int BUY_CLEAR_CD_TYPE_ARRAYSIZE = BUY_CLEAR_CD_TYPE_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* BUY_CLEAR_CD_TYPE_descriptor();
@@ -1417,6 +1838,30 @@ inline bool UniqueNameType_Parse(
   return ::google::protobuf::internal::ParseNamedEnum<UniqueNameType>(
     UniqueNameType_descriptor(), name, value);
 }
+enum GuildSkillStatus {
+  GuildSkill_CANT_RESEARCH = 1,
+  GuildSkill_UNRESEARCHED = 2,
+  GuildSkill_RESEARCHING = 3,
+  GuildSkill_RESEARCHED = 4,
+  GuildSkill_CANT_LEARN = 5,
+  GuildSkill_UNLEARNED = 6,
+  GuildSkill_LEARNED = 7
+};
+bool GuildSkillStatus_IsValid(int value);
+const GuildSkillStatus GuildSkillStatus_MIN = GuildSkill_CANT_RESEARCH;
+const GuildSkillStatus GuildSkillStatus_MAX = GuildSkill_LEARNED;
+const int GuildSkillStatus_ARRAYSIZE = GuildSkillStatus_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* GuildSkillStatus_descriptor();
+inline const ::std::string& GuildSkillStatus_Name(GuildSkillStatus value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    GuildSkillStatus_descriptor(), value);
+}
+inline bool GuildSkillStatus_Parse(
+    const ::std::string& name, GuildSkillStatus* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<GuildSkillStatus>(
+    GuildSkillStatus_descriptor(), name, value);
+}
 enum FunctionType {
   FunctionType_HIRE_YINGLING = 1,
   FunctionType_ARENA = 2
@@ -1445,6 +1890,8 @@ enum LivenessType {
   LIVENESS_ARENA_FIGHT = 5,
   LIVENESS_LOGIN = 6,
   LIVENESS_AUTO_FIGHT = 7,
+  LIVENESS_PRACTICE_SKILL = 8,
+  LIVENESS_HIRE_YINGLING = 9,
   LIVENESS_TOTAL = 10
 };
 bool LivenessType_IsValid(int value);
@@ -1543,6 +1990,60 @@ inline bool TeamChannelMemberNotifyType_Parse(
     const ::std::string& name, TeamChannelMemberNotifyType* value) {
   return ::google::protobuf::internal::ParseNamedEnum<TeamChannelMemberNotifyType>(
     TeamChannelMemberNotifyType_descriptor(), name, value);
+}
+enum TitleId {
+  TITLE_ARENA_NO_1 = 10011,
+  TITLE_ARENA_NO_2 = 10012,
+  TITLE_ARENA_NO_3 = 10013,
+  TITLE_SWORDMAN_LEVEl_NO_1 = 10021,
+  TITLE_WIZARD_LEVEl_NO_1 = 10022,
+  TITLE_ARCHER_LEVEl_NO_1 = 10023,
+  TITLE_SWORDMAN_FIGHT_NO_1 = 10024,
+  TITLE_WIZARD_FIGHT_NO_1 = 10025,
+  TITLE_ARCHER_FIGHT_NO_1 = 10026,
+  TITLE_COINS_RANK_NO_1 = 10027,
+  TITLE_GUILD_RANK_NO_1 = 10041,
+  TITLE_WORLD_BOSS_NO_1 = 10031,
+  TITLE_PVP_NO_1 = 10051,
+  TITLE_GUILD_WAR_NO_1 = 10052,
+  TITLE_GUILD_WAR_MVP = 10053
+};
+bool TitleId_IsValid(int value);
+const TitleId TitleId_MIN = TITLE_ARENA_NO_1;
+const TitleId TitleId_MAX = TITLE_GUILD_WAR_MVP;
+const int TitleId_ARRAYSIZE = TitleId_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* TitleId_descriptor();
+inline const ::std::string& TitleId_Name(TitleId value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    TitleId_descriptor(), value);
+}
+inline bool TitleId_Parse(
+    const ::std::string& name, TitleId* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<TitleId>(
+    TitleId_descriptor(), name, value);
+}
+enum ROOM_OPERATION {
+  CHANGE_ROOM_LEADER = 1,
+  KICK_OUT_ROOM = 2,
+  LEAVE_ROOM = 3,
+  UPDATE_PLAYER_READY = 4,
+  UPDATE_ROOM_PWD = 5
+};
+bool ROOM_OPERATION_IsValid(int value);
+const ROOM_OPERATION ROOM_OPERATION_MIN = CHANGE_ROOM_LEADER;
+const ROOM_OPERATION ROOM_OPERATION_MAX = UPDATE_ROOM_PWD;
+const int ROOM_OPERATION_ARRAYSIZE = ROOM_OPERATION_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* ROOM_OPERATION_descriptor();
+inline const ::std::string& ROOM_OPERATION_Name(ROOM_OPERATION value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    ROOM_OPERATION_descriptor(), value);
+}
+inline bool ROOM_OPERATION_Parse(
+    const ::std::string& name, ROOM_OPERATION* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<ROOM_OPERATION>(
+    ROOM_OPERATION_descriptor(), name, value);
 }
 // ===================================================================
 
@@ -1954,6 +2455,13 @@ class Fighter : public ::google::protobuf::Message {
   inline ::google::protobuf::int32 hp() const;
   inline void set_hp(::google::protobuf::int32 value);
   
+  // optional int32 max_hp = 16;
+  inline bool has_max_hp() const;
+  inline void clear_max_hp();
+  static const int kMaxHpFieldNumber = 16;
+  inline ::google::protobuf::int32 max_hp() const;
+  inline void set_max_hp(::google::protobuf::int32 value);
+  
   // optional int32 level = 6;
   inline bool has_level() const;
   inline void clear_level();
@@ -2044,6 +2552,8 @@ class Fighter : public ::google::protobuf::Message {
   inline void clear_has_tid();
   inline void set_has_hp();
   inline void clear_has_hp();
+  inline void set_has_max_hp();
+  inline void clear_has_max_hp();
   inline void set_has_level();
   inline void clear_has_level();
   inline void set_has_is_player();
@@ -2072,19 +2582,20 @@ class Fighter : public ::google::protobuf::Message {
   ::google::protobuf::int64 guid_;
   ::google::protobuf::int32 tid_;
   ::google::protobuf::int32 hp_;
+  ::google::protobuf::int32 max_hp_;
   ::google::protobuf::int32 level_;
   ::google::protobuf::int32 is_player_;
-  ::std::string* name_;
   ::google::protobuf::int32 is_team_leader_;
-  ::google::protobuf::int32 quality_;
+  ::std::string* name_;
   ::std::string* owner_name_;
+  ::google::protobuf::int32 quality_;
   ::google::protobuf::int32 phy_attack_;
   ::google::protobuf::int32 phy_defence_;
   ::google::protobuf::int32 mag_attack_;
   ::google::protobuf::int32 mag_defence_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(15 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(16 + 31) / 32];
   
   friend void  protobuf_AddDesc_game_5fcommon_2eproto();
   friend void protobuf_AssignDesc_game_5fcommon_2eproto();
@@ -2194,505 +2705,6 @@ class SkillBonus : public ::google::protobuf::Message {
   
   void InitAsDefaultInstance();
   static SkillBonus* default_instance_;
-};
-// -------------------------------------------------------------------
-
-class Bonus : public ::google::protobuf::Message {
- public:
-  Bonus();
-  virtual ~Bonus();
-  
-  Bonus(const Bonus& from);
-  
-  inline Bonus& operator=(const Bonus& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  
-  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
-    return _unknown_fields_;
-  }
-  
-  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
-  
-  static const ::google::protobuf::Descriptor* descriptor();
-  static const Bonus& default_instance();
-  
-  void Swap(Bonus* other);
-  
-  // implements Message ----------------------------------------------
-  
-  Bonus* New() const;
-  void CopyFrom(const ::google::protobuf::Message& from);
-  void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const Bonus& from);
-  void MergeFrom(const Bonus& from);
-  void Clear();
-  bool IsInitialized() const;
-  
-  int ByteSize() const;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input);
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const;
-  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
-  int GetCachedSize() const { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  public:
-  
-  ::google::protobuf::Metadata GetMetadata() const;
-  
-  // nested types ----------------------------------------------------
-  
-  // accessors -------------------------------------------------------
-  
-  // optional int64 guid = 1;
-  inline bool has_guid() const;
-  inline void clear_guid();
-  static const int kGuidFieldNumber = 1;
-  inline ::google::protobuf::int64 guid() const;
-  inline void set_guid(::google::protobuf::int64 value);
-  
-  // optional int32 exp_bonus = 2;
-  inline bool has_exp_bonus() const;
-  inline void clear_exp_bonus();
-  static const int kExpBonusFieldNumber = 2;
-  inline ::google::protobuf::int32 exp_bonus() const;
-  inline void set_exp_bonus(::google::protobuf::int32 value);
-  
-  // optional int32 vip_level = 13;
-  inline bool has_vip_level() const;
-  inline void clear_vip_level();
-  static const int kVipLevelFieldNumber = 13;
-  inline ::google::protobuf::int32 vip_level() const;
-  inline void set_vip_level(::google::protobuf::int32 value);
-  
-  // optional int32 vip_exp_factor = 10;
-  inline bool has_vip_exp_factor() const;
-  inline void clear_vip_exp_factor();
-  static const int kVipExpFactorFieldNumber = 10;
-  inline ::google::protobuf::int32 vip_exp_factor() const;
-  inline void set_vip_exp_factor(::google::protobuf::int32 value);
-  
-  // optional int32 team_exp_factor = 11;
-  inline bool has_team_exp_factor() const;
-  inline void clear_team_exp_factor();
-  static const int kTeamExpFactorFieldNumber = 11;
-  inline ::google::protobuf::int32 team_exp_factor() const;
-  inline void set_team_exp_factor(::google::protobuf::int32 value);
-  
-  // optional int32 other_exp_factor = 12;
-  inline bool has_other_exp_factor() const;
-  inline void clear_other_exp_factor();
-  static const int kOtherExpFactorFieldNumber = 12;
-  inline ::google::protobuf::int32 other_exp_factor() const;
-  inline void set_other_exp_factor(::google::protobuf::int32 value);
-  
-  // repeated .protocols.common.SkillBonus skill_bonus = 3;
-  inline int skill_bonus_size() const;
-  inline void clear_skill_bonus();
-  static const int kSkillBonusFieldNumber = 3;
-  inline const ::protocols::common::SkillBonus& skill_bonus(int index) const;
-  inline ::protocols::common::SkillBonus* mutable_skill_bonus(int index);
-  inline ::protocols::common::SkillBonus* add_skill_bonus();
-  inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::SkillBonus >&
-      skill_bonus() const;
-  inline ::google::protobuf::RepeatedPtrField< ::protocols::common::SkillBonus >*
-      mutable_skill_bonus();
-  
-  // optional int32 gold_coin_bonus = 8;
-  inline bool has_gold_coin_bonus() const;
-  inline void clear_gold_coin_bonus();
-  static const int kGoldCoinBonusFieldNumber = 8;
-  inline ::google::protobuf::int32 gold_coin_bonus() const;
-  inline void set_gold_coin_bonus(::google::protobuf::int32 value);
-  
-  // optional int32 bag_has_enough_slots = 4;
-  inline bool has_bag_has_enough_slots() const;
-  inline void clear_bag_has_enough_slots();
-  static const int kBagHasEnoughSlotsFieldNumber = 4;
-  inline ::google::protobuf::int32 bag_has_enough_slots() const;
-  inline void set_bag_has_enough_slots(::google::protobuf::int32 value);
-  
-  // optional int32 base_exp_bonus = 9;
-  inline bool has_base_exp_bonus() const;
-  inline void clear_base_exp_bonus();
-  static const int kBaseExpBonusFieldNumber = 9;
-  inline ::google::protobuf::int32 base_exp_bonus() const;
-  inline void set_base_exp_bonus(::google::protobuf::int32 value);
-  
-  // optional int32 base_gold_coin_bonus = 14;
-  inline bool has_base_gold_coin_bonus() const;
-  inline void clear_base_gold_coin_bonus();
-  static const int kBaseGoldCoinBonusFieldNumber = 14;
-  inline ::google::protobuf::int32 base_gold_coin_bonus() const;
-  inline void set_base_gold_coin_bonus(::google::protobuf::int32 value);
-  
-  // optional int32 cont_win_exp_bonus = 15;
-  inline bool has_cont_win_exp_bonus() const;
-  inline void clear_cont_win_exp_bonus();
-  static const int kContWinExpBonusFieldNumber = 15;
-  inline ::google::protobuf::int32 cont_win_exp_bonus() const;
-  inline void set_cont_win_exp_bonus(::google::protobuf::int32 value);
-  
-  // optional int32 cont_win_gold_bonus = 16;
-  inline bool has_cont_win_gold_bonus() const;
-  inline void clear_cont_win_gold_bonus();
-  static const int kContWinGoldBonusFieldNumber = 16;
-  inline ::google::protobuf::int32 cont_win_gold_bonus() const;
-  inline void set_cont_win_gold_bonus(::google::protobuf::int32 value);
-  
-  // optional int32 de_cont_win_exp_bonus = 17;
-  inline bool has_de_cont_win_exp_bonus() const;
-  inline void clear_de_cont_win_exp_bonus();
-  static const int kDeContWinExpBonusFieldNumber = 17;
-  inline ::google::protobuf::int32 de_cont_win_exp_bonus() const;
-  inline void set_de_cont_win_exp_bonus(::google::protobuf::int32 value);
-  
-  // optional int32 de_cont_win_gold_bonus = 18;
-  inline bool has_de_cont_win_gold_bonus() const;
-  inline void clear_de_cont_win_gold_bonus();
-  static const int kDeContWinGoldBonusFieldNumber = 18;
-  inline ::google::protobuf::int32 de_cont_win_gold_bonus() const;
-  inline void set_de_cont_win_gold_bonus(::google::protobuf::int32 value);
-  
-  // repeated .protocols.common.ItemInfo drop_item = 5;
-  inline int drop_item_size() const;
-  inline void clear_drop_item();
-  static const int kDropItemFieldNumber = 5;
-  inline const ::protocols::common::ItemInfo& drop_item(int index) const;
-  inline ::protocols::common::ItemInfo* mutable_drop_item(int index);
-  inline ::protocols::common::ItemInfo* add_drop_item();
-  inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::ItemInfo >&
-      drop_item() const;
-  inline ::google::protobuf::RepeatedPtrField< ::protocols::common::ItemInfo >*
-      mutable_drop_item();
-  
-  // repeated .protocols.common.ItemInfo quest_drop_item = 7;
-  inline int quest_drop_item_size() const;
-  inline void clear_quest_drop_item();
-  static const int kQuestDropItemFieldNumber = 7;
-  inline const ::protocols::common::ItemInfo& quest_drop_item(int index) const;
-  inline ::protocols::common::ItemInfo* mutable_quest_drop_item(int index);
-  inline ::protocols::common::ItemInfo* add_quest_drop_item();
-  inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::ItemInfo >&
-      quest_drop_item() const;
-  inline ::google::protobuf::RepeatedPtrField< ::protocols::common::ItemInfo >*
-      mutable_quest_drop_item();
-  
-  // repeated .protocols.common.EquipDetail equipment = 6;
-  inline int equipment_size() const;
-  inline void clear_equipment();
-  static const int kEquipmentFieldNumber = 6;
-  inline const ::protocols::common::EquipDetail& equipment(int index) const;
-  inline ::protocols::common::EquipDetail* mutable_equipment(int index);
-  inline ::protocols::common::EquipDetail* add_equipment();
-  inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::EquipDetail >&
-      equipment() const;
-  inline ::google::protobuf::RepeatedPtrField< ::protocols::common::EquipDetail >*
-      mutable_equipment();
-  
-  // @@protoc_insertion_point(class_scope:protocols.common.Bonus)
- private:
-  inline void set_has_guid();
-  inline void clear_has_guid();
-  inline void set_has_exp_bonus();
-  inline void clear_has_exp_bonus();
-  inline void set_has_vip_level();
-  inline void clear_has_vip_level();
-  inline void set_has_vip_exp_factor();
-  inline void clear_has_vip_exp_factor();
-  inline void set_has_team_exp_factor();
-  inline void clear_has_team_exp_factor();
-  inline void set_has_other_exp_factor();
-  inline void clear_has_other_exp_factor();
-  inline void set_has_gold_coin_bonus();
-  inline void clear_has_gold_coin_bonus();
-  inline void set_has_bag_has_enough_slots();
-  inline void clear_has_bag_has_enough_slots();
-  inline void set_has_base_exp_bonus();
-  inline void clear_has_base_exp_bonus();
-  inline void set_has_base_gold_coin_bonus();
-  inline void clear_has_base_gold_coin_bonus();
-  inline void set_has_cont_win_exp_bonus();
-  inline void clear_has_cont_win_exp_bonus();
-  inline void set_has_cont_win_gold_bonus();
-  inline void clear_has_cont_win_gold_bonus();
-  inline void set_has_de_cont_win_exp_bonus();
-  inline void clear_has_de_cont_win_exp_bonus();
-  inline void set_has_de_cont_win_gold_bonus();
-  inline void clear_has_de_cont_win_gold_bonus();
-  
-  ::google::protobuf::UnknownFieldSet _unknown_fields_;
-  
-  ::google::protobuf::int64 guid_;
-  ::google::protobuf::int32 exp_bonus_;
-  ::google::protobuf::int32 vip_level_;
-  ::google::protobuf::int32 vip_exp_factor_;
-  ::google::protobuf::int32 team_exp_factor_;
-  ::google::protobuf::RepeatedPtrField< ::protocols::common::SkillBonus > skill_bonus_;
-  ::google::protobuf::int32 other_exp_factor_;
-  ::google::protobuf::int32 gold_coin_bonus_;
-  ::google::protobuf::int32 bag_has_enough_slots_;
-  ::google::protobuf::int32 base_exp_bonus_;
-  ::google::protobuf::int32 base_gold_coin_bonus_;
-  ::google::protobuf::int32 cont_win_exp_bonus_;
-  ::google::protobuf::int32 cont_win_gold_bonus_;
-  ::google::protobuf::int32 de_cont_win_exp_bonus_;
-  ::google::protobuf::RepeatedPtrField< ::protocols::common::ItemInfo > drop_item_;
-  ::google::protobuf::RepeatedPtrField< ::protocols::common::ItemInfo > quest_drop_item_;
-  ::google::protobuf::RepeatedPtrField< ::protocols::common::EquipDetail > equipment_;
-  ::google::protobuf::int32 de_cont_win_gold_bonus_;
-  
-  mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(18 + 31) / 32];
-  
-  friend void  protobuf_AddDesc_game_5fcommon_2eproto();
-  friend void protobuf_AssignDesc_game_5fcommon_2eproto();
-  friend void protobuf_ShutdownFile_game_5fcommon_2eproto();
-  
-  void InitAsDefaultInstance();
-  static Bonus* default_instance_;
-};
-// -------------------------------------------------------------------
-
-class FightResult : public ::google::protobuf::Message {
- public:
-  FightResult();
-  virtual ~FightResult();
-  
-  FightResult(const FightResult& from);
-  
-  inline FightResult& operator=(const FightResult& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  
-  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
-    return _unknown_fields_;
-  }
-  
-  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
-  
-  static const ::google::protobuf::Descriptor* descriptor();
-  static const FightResult& default_instance();
-  
-  void Swap(FightResult* other);
-  
-  // implements Message ----------------------------------------------
-  
-  FightResult* New() const;
-  void CopyFrom(const ::google::protobuf::Message& from);
-  void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const FightResult& from);
-  void MergeFrom(const FightResult& from);
-  void Clear();
-  bool IsInitialized() const;
-  
-  int ByteSize() const;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input);
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const;
-  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
-  int GetCachedSize() const { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  public:
-  
-  ::google::protobuf::Metadata GetMetadata() const;
-  
-  // nested types ----------------------------------------------------
-  
-  // accessors -------------------------------------------------------
-  
-  // required int32 battle_id = 5;
-  inline bool has_battle_id() const;
-  inline void clear_battle_id();
-  static const int kBattleIdFieldNumber = 5;
-  inline ::google::protobuf::int32 battle_id() const;
-  inline void set_battle_id(::google::protobuf::int32 value);
-  
-  // repeated .protocols.common.Fighter fighter = 1;
-  inline int fighter_size() const;
-  inline void clear_fighter();
-  static const int kFighterFieldNumber = 1;
-  inline const ::protocols::common::Fighter& fighter(int index) const;
-  inline ::protocols::common::Fighter* mutable_fighter(int index);
-  inline ::protocols::common::Fighter* add_fighter();
-  inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::Fighter >&
-      fighter() const;
-  inline ::google::protobuf::RepeatedPtrField< ::protocols::common::Fighter >*
-      mutable_fighter();
-  
-  // optional int32 winner = 2;
-  inline bool has_winner() const;
-  inline void clear_winner();
-  static const int kWinnerFieldNumber = 2;
-  inline ::google::protobuf::int32 winner() const;
-  inline void set_winner(::google::protobuf::int32 value);
-  
-  // repeated .protocols.common.Bonus bonus = 3;
-  inline int bonus_size() const;
-  inline void clear_bonus();
-  static const int kBonusFieldNumber = 3;
-  inline const ::protocols::common::Bonus& bonus(int index) const;
-  inline ::protocols::common::Bonus* mutable_bonus(int index);
-  inline ::protocols::common::Bonus* add_bonus();
-  inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::Bonus >&
-      bonus() const;
-  inline ::google::protobuf::RepeatedPtrField< ::protocols::common::Bonus >*
-      mutable_bonus();
-  
-  // repeated .protocols.common.SkillInfo camp_a_battle_skills = 6;
-  inline int camp_a_battle_skills_size() const;
-  inline void clear_camp_a_battle_skills();
-  static const int kCampABattleSkillsFieldNumber = 6;
-  inline const ::protocols::common::SkillInfo& camp_a_battle_skills(int index) const;
-  inline ::protocols::common::SkillInfo* mutable_camp_a_battle_skills(int index);
-  inline ::protocols::common::SkillInfo* add_camp_a_battle_skills();
-  inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::SkillInfo >&
-      camp_a_battle_skills() const;
-  inline ::google::protobuf::RepeatedPtrField< ::protocols::common::SkillInfo >*
-      mutable_camp_a_battle_skills();
-  
-  // repeated .protocols.common.SkillInfo camp_b_battle_skills = 7;
-  inline int camp_b_battle_skills_size() const;
-  inline void clear_camp_b_battle_skills();
-  static const int kCampBBattleSkillsFieldNumber = 7;
-  inline const ::protocols::common::SkillInfo& camp_b_battle_skills(int index) const;
-  inline ::protocols::common::SkillInfo* mutable_camp_b_battle_skills(int index);
-  inline ::protocols::common::SkillInfo* add_camp_b_battle_skills();
-  inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::SkillInfo >&
-      camp_b_battle_skills() const;
-  inline ::google::protobuf::RepeatedPtrField< ::protocols::common::SkillInfo >*
-      mutable_camp_b_battle_skills();
-  
-  // repeated bytes round_data = 4;
-  inline int round_data_size() const;
-  inline void clear_round_data();
-  static const int kRoundDataFieldNumber = 4;
-  inline const ::std::string& round_data(int index) const;
-  inline ::std::string* mutable_round_data(int index);
-  inline void set_round_data(int index, const ::std::string& value);
-  inline void set_round_data(int index, const char* value);
-  inline void set_round_data(int index, const void* value, size_t size);
-  inline ::std::string* add_round_data();
-  inline void add_round_data(const ::std::string& value);
-  inline void add_round_data(const char* value);
-  inline void add_round_data(const void* value, size_t size);
-  inline const ::google::protobuf::RepeatedPtrField< ::std::string>& round_data() const;
-  inline ::google::protobuf::RepeatedPtrField< ::std::string>* mutable_round_data();
-  
-  // optional string npc_name = 8;
-  inline bool has_npc_name() const;
-  inline void clear_npc_name();
-  static const int kNpcNameFieldNumber = 8;
-  inline const ::std::string& npc_name() const;
-  inline void set_npc_name(const ::std::string& value);
-  inline void set_npc_name(const char* value);
-  inline void set_npc_name(const char* value, size_t size);
-  inline ::std::string* mutable_npc_name();
-  inline ::std::string* release_npc_name();
-  
-  // optional int32 npc_level = 11;
-  inline bool has_npc_level() const;
-  inline void clear_npc_level();
-  static const int kNpcLevelFieldNumber = 11;
-  inline ::google::protobuf::int32 npc_level() const;
-  inline void set_npc_level(::google::protobuf::int32 value);
-  
-  // optional int32 left_free_skip_times = 9;
-  inline bool has_left_free_skip_times() const;
-  inline void clear_left_free_skip_times();
-  static const int kLeftFreeSkipTimesFieldNumber = 9;
-  inline ::google::protobuf::int32 left_free_skip_times() const;
-  inline void set_left_free_skip_times(::google::protobuf::int32 value);
-  
-  // optional int32 auto_skip_time_limit = 10;
-  inline bool has_auto_skip_time_limit() const;
-  inline void clear_auto_skip_time_limit();
-  static const int kAutoSkipTimeLimitFieldNumber = 10;
-  inline ::google::protobuf::int32 auto_skip_time_limit() const;
-  inline void set_auto_skip_time_limit(::google::protobuf::int32 value);
-  
-  // optional int32 camp_a_dead_persons = 12;
-  inline bool has_camp_a_dead_persons() const;
-  inline void clear_camp_a_dead_persons();
-  static const int kCampADeadPersonsFieldNumber = 12;
-  inline ::google::protobuf::int32 camp_a_dead_persons() const;
-  inline void set_camp_a_dead_persons(::google::protobuf::int32 value);
-  
-  // optional int32 camp_b_dead_persons = 13;
-  inline bool has_camp_b_dead_persons() const;
-  inline void clear_camp_b_dead_persons();
-  static const int kCampBDeadPersonsFieldNumber = 13;
-  inline ::google::protobuf::int32 camp_b_dead_persons() const;
-  inline void set_camp_b_dead_persons(::google::protobuf::int32 value);
-  
-  // optional int32 battle_group_id = 14;
-  inline bool has_battle_group_id() const;
-  inline void clear_battle_group_id();
-  static const int kBattleGroupIdFieldNumber = 14;
-  inline ::google::protobuf::int32 battle_group_id() const;
-  inline void set_battle_group_id(::google::protobuf::int32 value);
-  
-  // @@protoc_insertion_point(class_scope:protocols.common.FightResult)
- private:
-  inline void set_has_battle_id();
-  inline void clear_has_battle_id();
-  inline void set_has_winner();
-  inline void clear_has_winner();
-  inline void set_has_npc_name();
-  inline void clear_has_npc_name();
-  inline void set_has_npc_level();
-  inline void clear_has_npc_level();
-  inline void set_has_left_free_skip_times();
-  inline void clear_has_left_free_skip_times();
-  inline void set_has_auto_skip_time_limit();
-  inline void clear_has_auto_skip_time_limit();
-  inline void set_has_camp_a_dead_persons();
-  inline void clear_has_camp_a_dead_persons();
-  inline void set_has_camp_b_dead_persons();
-  inline void clear_has_camp_b_dead_persons();
-  inline void set_has_battle_group_id();
-  inline void clear_has_battle_group_id();
-  
-  ::google::protobuf::UnknownFieldSet _unknown_fields_;
-  
-  ::google::protobuf::RepeatedPtrField< ::protocols::common::Fighter > fighter_;
-  ::google::protobuf::int32 battle_id_;
-  ::google::protobuf::int32 winner_;
-  ::google::protobuf::RepeatedPtrField< ::protocols::common::Bonus > bonus_;
-  ::google::protobuf::RepeatedPtrField< ::protocols::common::SkillInfo > camp_a_battle_skills_;
-  ::google::protobuf::RepeatedPtrField< ::protocols::common::SkillInfo > camp_b_battle_skills_;
-  ::google::protobuf::RepeatedPtrField< ::std::string> round_data_;
-  ::std::string* npc_name_;
-  ::google::protobuf::int32 npc_level_;
-  ::google::protobuf::int32 left_free_skip_times_;
-  ::google::protobuf::int32 auto_skip_time_limit_;
-  ::google::protobuf::int32 camp_a_dead_persons_;
-  ::google::protobuf::int32 camp_b_dead_persons_;
-  ::google::protobuf::int32 battle_group_id_;
-  
-  mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(14 + 31) / 32];
-  
-  friend void  protobuf_AddDesc_game_5fcommon_2eproto();
-  friend void protobuf_AssignDesc_game_5fcommon_2eproto();
-  friend void protobuf_ShutdownFile_game_5fcommon_2eproto();
-  
-  void InitAsDefaultInstance();
-  static FightResult* default_instance_;
 };
 // -------------------------------------------------------------------
 
@@ -2935,7 +2947,7 @@ class PlayerInfo : public ::google::protobuf::Message {
   inline ::google::protobuf::int32 flag() const;
   inline void set_flag(::google::protobuf::int32 value);
   
-  // required string name = 9;
+  // optional string name = 9;
   inline bool has_name() const;
   inline void clear_name();
   static const int kNameFieldNumber = 9;
@@ -3042,6 +3054,48 @@ class PlayerInfo : public ::google::protobuf::Message {
   inline ::google::protobuf::int64 follow_guid() const;
   inline void set_follow_guid(::google::protobuf::int64 value);
   
+  // optional int32 direction = 25 [default = 1];
+  inline bool has_direction() const;
+  inline void clear_direction();
+  static const int kDirectionFieldNumber = 25;
+  inline ::google::protobuf::int32 direction() const;
+  inline void set_direction(::google::protobuf::int32 value);
+  
+  // optional int64 role_create_time = 26;
+  inline bool has_role_create_time() const;
+  inline void clear_role_create_time();
+  static const int kRoleCreateTimeFieldNumber = 26;
+  inline ::google::protobuf::int64 role_create_time() const;
+  inline void set_role_create_time(::google::protobuf::int64 value);
+  
+  // optional int32 wing_tid = 27 [default = 0];
+  inline bool has_wing_tid() const;
+  inline void clear_wing_tid();
+  static const int kWingTidFieldNumber = 27;
+  inline ::google::protobuf::int32 wing_tid() const;
+  inline void set_wing_tid(::google::protobuf::int32 value);
+  
+  // optional int32 guild_title = 28 [default = 0];
+  inline bool has_guild_title() const;
+  inline void clear_guild_title();
+  static const int kGuildTitleFieldNumber = 28;
+  inline ::google::protobuf::int32 guild_title() const;
+  inline void set_guild_title(::google::protobuf::int32 value);
+  
+  // optional int32 title = 29 [default = 0];
+  inline bool has_title() const;
+  inline void clear_title();
+  static const int kTitleFieldNumber = 29;
+  inline ::google::protobuf::int32 title() const;
+  inline void set_title(::google::protobuf::int32 value);
+  
+  // optional int32 practice_exp = 30 [default = 0];
+  inline bool has_practice_exp() const;
+  inline void clear_practice_exp();
+  static const int kPracticeExpFieldNumber = 30;
+  inline ::google::protobuf::int32 practice_exp() const;
+  inline void set_practice_exp(::google::protobuf::int32 value);
+  
   // @@protoc_insertion_point(class_scope:protocols.common.PlayerInfo)
  private:
   inline void set_has_guid();
@@ -3090,6 +3144,18 @@ class PlayerInfo : public ::google::protobuf::Message {
   inline void clear_has_map_instance_id();
   inline void set_has_follow_guid();
   inline void clear_has_follow_guid();
+  inline void set_has_direction();
+  inline void clear_has_direction();
+  inline void set_has_role_create_time();
+  inline void clear_has_role_create_time();
+  inline void set_has_wing_tid();
+  inline void clear_has_wing_tid();
+  inline void set_has_guild_title();
+  inline void clear_has_guild_title();
+  inline void set_has_title();
+  inline void clear_has_title();
+  inline void set_has_practice_exp();
+  inline void clear_has_practice_exp();
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
@@ -3116,9 +3182,15 @@ class PlayerInfo : public ::google::protobuf::Message {
   ::protocols::common::PlayerPhyStrengthInfo* player_phy_strength_;
   ::google::protobuf::int64 follow_guid_;
   ::google::protobuf::int32 map_instance_id_;
+  ::google::protobuf::int32 direction_;
+  ::google::protobuf::int64 role_create_time_;
+  ::google::protobuf::int32 wing_tid_;
+  ::google::protobuf::int32 guild_title_;
+  ::google::protobuf::int32 title_;
+  ::google::protobuf::int32 practice_exp_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(23 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(29 + 31) / 32];
   
   friend void  protobuf_AddDesc_game_5fcommon_2eproto();
   friend void protobuf_AssignDesc_game_5fcommon_2eproto();
@@ -3589,6 +3661,27 @@ class SkillInfo : public ::google::protobuf::Message {
   inline ::google::protobuf::int32 practice_time() const;
   inline void set_practice_time(::google::protobuf::int32 value);
   
+  // optional int32 status = 9;
+  inline bool has_status() const;
+  inline void clear_status();
+  static const int kStatusFieldNumber = 9;
+  inline ::google::protobuf::int32 status() const;
+  inline void set_status(::google::protobuf::int32 value);
+  
+  // optional int32 time_left_for_research = 10;
+  inline bool has_time_left_for_research() const;
+  inline void clear_time_left_for_research();
+  static const int kTimeLeftForResearchFieldNumber = 10;
+  inline ::google::protobuf::int32 time_left_for_research() const;
+  inline void set_time_left_for_research(::google::protobuf::int32 value);
+  
+  // optional int32 is_used = 11;
+  inline bool has_is_used() const;
+  inline void clear_is_used();
+  static const int kIsUsedFieldNumber = 11;
+  inline ::google::protobuf::int32 is_used() const;
+  inline void set_is_used(::google::protobuf::int32 value);
+  
   // @@protoc_insertion_point(class_scope:protocols.common.SkillInfo)
  private:
   inline void set_has_skill_id();
@@ -3607,6 +3700,12 @@ class SkillInfo : public ::google::protobuf::Message {
   inline void clear_has_delta_add_exp();
   inline void set_has_practice_time();
   inline void clear_has_practice_time();
+  inline void set_has_status();
+  inline void clear_has_status();
+  inline void set_has_time_left_for_research();
+  inline void clear_has_time_left_for_research();
+  inline void set_has_is_used();
+  inline void clear_has_is_used();
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
@@ -3618,9 +3717,12 @@ class SkillInfo : public ::google::protobuf::Message {
   ::google::protobuf::int32 delta_time_;
   ::google::protobuf::int32 delta_add_exp_;
   ::google::protobuf::int32 practice_time_;
+  ::google::protobuf::int32 status_;
+  ::google::protobuf::int32 time_left_for_research_;
+  ::google::protobuf::int32 is_used_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(8 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(11 + 31) / 32];
   
   friend void  protobuf_AddDesc_game_5fcommon_2eproto();
   friend void protobuf_AssignDesc_game_5fcommon_2eproto();
@@ -4203,6 +4305,98 @@ class BuddyDetailInfo : public ::google::protobuf::Message {
   
   void InitAsDefaultInstance();
   static BuddyDetailInfo* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class PBIntPair : public ::google::protobuf::Message {
+ public:
+  PBIntPair();
+  virtual ~PBIntPair();
+  
+  PBIntPair(const PBIntPair& from);
+  
+  inline PBIntPair& operator=(const PBIntPair& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const PBIntPair& default_instance();
+  
+  void Swap(PBIntPair* other);
+  
+  // implements Message ----------------------------------------------
+  
+  PBIntPair* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const PBIntPair& from);
+  void MergeFrom(const PBIntPair& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required int32 key = 1;
+  inline bool has_key() const;
+  inline void clear_key();
+  static const int kKeyFieldNumber = 1;
+  inline ::google::protobuf::int32 key() const;
+  inline void set_key(::google::protobuf::int32 value);
+  
+  // required int32 value = 2;
+  inline bool has_value() const;
+  inline void clear_value();
+  static const int kValueFieldNumber = 2;
+  inline ::google::protobuf::int32 value() const;
+  inline void set_value(::google::protobuf::int32 value);
+  
+  // @@protoc_insertion_point(class_scope:protocols.common.PBIntPair)
+ private:
+  inline void set_has_key();
+  inline void clear_has_key();
+  inline void set_has_value();
+  inline void clear_has_value();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::int32 key_;
+  ::google::protobuf::int32 value_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_game_5fcommon_2eproto();
+  friend void protobuf_AssignDesc_game_5fcommon_2eproto();
+  friend void protobuf_ShutdownFile_game_5fcommon_2eproto();
+  
+  void InitAsDefaultInstance();
+  static PBIntPair* default_instance_;
 };
 // -------------------------------------------------------------------
 
@@ -4797,6 +4991,596 @@ class MonsterInfo : public ::google::protobuf::Message {
 };
 // -------------------------------------------------------------------
 
+class WingSpiritInfo : public ::google::protobuf::Message {
+ public:
+  WingSpiritInfo();
+  virtual ~WingSpiritInfo();
+  
+  WingSpiritInfo(const WingSpiritInfo& from);
+  
+  inline WingSpiritInfo& operator=(const WingSpiritInfo& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const WingSpiritInfo& default_instance();
+  
+  void Swap(WingSpiritInfo* other);
+  
+  // implements Message ----------------------------------------------
+  
+  WingSpiritInfo* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const WingSpiritInfo& from);
+  void MergeFrom(const WingSpiritInfo& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // optional int64 item_id = 1;
+  inline bool has_item_id() const;
+  inline void clear_item_id();
+  static const int kItemIdFieldNumber = 1;
+  inline ::google::protobuf::int64 item_id() const;
+  inline void set_item_id(::google::protobuf::int64 value);
+  
+  // optional int32 t_id = 9;
+  inline bool has_t_id() const;
+  inline void clear_t_id();
+  static const int kTIdFieldNumber = 9;
+  inline ::google::protobuf::int32 t_id() const;
+  inline void set_t_id(::google::protobuf::int32 value);
+  
+  // optional bool is_fragment = 2;
+  inline bool has_is_fragment() const;
+  inline void clear_is_fragment();
+  static const int kIsFragmentFieldNumber = 2;
+  inline bool is_fragment() const;
+  inline void set_is_fragment(bool value);
+  
+  // optional int32 level = 3;
+  inline bool has_level() const;
+  inline void clear_level();
+  static const int kLevelFieldNumber = 3;
+  inline ::google::protobuf::int32 level() const;
+  inline void set_level(::google::protobuf::int32 value);
+  
+  // optional int32 self_exp = 4;
+  inline bool has_self_exp() const;
+  inline void clear_self_exp();
+  static const int kSelfExpFieldNumber = 4;
+  inline ::google::protobuf::int32 self_exp() const;
+  inline void set_self_exp(::google::protobuf::int32 value);
+  
+  // optional int32 add_exp = 5;
+  inline bool has_add_exp() const;
+  inline void clear_add_exp();
+  static const int kAddExpFieldNumber = 5;
+  inline ::google::protobuf::int32 add_exp() const;
+  inline void set_add_exp(::google::protobuf::int32 value);
+  
+  // optional int32 max_exp = 6;
+  inline bool has_max_exp() const;
+  inline void clear_max_exp();
+  static const int kMaxExpFieldNumber = 6;
+  inline ::google::protobuf::int32 max_exp() const;
+  inline void set_max_exp(::google::protobuf::int32 value);
+  
+  // repeated .protocols.common.AttributeData attr_plus = 7;
+  inline int attr_plus_size() const;
+  inline void clear_attr_plus();
+  static const int kAttrPlusFieldNumber = 7;
+  inline const ::protocols::common::AttributeData& attr_plus(int index) const;
+  inline ::protocols::common::AttributeData* mutable_attr_plus(int index);
+  inline ::protocols::common::AttributeData* add_attr_plus();
+  inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::AttributeData >&
+      attr_plus() const;
+  inline ::google::protobuf::RepeatedPtrField< ::protocols::common::AttributeData >*
+      mutable_attr_plus();
+  
+  // optional int32 index = 8;
+  inline bool has_index() const;
+  inline void clear_index();
+  static const int kIndexFieldNumber = 8;
+  inline ::google::protobuf::int32 index() const;
+  inline void set_index(::google::protobuf::int32 value);
+  
+  // @@protoc_insertion_point(class_scope:protocols.common.WingSpiritInfo)
+ private:
+  inline void set_has_item_id();
+  inline void clear_has_item_id();
+  inline void set_has_t_id();
+  inline void clear_has_t_id();
+  inline void set_has_is_fragment();
+  inline void clear_has_is_fragment();
+  inline void set_has_level();
+  inline void clear_has_level();
+  inline void set_has_self_exp();
+  inline void clear_has_self_exp();
+  inline void set_has_add_exp();
+  inline void clear_has_add_exp();
+  inline void set_has_max_exp();
+  inline void clear_has_max_exp();
+  inline void set_has_index();
+  inline void clear_has_index();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::int64 item_id_;
+  ::google::protobuf::int32 t_id_;
+  bool is_fragment_;
+  ::google::protobuf::int32 level_;
+  ::google::protobuf::int32 self_exp_;
+  ::google::protobuf::int32 add_exp_;
+  ::google::protobuf::int32 max_exp_;
+  ::google::protobuf::RepeatedPtrField< ::protocols::common::AttributeData > attr_plus_;
+  ::google::protobuf::int32 index_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(9 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_game_5fcommon_2eproto();
+  friend void protobuf_AssignDesc_game_5fcommon_2eproto();
+  friend void protobuf_ShutdownFile_game_5fcommon_2eproto();
+  
+  void InitAsDefaultInstance();
+  static WingSpiritInfo* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class WingSlotInfo : public ::google::protobuf::Message {
+ public:
+  WingSlotInfo();
+  virtual ~WingSlotInfo();
+  
+  WingSlotInfo(const WingSlotInfo& from);
+  
+  inline WingSlotInfo& operator=(const WingSlotInfo& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const WingSlotInfo& default_instance();
+  
+  void Swap(WingSlotInfo* other);
+  
+  // implements Message ----------------------------------------------
+  
+  WingSlotInfo* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const WingSlotInfo& from);
+  void MergeFrom(const WingSlotInfo& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // optional int32 slot_num = 1;
+  inline bool has_slot_num() const;
+  inline void clear_slot_num();
+  static const int kSlotNumFieldNumber = 1;
+  inline ::google::protobuf::int32 slot_num() const;
+  inline void set_slot_num(::google::protobuf::int32 value);
+  
+  // optional .protocols.common.WingSpiritInfo spirit = 2;
+  inline bool has_spirit() const;
+  inline void clear_spirit();
+  static const int kSpiritFieldNumber = 2;
+  inline const ::protocols::common::WingSpiritInfo& spirit() const;
+  inline ::protocols::common::WingSpiritInfo* mutable_spirit();
+  inline ::protocols::common::WingSpiritInfo* release_spirit();
+  
+  // @@protoc_insertion_point(class_scope:protocols.common.WingSlotInfo)
+ private:
+  inline void set_has_slot_num();
+  inline void clear_has_slot_num();
+  inline void set_has_spirit();
+  inline void clear_has_spirit();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::protocols::common::WingSpiritInfo* spirit_;
+  ::google::protobuf::int32 slot_num_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_game_5fcommon_2eproto();
+  friend void protobuf_AssignDesc_game_5fcommon_2eproto();
+  friend void protobuf_ShutdownFile_game_5fcommon_2eproto();
+  
+  void InitAsDefaultInstance();
+  static WingSlotInfo* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class WingItemInfo : public ::google::protobuf::Message {
+ public:
+  WingItemInfo();
+  virtual ~WingItemInfo();
+  
+  WingItemInfo(const WingItemInfo& from);
+  
+  inline WingItemInfo& operator=(const WingItemInfo& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const WingItemInfo& default_instance();
+  
+  void Swap(WingItemInfo* other);
+  
+  // implements Message ----------------------------------------------
+  
+  WingItemInfo* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const WingItemInfo& from);
+  void MergeFrom(const WingItemInfo& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // optional int32 wing_tid = 1;
+  inline bool has_wing_tid() const;
+  inline void clear_wing_tid();
+  static const int kWingTidFieldNumber = 1;
+  inline ::google::protobuf::int32 wing_tid() const;
+  inline void set_wing_tid(::google::protobuf::int32 value);
+  
+  // optional int64 wing_item_id = 5;
+  inline bool has_wing_item_id() const;
+  inline void clear_wing_item_id();
+  static const int kWingItemIdFieldNumber = 5;
+  inline ::google::protobuf::int64 wing_item_id() const;
+  inline void set_wing_item_id(::google::protobuf::int64 value);
+  
+  // optional int64 equipt_guid = 2;
+  inline bool has_equipt_guid() const;
+  inline void clear_equipt_guid();
+  static const int kEquiptGuidFieldNumber = 2;
+  inline ::google::protobuf::int64 equipt_guid() const;
+  inline void set_equipt_guid(::google::protobuf::int64 value);
+  
+  // repeated .protocols.common.WingSlotInfo slots = 3;
+  inline int slots_size() const;
+  inline void clear_slots();
+  static const int kSlotsFieldNumber = 3;
+  inline const ::protocols::common::WingSlotInfo& slots(int index) const;
+  inline ::protocols::common::WingSlotInfo* mutable_slots(int index);
+  inline ::protocols::common::WingSlotInfo* add_slots();
+  inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::WingSlotInfo >&
+      slots() const;
+  inline ::google::protobuf::RepeatedPtrField< ::protocols::common::WingSlotInfo >*
+      mutable_slots();
+  
+  // optional int64 point = 4;
+  inline bool has_point() const;
+  inline void clear_point();
+  static const int kPointFieldNumber = 4;
+  inline ::google::protobuf::int64 point() const;
+  inline void set_point(::google::protobuf::int64 value);
+  
+  // @@protoc_insertion_point(class_scope:protocols.common.WingItemInfo)
+ private:
+  inline void set_has_wing_tid();
+  inline void clear_has_wing_tid();
+  inline void set_has_wing_item_id();
+  inline void clear_has_wing_item_id();
+  inline void set_has_equipt_guid();
+  inline void clear_has_equipt_guid();
+  inline void set_has_point();
+  inline void clear_has_point();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::int64 wing_item_id_;
+  ::google::protobuf::int64 equipt_guid_;
+  ::google::protobuf::RepeatedPtrField< ::protocols::common::WingSlotInfo > slots_;
+  ::google::protobuf::int64 point_;
+  ::google::protobuf::int32 wing_tid_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(5 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_game_5fcommon_2eproto();
+  friend void protobuf_AssignDesc_game_5fcommon_2eproto();
+  friend void protobuf_ShutdownFile_game_5fcommon_2eproto();
+  
+  void InitAsDefaultInstance();
+  static WingItemInfo* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class WingSpiritBag : public ::google::protobuf::Message {
+ public:
+  WingSpiritBag();
+  virtual ~WingSpiritBag();
+  
+  WingSpiritBag(const WingSpiritBag& from);
+  
+  inline WingSpiritBag& operator=(const WingSpiritBag& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const WingSpiritBag& default_instance();
+  
+  void Swap(WingSpiritBag* other);
+  
+  // implements Message ----------------------------------------------
+  
+  WingSpiritBag* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const WingSpiritBag& from);
+  void MergeFrom(const WingSpiritBag& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // optional int32 max_num = 1;
+  inline bool has_max_num() const;
+  inline void clear_max_num();
+  static const int kMaxNumFieldNumber = 1;
+  inline ::google::protobuf::int32 max_num() const;
+  inline void set_max_num(::google::protobuf::int32 value);
+  
+  // optional int32 open_num = 2;
+  inline bool has_open_num() const;
+  inline void clear_open_num();
+  static const int kOpenNumFieldNumber = 2;
+  inline ::google::protobuf::int32 open_num() const;
+  inline void set_open_num(::google::protobuf::int32 value);
+  
+  // repeated .protocols.common.WingSpiritInfo spirits = 3;
+  inline int spirits_size() const;
+  inline void clear_spirits();
+  static const int kSpiritsFieldNumber = 3;
+  inline const ::protocols::common::WingSpiritInfo& spirits(int index) const;
+  inline ::protocols::common::WingSpiritInfo* mutable_spirits(int index);
+  inline ::protocols::common::WingSpiritInfo* add_spirits();
+  inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::WingSpiritInfo >&
+      spirits() const;
+  inline ::google::protobuf::RepeatedPtrField< ::protocols::common::WingSpiritInfo >*
+      mutable_spirits();
+  
+  // @@protoc_insertion_point(class_scope:protocols.common.WingSpiritBag)
+ private:
+  inline void set_has_max_num();
+  inline void clear_has_max_num();
+  inline void set_has_open_num();
+  inline void clear_has_open_num();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::int32 max_num_;
+  ::google::protobuf::int32 open_num_;
+  ::google::protobuf::RepeatedPtrField< ::protocols::common::WingSpiritInfo > spirits_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(3 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_game_5fcommon_2eproto();
+  friend void protobuf_AssignDesc_game_5fcommon_2eproto();
+  friend void protobuf_ShutdownFile_game_5fcommon_2eproto();
+  
+  void InitAsDefaultInstance();
+  static WingSpiritBag* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class SpiritGeneratorInfo : public ::google::protobuf::Message {
+ public:
+  SpiritGeneratorInfo();
+  virtual ~SpiritGeneratorInfo();
+  
+  SpiritGeneratorInfo(const SpiritGeneratorInfo& from);
+  
+  inline SpiritGeneratorInfo& operator=(const SpiritGeneratorInfo& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const SpiritGeneratorInfo& default_instance();
+  
+  void Swap(SpiritGeneratorInfo* other);
+  
+  // implements Message ----------------------------------------------
+  
+  SpiritGeneratorInfo* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const SpiritGeneratorInfo& from);
+  void MergeFrom(const SpiritGeneratorInfo& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // optional int32 level = 1;
+  inline bool has_level() const;
+  inline void clear_level();
+  static const int kLevelFieldNumber = 1;
+  inline ::google::protobuf::int32 level() const;
+  inline void set_level(::google::protobuf::int32 value);
+  
+  // optional bool is_on = 2;
+  inline bool has_is_on() const;
+  inline void clear_is_on();
+  static const int kIsOnFieldNumber = 2;
+  inline bool is_on() const;
+  inline void set_is_on(bool value);
+  
+  // optional int32 cost_money = 3;
+  inline bool has_cost_money() const;
+  inline void clear_cost_money();
+  static const int kCostMoneyFieldNumber = 3;
+  inline ::google::protobuf::int32 cost_money() const;
+  inline void set_cost_money(::google::protobuf::int32 value);
+  
+  // @@protoc_insertion_point(class_scope:protocols.common.SpiritGeneratorInfo)
+ private:
+  inline void set_has_level();
+  inline void clear_has_level();
+  inline void set_has_is_on();
+  inline void clear_has_is_on();
+  inline void set_has_cost_money();
+  inline void clear_has_cost_money();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::int32 level_;
+  bool is_on_;
+  ::google::protobuf::int32 cost_money_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(3 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_game_5fcommon_2eproto();
+  friend void protobuf_AssignDesc_game_5fcommon_2eproto();
+  friend void protobuf_ShutdownFile_game_5fcommon_2eproto();
+  
+  void InitAsDefaultInstance();
+  static SpiritGeneratorInfo* default_instance_;
+};
+// -------------------------------------------------------------------
+
 class EquipInfo : public ::google::protobuf::Message {
  public:
   EquipInfo();
@@ -4998,211 +5782,6 @@ class AttributeData : public ::google::protobuf::Message {
   
   void InitAsDefaultInstance();
   static AttributeData* default_instance_;
-};
-// -------------------------------------------------------------------
-
-class EquipDetail : public ::google::protobuf::Message {
- public:
-  EquipDetail();
-  virtual ~EquipDetail();
-  
-  EquipDetail(const EquipDetail& from);
-  
-  inline EquipDetail& operator=(const EquipDetail& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  
-  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
-    return _unknown_fields_;
-  }
-  
-  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
-  
-  static const ::google::protobuf::Descriptor* descriptor();
-  static const EquipDetail& default_instance();
-  
-  void Swap(EquipDetail* other);
-  
-  // implements Message ----------------------------------------------
-  
-  EquipDetail* New() const;
-  void CopyFrom(const ::google::protobuf::Message& from);
-  void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const EquipDetail& from);
-  void MergeFrom(const EquipDetail& from);
-  void Clear();
-  bool IsInitialized() const;
-  
-  int ByteSize() const;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input);
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const;
-  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
-  int GetCachedSize() const { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  public:
-  
-  ::google::protobuf::Metadata GetMetadata() const;
-  
-  // nested types ----------------------------------------------------
-  
-  // accessors -------------------------------------------------------
-  
-  // required int64 item_id = 1;
-  inline bool has_item_id() const;
-  inline void clear_item_id();
-  static const int kItemIdFieldNumber = 1;
-  inline ::google::protobuf::int64 item_id() const;
-  inline void set_item_id(::google::protobuf::int64 value);
-  
-  // optional int32 expired = 2 [default = 0];
-  inline bool has_expired() const;
-  inline void clear_expired();
-  static const int kExpiredFieldNumber = 2;
-  inline ::google::protobuf::int32 expired() const;
-  inline void set_expired(::google::protobuf::int32 value);
-  
-  // optional int32 strength_level = 3 [default = 0];
-  inline bool has_strength_level() const;
-  inline void clear_strength_level();
-  static const int kStrengthLevelFieldNumber = 3;
-  inline ::google::protobuf::int32 strength_level() const;
-  inline void set_strength_level(::google::protobuf::int32 value);
-  
-  // optional int32 slot_count = 4 [default = 0];
-  inline bool has_slot_count() const;
-  inline void clear_slot_count();
-  static const int kSlotCountFieldNumber = 4;
-  inline ::google::protobuf::int32 slot_count() const;
-  inline void set_slot_count(::google::protobuf::int32 value);
-  
-  // repeated .protocols.common.AttributeData attr_list = 5;
-  inline int attr_list_size() const;
-  inline void clear_attr_list();
-  static const int kAttrListFieldNumber = 5;
-  inline const ::protocols::common::AttributeData& attr_list(int index) const;
-  inline ::protocols::common::AttributeData* mutable_attr_list(int index);
-  inline ::protocols::common::AttributeData* add_attr_list();
-  inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::AttributeData >&
-      attr_list() const;
-  inline ::google::protobuf::RepeatedPtrField< ::protocols::common::AttributeData >*
-      mutable_attr_list();
-  
-  // optional int32 bind_flag = 6 [default = 0];
-  inline bool has_bind_flag() const;
-  inline void clear_bind_flag();
-  static const int kBindFlagFieldNumber = 6;
-  inline ::google::protobuf::int32 bind_flag() const;
-  inline void set_bind_flag(::google::protobuf::int32 value);
-  
-  // repeated .protocols.common.AttributeData extra_attr_list = 7;
-  inline int extra_attr_list_size() const;
-  inline void clear_extra_attr_list();
-  static const int kExtraAttrListFieldNumber = 7;
-  inline const ::protocols::common::AttributeData& extra_attr_list(int index) const;
-  inline ::protocols::common::AttributeData* mutable_extra_attr_list(int index);
-  inline ::protocols::common::AttributeData* add_extra_attr_list();
-  inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::AttributeData >&
-      extra_attr_list() const;
-  inline ::google::protobuf::RepeatedPtrField< ::protocols::common::AttributeData >*
-      mutable_extra_attr_list();
-  
-  // repeated .protocols.common.AttributeData strength_attr_list = 9;
-  inline int strength_attr_list_size() const;
-  inline void clear_strength_attr_list();
-  static const int kStrengthAttrListFieldNumber = 9;
-  inline const ::protocols::common::AttributeData& strength_attr_list(int index) const;
-  inline ::protocols::common::AttributeData* mutable_strength_attr_list(int index);
-  inline ::protocols::common::AttributeData* add_strength_attr_list();
-  inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::AttributeData >&
-      strength_attr_list() const;
-  inline ::google::protobuf::RepeatedPtrField< ::protocols::common::AttributeData >*
-      mutable_strength_attr_list();
-  
-  // optional int32 mark = 10;
-  inline bool has_mark() const;
-  inline void clear_mark();
-  static const int kMarkFieldNumber = 10;
-  inline ::google::protobuf::int32 mark() const;
-  inline void set_mark(::google::protobuf::int32 value);
-  
-  // repeated .protocols.common.AttributeData stone_attr_list = 11;
-  inline int stone_attr_list_size() const;
-  inline void clear_stone_attr_list();
-  static const int kStoneAttrListFieldNumber = 11;
-  inline const ::protocols::common::AttributeData& stone_attr_list(int index) const;
-  inline ::protocols::common::AttributeData* mutable_stone_attr_list(int index);
-  inline ::protocols::common::AttributeData* add_stone_attr_list();
-  inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::AttributeData >&
-      stone_attr_list() const;
-  inline ::google::protobuf::RepeatedPtrField< ::protocols::common::AttributeData >*
-      mutable_stone_attr_list();
-  
-  // optional int32 locked_attr_bits = 12;
-  inline bool has_locked_attr_bits() const;
-  inline void clear_locked_attr_bits();
-  static const int kLockedAttrBitsFieldNumber = 12;
-  inline ::google::protobuf::int32 locked_attr_bits() const;
-  inline void set_locked_attr_bits(::google::protobuf::int32 value);
-  
-  // optional .protocols.common.EquipStoneData stone_data = 13;
-  inline bool has_stone_data() const;
-  inline void clear_stone_data();
-  static const int kStoneDataFieldNumber = 13;
-  inline const ::protocols::common::EquipStoneData& stone_data() const;
-  inline ::protocols::common::EquipStoneData* mutable_stone_data();
-  inline ::protocols::common::EquipStoneData* release_stone_data();
-  
-  // @@protoc_insertion_point(class_scope:protocols.common.EquipDetail)
- private:
-  inline void set_has_item_id();
-  inline void clear_has_item_id();
-  inline void set_has_expired();
-  inline void clear_has_expired();
-  inline void set_has_strength_level();
-  inline void clear_has_strength_level();
-  inline void set_has_slot_count();
-  inline void clear_has_slot_count();
-  inline void set_has_bind_flag();
-  inline void clear_has_bind_flag();
-  inline void set_has_mark();
-  inline void clear_has_mark();
-  inline void set_has_locked_attr_bits();
-  inline void clear_has_locked_attr_bits();
-  inline void set_has_stone_data();
-  inline void clear_has_stone_data();
-  
-  ::google::protobuf::UnknownFieldSet _unknown_fields_;
-  
-  ::google::protobuf::int64 item_id_;
-  ::google::protobuf::int32 expired_;
-  ::google::protobuf::int32 strength_level_;
-  ::google::protobuf::RepeatedPtrField< ::protocols::common::AttributeData > attr_list_;
-  ::google::protobuf::int32 slot_count_;
-  ::google::protobuf::int32 bind_flag_;
-  ::google::protobuf::RepeatedPtrField< ::protocols::common::AttributeData > extra_attr_list_;
-  ::google::protobuf::RepeatedPtrField< ::protocols::common::AttributeData > strength_attr_list_;
-  ::google::protobuf::RepeatedPtrField< ::protocols::common::AttributeData > stone_attr_list_;
-  ::google::protobuf::int32 mark_;
-  ::google::protobuf::int32 locked_attr_bits_;
-  ::protocols::common::EquipStoneData* stone_data_;
-  
-  mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(12 + 31) / 32];
-  
-  friend void  protobuf_AddDesc_game_5fcommon_2eproto();
-  friend void protobuf_AssignDesc_game_5fcommon_2eproto();
-  friend void protobuf_ShutdownFile_game_5fcommon_2eproto();
-  
-  void InitAsDefaultInstance();
-  static EquipDetail* default_instance_;
 };
 // -------------------------------------------------------------------
 
@@ -5545,6 +6124,222 @@ class DBSlotData : public ::google::protobuf::Message {
   
   void InitAsDefaultInstance();
   static DBSlotData* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class EquipDetail : public ::google::protobuf::Message {
+ public:
+  EquipDetail();
+  virtual ~EquipDetail();
+  
+  EquipDetail(const EquipDetail& from);
+  
+  inline EquipDetail& operator=(const EquipDetail& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const EquipDetail& default_instance();
+  
+  void Swap(EquipDetail* other);
+  
+  // implements Message ----------------------------------------------
+  
+  EquipDetail* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const EquipDetail& from);
+  void MergeFrom(const EquipDetail& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required int64 item_id = 1;
+  inline bool has_item_id() const;
+  inline void clear_item_id();
+  static const int kItemIdFieldNumber = 1;
+  inline ::google::protobuf::int64 item_id() const;
+  inline void set_item_id(::google::protobuf::int64 value);
+  
+  // optional int32 expired = 2 [default = 0];
+  inline bool has_expired() const;
+  inline void clear_expired();
+  static const int kExpiredFieldNumber = 2;
+  inline ::google::protobuf::int32 expired() const;
+  inline void set_expired(::google::protobuf::int32 value);
+  
+  // optional int32 strength_level = 3 [default = 0];
+  inline bool has_strength_level() const;
+  inline void clear_strength_level();
+  static const int kStrengthLevelFieldNumber = 3;
+  inline ::google::protobuf::int32 strength_level() const;
+  inline void set_strength_level(::google::protobuf::int32 value);
+  
+  // optional int32 slot_count = 4 [default = 0];
+  inline bool has_slot_count() const;
+  inline void clear_slot_count();
+  static const int kSlotCountFieldNumber = 4;
+  inline ::google::protobuf::int32 slot_count() const;
+  inline void set_slot_count(::google::protobuf::int32 value);
+  
+  // repeated .protocols.common.AttributeData attr_list = 5;
+  inline int attr_list_size() const;
+  inline void clear_attr_list();
+  static const int kAttrListFieldNumber = 5;
+  inline const ::protocols::common::AttributeData& attr_list(int index) const;
+  inline ::protocols::common::AttributeData* mutable_attr_list(int index);
+  inline ::protocols::common::AttributeData* add_attr_list();
+  inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::AttributeData >&
+      attr_list() const;
+  inline ::google::protobuf::RepeatedPtrField< ::protocols::common::AttributeData >*
+      mutable_attr_list();
+  
+  // optional int32 bind_flag = 6 [default = 0];
+  inline bool has_bind_flag() const;
+  inline void clear_bind_flag();
+  static const int kBindFlagFieldNumber = 6;
+  inline ::google::protobuf::int32 bind_flag() const;
+  inline void set_bind_flag(::google::protobuf::int32 value);
+  
+  // repeated .protocols.common.AttributeData extra_attr_list = 7;
+  inline int extra_attr_list_size() const;
+  inline void clear_extra_attr_list();
+  static const int kExtraAttrListFieldNumber = 7;
+  inline const ::protocols::common::AttributeData& extra_attr_list(int index) const;
+  inline ::protocols::common::AttributeData* mutable_extra_attr_list(int index);
+  inline ::protocols::common::AttributeData* add_extra_attr_list();
+  inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::AttributeData >&
+      extra_attr_list() const;
+  inline ::google::protobuf::RepeatedPtrField< ::protocols::common::AttributeData >*
+      mutable_extra_attr_list();
+  
+  // repeated .protocols.common.AttributeData strength_attr_list = 9;
+  inline int strength_attr_list_size() const;
+  inline void clear_strength_attr_list();
+  static const int kStrengthAttrListFieldNumber = 9;
+  inline const ::protocols::common::AttributeData& strength_attr_list(int index) const;
+  inline ::protocols::common::AttributeData* mutable_strength_attr_list(int index);
+  inline ::protocols::common::AttributeData* add_strength_attr_list();
+  inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::AttributeData >&
+      strength_attr_list() const;
+  inline ::google::protobuf::RepeatedPtrField< ::protocols::common::AttributeData >*
+      mutable_strength_attr_list();
+  
+  // optional int32 mark = 10;
+  inline bool has_mark() const;
+  inline void clear_mark();
+  static const int kMarkFieldNumber = 10;
+  inline ::google::protobuf::int32 mark() const;
+  inline void set_mark(::google::protobuf::int32 value);
+  
+  // repeated .protocols.common.AttributeData stone_attr_list = 11;
+  inline int stone_attr_list_size() const;
+  inline void clear_stone_attr_list();
+  static const int kStoneAttrListFieldNumber = 11;
+  inline const ::protocols::common::AttributeData& stone_attr_list(int index) const;
+  inline ::protocols::common::AttributeData* mutable_stone_attr_list(int index);
+  inline ::protocols::common::AttributeData* add_stone_attr_list();
+  inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::AttributeData >&
+      stone_attr_list() const;
+  inline ::google::protobuf::RepeatedPtrField< ::protocols::common::AttributeData >*
+      mutable_stone_attr_list();
+  
+  // optional int32 locked_attr_bits = 12;
+  inline bool has_locked_attr_bits() const;
+  inline void clear_locked_attr_bits();
+  static const int kLockedAttrBitsFieldNumber = 12;
+  inline ::google::protobuf::int32 locked_attr_bits() const;
+  inline void set_locked_attr_bits(::google::protobuf::int32 value);
+  
+  // optional .protocols.common.EquipStoneData stone_data = 13;
+  inline bool has_stone_data() const;
+  inline void clear_stone_data();
+  static const int kStoneDataFieldNumber = 13;
+  inline const ::protocols::common::EquipStoneData& stone_data() const;
+  inline ::protocols::common::EquipStoneData* mutable_stone_data();
+  inline ::protocols::common::EquipStoneData* release_stone_data();
+  
+  // optional .protocols.common.WingItemInfo wing_info = 14;
+  inline bool has_wing_info() const;
+  inline void clear_wing_info();
+  static const int kWingInfoFieldNumber = 14;
+  inline const ::protocols::common::WingItemInfo& wing_info() const;
+  inline ::protocols::common::WingItemInfo* mutable_wing_info();
+  inline ::protocols::common::WingItemInfo* release_wing_info();
+  
+  // @@protoc_insertion_point(class_scope:protocols.common.EquipDetail)
+ private:
+  inline void set_has_item_id();
+  inline void clear_has_item_id();
+  inline void set_has_expired();
+  inline void clear_has_expired();
+  inline void set_has_strength_level();
+  inline void clear_has_strength_level();
+  inline void set_has_slot_count();
+  inline void clear_has_slot_count();
+  inline void set_has_bind_flag();
+  inline void clear_has_bind_flag();
+  inline void set_has_mark();
+  inline void clear_has_mark();
+  inline void set_has_locked_attr_bits();
+  inline void clear_has_locked_attr_bits();
+  inline void set_has_stone_data();
+  inline void clear_has_stone_data();
+  inline void set_has_wing_info();
+  inline void clear_has_wing_info();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::int64 item_id_;
+  ::google::protobuf::int32 expired_;
+  ::google::protobuf::int32 strength_level_;
+  ::google::protobuf::RepeatedPtrField< ::protocols::common::AttributeData > attr_list_;
+  ::google::protobuf::int32 slot_count_;
+  ::google::protobuf::int32 bind_flag_;
+  ::google::protobuf::RepeatedPtrField< ::protocols::common::AttributeData > extra_attr_list_;
+  ::google::protobuf::RepeatedPtrField< ::protocols::common::AttributeData > strength_attr_list_;
+  ::google::protobuf::RepeatedPtrField< ::protocols::common::AttributeData > stone_attr_list_;
+  ::google::protobuf::int32 mark_;
+  ::google::protobuf::int32 locked_attr_bits_;
+  ::protocols::common::EquipStoneData* stone_data_;
+  ::protocols::common::WingItemInfo* wing_info_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(13 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_game_5fcommon_2eproto();
+  friend void protobuf_AssignDesc_game_5fcommon_2eproto();
+  friend void protobuf_ShutdownFile_game_5fcommon_2eproto();
+  
+  void InitAsDefaultInstance();
+  static EquipDetail* default_instance_;
 };
 // -------------------------------------------------------------------
 
@@ -6427,6 +7222,27 @@ class QuestPreCondition : public ::google::protobuf::Message {
   inline bool daily_reset() const;
   inline void set_daily_reset(bool value);
   
+  // optional bool need_guild = 14;
+  inline bool has_need_guild() const;
+  inline void clear_need_guild();
+  static const int kNeedGuildFieldNumber = 14;
+  inline bool need_guild() const;
+  inline void set_need_guild(bool value);
+  
+  // optional bool need_guild_check = 15;
+  inline bool has_need_guild_check() const;
+  inline void clear_need_guild_check();
+  static const int kNeedGuildCheckFieldNumber = 15;
+  inline bool need_guild_check() const;
+  inline void set_need_guild_check(bool value);
+  
+  // optional bool repeatable = 16;
+  inline bool has_repeatable() const;
+  inline void clear_repeatable();
+  static const int kRepeatableFieldNumber = 16;
+  inline bool repeatable() const;
+  inline void set_repeatable(bool value);
+  
   // @@protoc_insertion_point(class_scope:protocols.common.QuestPreCondition)
  private:
   inline void set_has_pre_quest_id();
@@ -6451,6 +7267,12 @@ class QuestPreCondition : public ::google::protobuf::Message {
   inline void clear_has_can_be_cancelled();
   inline void set_has_daily_reset();
   inline void clear_has_daily_reset();
+  inline void set_has_need_guild();
+  inline void clear_has_need_guild();
+  inline void set_has_need_guild_check();
+  inline void clear_has_need_guild_check();
+  inline void set_has_repeatable();
+  inline void clear_has_repeatable();
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
@@ -6467,9 +7289,12 @@ class QuestPreCondition : public ::google::protobuf::Message {
   bool auto_commit_;
   bool can_be_cancelled_;
   bool daily_reset_;
+  bool need_guild_;
+  bool need_guild_check_;
+  bool repeatable_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(13 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(16 + 31) / 32];
   
   friend void  protobuf_AddDesc_game_5fcommon_2eproto();
   friend void protobuf_AssignDesc_game_5fcommon_2eproto();
@@ -6654,21 +7479,51 @@ class QuestRewards : public ::google::protobuf::Message {
   inline ::google::protobuf::RepeatedPtrField< ::protocols::common::QuestRewards_QuestRewardItem >*
       mutable_item();
   
+  // optional int32 guild_contribution = 4;
+  inline bool has_guild_contribution() const;
+  inline void clear_guild_contribution();
+  static const int kGuildContributionFieldNumber = 4;
+  inline ::google::protobuf::int32 guild_contribution() const;
+  inline void set_guild_contribution(::google::protobuf::int32 value);
+  
+  // optional int32 guild_exp = 5;
+  inline bool has_guild_exp() const;
+  inline void clear_guild_exp();
+  static const int kGuildExpFieldNumber = 5;
+  inline ::google::protobuf::int32 guild_exp() const;
+  inline void set_guild_exp(::google::protobuf::int32 value);
+  
+  // optional int32 guild_crystal = 6;
+  inline bool has_guild_crystal() const;
+  inline void clear_guild_crystal();
+  static const int kGuildCrystalFieldNumber = 6;
+  inline ::google::protobuf::int32 guild_crystal() const;
+  inline void set_guild_crystal(::google::protobuf::int32 value);
+  
   // @@protoc_insertion_point(class_scope:protocols.common.QuestRewards)
  private:
   inline void set_has_exp();
   inline void clear_has_exp();
   inline void set_has_coin();
   inline void clear_has_coin();
+  inline void set_has_guild_contribution();
+  inline void clear_has_guild_contribution();
+  inline void set_has_guild_exp();
+  inline void clear_has_guild_exp();
+  inline void set_has_guild_crystal();
+  inline void clear_has_guild_crystal();
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
   ::google::protobuf::int32 exp_;
   ::google::protobuf::int32 coin_;
   ::google::protobuf::RepeatedPtrField< ::protocols::common::QuestRewards_QuestRewardItem > item_;
+  ::google::protobuf::int32 guild_contribution_;
+  ::google::protobuf::int32 guild_exp_;
+  ::google::protobuf::int32 guild_crystal_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(3 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(6 + 31) / 32];
   
   friend void  protobuf_AddDesc_game_5fcommon_2eproto();
   friend void protobuf_AssignDesc_game_5fcommon_2eproto();
@@ -6820,6 +7675,560 @@ class QuestProtoype : public ::google::protobuf::Message {
 };
 // -------------------------------------------------------------------
 
+class GuildCrystalReward : public ::google::protobuf::Message {
+ public:
+  GuildCrystalReward();
+  virtual ~GuildCrystalReward();
+  
+  GuildCrystalReward(const GuildCrystalReward& from);
+  
+  inline GuildCrystalReward& operator=(const GuildCrystalReward& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const GuildCrystalReward& default_instance();
+  
+  void Swap(GuildCrystalReward* other);
+  
+  // implements Message ----------------------------------------------
+  
+  GuildCrystalReward* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const GuildCrystalReward& from);
+  void MergeFrom(const GuildCrystalReward& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // optional int32 x = 1;
+  inline bool has_x() const;
+  inline void clear_x();
+  static const int kXFieldNumber = 1;
+  inline ::google::protobuf::int32 x() const;
+  inline void set_x(::google::protobuf::int32 value);
+  
+  // optional int32 y = 2;
+  inline bool has_y() const;
+  inline void clear_y();
+  static const int kYFieldNumber = 2;
+  inline ::google::protobuf::int32 y() const;
+  inline void set_y(::google::protobuf::int32 value);
+  
+  // optional int32 item_id = 3;
+  inline bool has_item_id() const;
+  inline void clear_item_id();
+  static const int kItemIdFieldNumber = 3;
+  inline ::google::protobuf::int32 item_id() const;
+  inline void set_item_id(::google::protobuf::int32 value);
+  
+  // optional int32 item_count = 4;
+  inline bool has_item_count() const;
+  inline void clear_item_count();
+  static const int kItemCountFieldNumber = 4;
+  inline ::google::protobuf::int32 item_count() const;
+  inline void set_item_count(::google::protobuf::int32 value);
+  
+  // optional bool picked = 5;
+  inline bool has_picked() const;
+  inline void clear_picked();
+  static const int kPickedFieldNumber = 5;
+  inline bool picked() const;
+  inline void set_picked(bool value);
+  
+  // optional int32 collecting_player_id = 6;
+  inline bool has_collecting_player_id() const;
+  inline void clear_collecting_player_id();
+  static const int kCollectingPlayerIdFieldNumber = 6;
+  inline ::google::protobuf::int32 collecting_player_id() const;
+  inline void set_collecting_player_id(::google::protobuf::int32 value);
+  
+  // optional int32 collecting_tick = 7;
+  inline bool has_collecting_tick() const;
+  inline void clear_collecting_tick();
+  static const int kCollectingTickFieldNumber = 7;
+  inline ::google::protobuf::int32 collecting_tick() const;
+  inline void set_collecting_tick(::google::protobuf::int32 value);
+  
+  // optional int32 display_id = 8;
+  inline bool has_display_id() const;
+  inline void clear_display_id();
+  static const int kDisplayIdFieldNumber = 8;
+  inline ::google::protobuf::int32 display_id() const;
+  inline void set_display_id(::google::protobuf::int32 value);
+  
+  // @@protoc_insertion_point(class_scope:protocols.common.GuildCrystalReward)
+ private:
+  inline void set_has_x();
+  inline void clear_has_x();
+  inline void set_has_y();
+  inline void clear_has_y();
+  inline void set_has_item_id();
+  inline void clear_has_item_id();
+  inline void set_has_item_count();
+  inline void clear_has_item_count();
+  inline void set_has_picked();
+  inline void clear_has_picked();
+  inline void set_has_collecting_player_id();
+  inline void clear_has_collecting_player_id();
+  inline void set_has_collecting_tick();
+  inline void clear_has_collecting_tick();
+  inline void set_has_display_id();
+  inline void clear_has_display_id();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::int32 x_;
+  ::google::protobuf::int32 y_;
+  ::google::protobuf::int32 item_id_;
+  ::google::protobuf::int32 item_count_;
+  bool picked_;
+  ::google::protobuf::int32 collecting_player_id_;
+  ::google::protobuf::int32 collecting_tick_;
+  ::google::protobuf::int32 display_id_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(8 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_game_5fcommon_2eproto();
+  friend void protobuf_AssignDesc_game_5fcommon_2eproto();
+  friend void protobuf_ShutdownFile_game_5fcommon_2eproto();
+  
+  void InitAsDefaultInstance();
+  static GuildCrystalReward* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class TreasureBoxReward : public ::google::protobuf::Message {
+ public:
+  TreasureBoxReward();
+  virtual ~TreasureBoxReward();
+  
+  TreasureBoxReward(const TreasureBoxReward& from);
+  
+  inline TreasureBoxReward& operator=(const TreasureBoxReward& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const TreasureBoxReward& default_instance();
+  
+  void Swap(TreasureBoxReward* other);
+  
+  // implements Message ----------------------------------------------
+  
+  TreasureBoxReward* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const TreasureBoxReward& from);
+  void MergeFrom(const TreasureBoxReward& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // optional int32 act_id = 1;
+  inline bool has_act_id() const;
+  inline void clear_act_id();
+  static const int kActIdFieldNumber = 1;
+  inline ::google::protobuf::int32 act_id() const;
+  inline void set_act_id(::google::protobuf::int32 value);
+  
+  // optional int32 index = 2;
+  inline bool has_index() const;
+  inline void clear_index();
+  static const int kIndexFieldNumber = 2;
+  inline ::google::protobuf::int32 index() const;
+  inline void set_index(::google::protobuf::int32 value);
+  
+  // optional int32 map_id = 3;
+  inline bool has_map_id() const;
+  inline void clear_map_id();
+  static const int kMapIdFieldNumber = 3;
+  inline ::google::protobuf::int32 map_id() const;
+  inline void set_map_id(::google::protobuf::int32 value);
+  
+  // optional int32 map_x = 4;
+  inline bool has_map_x() const;
+  inline void clear_map_x();
+  static const int kMapXFieldNumber = 4;
+  inline ::google::protobuf::int32 map_x() const;
+  inline void set_map_x(::google::protobuf::int32 value);
+  
+  // optional int32 map_y = 5;
+  inline bool has_map_y() const;
+  inline void clear_map_y();
+  static const int kMapYFieldNumber = 5;
+  inline ::google::protobuf::int32 map_y() const;
+  inline void set_map_y(::google::protobuf::int32 value);
+  
+  // optional int32 icon_id = 6;
+  inline bool has_icon_id() const;
+  inline void clear_icon_id();
+  static const int kIconIdFieldNumber = 6;
+  inline ::google::protobuf::int32 icon_id() const;
+  inline void set_icon_id(::google::protobuf::int32 value);
+  
+  // @@protoc_insertion_point(class_scope:protocols.common.TreasureBoxReward)
+ private:
+  inline void set_has_act_id();
+  inline void clear_has_act_id();
+  inline void set_has_index();
+  inline void clear_has_index();
+  inline void set_has_map_id();
+  inline void clear_has_map_id();
+  inline void set_has_map_x();
+  inline void clear_has_map_x();
+  inline void set_has_map_y();
+  inline void clear_has_map_y();
+  inline void set_has_icon_id();
+  inline void clear_has_icon_id();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::int32 act_id_;
+  ::google::protobuf::int32 index_;
+  ::google::protobuf::int32 map_id_;
+  ::google::protobuf::int32 map_x_;
+  ::google::protobuf::int32 map_y_;
+  ::google::protobuf::int32 icon_id_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(6 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_game_5fcommon_2eproto();
+  friend void protobuf_AssignDesc_game_5fcommon_2eproto();
+  friend void protobuf_ShutdownFile_game_5fcommon_2eproto();
+  
+  void InitAsDefaultInstance();
+  static TreasureBoxReward* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class GuildCrystalTowerActivityData : public ::google::protobuf::Message {
+ public:
+  GuildCrystalTowerActivityData();
+  virtual ~GuildCrystalTowerActivityData();
+  
+  GuildCrystalTowerActivityData(const GuildCrystalTowerActivityData& from);
+  
+  inline GuildCrystalTowerActivityData& operator=(const GuildCrystalTowerActivityData& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const GuildCrystalTowerActivityData& default_instance();
+  
+  void Swap(GuildCrystalTowerActivityData* other);
+  
+  // implements Message ----------------------------------------------
+  
+  GuildCrystalTowerActivityData* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const GuildCrystalTowerActivityData& from);
+  void MergeFrom(const GuildCrystalTowerActivityData& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // optional int32 last_activity_time_sec = 1;
+  inline bool has_last_activity_time_sec() const;
+  inline void clear_last_activity_time_sec();
+  static const int kLastActivityTimeSecFieldNumber = 1;
+  inline ::google::protobuf::int32 last_activity_time_sec() const;
+  inline void set_last_activity_time_sec(::google::protobuf::int32 value);
+  
+  // optional int32 tower_category = 2;
+  inline bool has_tower_category() const;
+  inline void clear_tower_category();
+  static const int kTowerCategoryFieldNumber = 2;
+  inline ::google::protobuf::int32 tower_category() const;
+  inline void set_tower_category(::google::protobuf::int32 value);
+  
+  // optional int32 start_sec = 3;
+  inline bool has_start_sec() const;
+  inline void clear_start_sec();
+  static const int kStartSecFieldNumber = 3;
+  inline ::google::protobuf::int32 start_sec() const;
+  inline void set_start_sec(::google::protobuf::int32 value);
+  
+  // optional int32 activity_duration = 4;
+  inline bool has_activity_duration() const;
+  inline void clear_activity_duration();
+  static const int kActivityDurationFieldNumber = 4;
+  inline ::google::protobuf::int32 activity_duration() const;
+  inline void set_activity_duration(::google::protobuf::int32 value);
+  
+  // optional int32 reward_count_down_sec = 5;
+  inline bool has_reward_count_down_sec() const;
+  inline void clear_reward_count_down_sec();
+  static const int kRewardCountDownSecFieldNumber = 5;
+  inline ::google::protobuf::int32 reward_count_down_sec() const;
+  inline void set_reward_count_down_sec(::google::protobuf::int32 value);
+  
+  // repeated int32 piece_count = 6;
+  inline int piece_count_size() const;
+  inline void clear_piece_count();
+  static const int kPieceCountFieldNumber = 6;
+  inline ::google::protobuf::int32 piece_count(int index) const;
+  inline void set_piece_count(int index, ::google::protobuf::int32 value);
+  inline void add_piece_count(::google::protobuf::int32 value);
+  inline const ::google::protobuf::RepeatedField< ::google::protobuf::int32 >&
+      piece_count() const;
+  inline ::google::protobuf::RepeatedField< ::google::protobuf::int32 >*
+      mutable_piece_count();
+  
+  // repeated .protocols.common.GuildCrystalReward rewards = 7;
+  inline int rewards_size() const;
+  inline void clear_rewards();
+  static const int kRewardsFieldNumber = 7;
+  inline const ::protocols::common::GuildCrystalReward& rewards(int index) const;
+  inline ::protocols::common::GuildCrystalReward* mutable_rewards(int index);
+  inline ::protocols::common::GuildCrystalReward* add_rewards();
+  inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::GuildCrystalReward >&
+      rewards() const;
+  inline ::google::protobuf::RepeatedPtrField< ::protocols::common::GuildCrystalReward >*
+      mutable_rewards();
+  
+  // optional int32 tower_level = 8;
+  inline bool has_tower_level() const;
+  inline void clear_tower_level();
+  static const int kTowerLevelFieldNumber = 8;
+  inline ::google::protobuf::int32 tower_level() const;
+  inline void set_tower_level(::google::protobuf::int32 value);
+  
+  // optional .protocols.common.ActivityStatus activity_status = 9;
+  inline bool has_activity_status() const;
+  inline void clear_activity_status();
+  static const int kActivityStatusFieldNumber = 9;
+  inline protocols::common::ActivityStatus activity_status() const;
+  inline void set_activity_status(protocols::common::ActivityStatus value);
+  
+  // @@protoc_insertion_point(class_scope:protocols.common.GuildCrystalTowerActivityData)
+ private:
+  inline void set_has_last_activity_time_sec();
+  inline void clear_has_last_activity_time_sec();
+  inline void set_has_tower_category();
+  inline void clear_has_tower_category();
+  inline void set_has_start_sec();
+  inline void clear_has_start_sec();
+  inline void set_has_activity_duration();
+  inline void clear_has_activity_duration();
+  inline void set_has_reward_count_down_sec();
+  inline void clear_has_reward_count_down_sec();
+  inline void set_has_tower_level();
+  inline void clear_has_tower_level();
+  inline void set_has_activity_status();
+  inline void clear_has_activity_status();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::int32 last_activity_time_sec_;
+  ::google::protobuf::int32 tower_category_;
+  ::google::protobuf::int32 start_sec_;
+  ::google::protobuf::int32 activity_duration_;
+  ::google::protobuf::RepeatedField< ::google::protobuf::int32 > piece_count_;
+  ::google::protobuf::int32 reward_count_down_sec_;
+  ::google::protobuf::int32 tower_level_;
+  ::google::protobuf::RepeatedPtrField< ::protocols::common::GuildCrystalReward > rewards_;
+  int activity_status_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(9 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_game_5fcommon_2eproto();
+  friend void protobuf_AssignDesc_game_5fcommon_2eproto();
+  friend void protobuf_ShutdownFile_game_5fcommon_2eproto();
+  
+  void InitAsDefaultInstance();
+  static GuildCrystalTowerActivityData* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class PlayerPosBeforeInstance : public ::google::protobuf::Message {
+ public:
+  PlayerPosBeforeInstance();
+  virtual ~PlayerPosBeforeInstance();
+  
+  PlayerPosBeforeInstance(const PlayerPosBeforeInstance& from);
+  
+  inline PlayerPosBeforeInstance& operator=(const PlayerPosBeforeInstance& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const PlayerPosBeforeInstance& default_instance();
+  
+  void Swap(PlayerPosBeforeInstance* other);
+  
+  // implements Message ----------------------------------------------
+  
+  PlayerPosBeforeInstance* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const PlayerPosBeforeInstance& from);
+  void MergeFrom(const PlayerPosBeforeInstance& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required int32 map_id = 1;
+  inline bool has_map_id() const;
+  inline void clear_map_id();
+  static const int kMapIdFieldNumber = 1;
+  inline ::google::protobuf::int32 map_id() const;
+  inline void set_map_id(::google::protobuf::int32 value);
+  
+  // required int32 map_x = 2;
+  inline bool has_map_x() const;
+  inline void clear_map_x();
+  static const int kMapXFieldNumber = 2;
+  inline ::google::protobuf::int32 map_x() const;
+  inline void set_map_x(::google::protobuf::int32 value);
+  
+  // required int32 map_y = 3;
+  inline bool has_map_y() const;
+  inline void clear_map_y();
+  static const int kMapYFieldNumber = 3;
+  inline ::google::protobuf::int32 map_y() const;
+  inline void set_map_y(::google::protobuf::int32 value);
+  
+  // @@protoc_insertion_point(class_scope:protocols.common.PlayerPosBeforeInstance)
+ private:
+  inline void set_has_map_id();
+  inline void clear_has_map_id();
+  inline void set_has_map_x();
+  inline void clear_has_map_x();
+  inline void set_has_map_y();
+  inline void clear_has_map_y();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::int32 map_id_;
+  ::google::protobuf::int32 map_x_;
+  ::google::protobuf::int32 map_y_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(3 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_game_5fcommon_2eproto();
+  friend void protobuf_AssignDesc_game_5fcommon_2eproto();
+  friend void protobuf_ShutdownFile_game_5fcommon_2eproto();
+  
+  void InitAsDefaultInstance();
+  static PlayerPosBeforeInstance* default_instance_;
+};
+// -------------------------------------------------------------------
+
 class TeamMemberInfo : public ::google::protobuf::Message {
  public:
   TeamMemberInfo();
@@ -6939,6 +8348,27 @@ class TeamMemberInfo : public ::google::protobuf::Message {
   inline ::google::protobuf::RepeatedPtrField< ::protocols::common::YinglingInfo >*
       mutable_yingling_info();
   
+  // optional bool is_ready = 9;
+  inline bool has_is_ready() const;
+  inline void clear_is_ready();
+  static const int kIsReadyFieldNumber = 9;
+  inline bool is_ready() const;
+  inline void set_is_ready(bool value);
+  
+  // optional int32 wing_id = 10;
+  inline bool has_wing_id() const;
+  inline void clear_wing_id();
+  static const int kWingIdFieldNumber = 10;
+  inline ::google::protobuf::int32 wing_id() const;
+  inline void set_wing_id(::google::protobuf::int32 value);
+  
+  // optional int32 titile = 11;
+  inline bool has_titile() const;
+  inline void clear_titile();
+  static const int kTitileFieldNumber = 11;
+  inline ::google::protobuf::int32 titile() const;
+  inline void set_titile(::google::protobuf::int32 value);
+  
   // @@protoc_insertion_point(class_scope:protocols.common.TeamMemberInfo)
  private:
   inline void set_has_seq_no();
@@ -6955,6 +8385,12 @@ class TeamMemberInfo : public ::google::protobuf::Message {
   inline void clear_has_level();
   inline void set_has_fight_capacity();
   inline void clear_has_fight_capacity();
+  inline void set_has_is_ready();
+  inline void clear_has_is_ready();
+  inline void set_has_wing_id();
+  inline void clear_has_wing_id();
+  inline void set_has_titile();
+  inline void clear_has_titile();
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
@@ -6966,9 +8402,12 @@ class TeamMemberInfo : public ::google::protobuf::Message {
   ::google::protobuf::int32 level_;
   ::google::protobuf::RepeatedPtrField< ::protocols::common::YinglingInfo > yingling_info_;
   ::google::protobuf::int32 fight_capacity_;
+  bool is_ready_;
+  ::google::protobuf::int32 wing_id_;
+  ::google::protobuf::int32 titile_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(8 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(11 + 31) / 32];
   
   friend void  protobuf_AddDesc_game_5fcommon_2eproto();
   friend void protobuf_AssignDesc_game_5fcommon_2eproto();
@@ -7138,6 +8577,13 @@ class TeamInfo : public ::google::protobuf::Message {
   inline ::google::protobuf::RepeatedPtrField< ::protocols::common::FighterInfo >*
       mutable_fighter_info();
   
+  // optional int32 team_create_type = 15 [default = 1];
+  inline bool has_team_create_type() const;
+  inline void clear_team_create_type();
+  static const int kTeamCreateTypeFieldNumber = 15;
+  inline ::google::protobuf::int32 team_create_type() const;
+  inline void set_team_create_type(::google::protobuf::int32 value);
+  
   // @@protoc_insertion_point(class_scope:protocols.common.TeamInfo)
  private:
   inline void set_has_team_id();
@@ -7162,6 +8608,8 @@ class TeamInfo : public ::google::protobuf::Message {
   inline void clear_has_add_member_type();
   inline void set_has_team_battle_skill_id();
   inline void clear_has_team_battle_skill_id();
+  inline void set_has_team_create_type();
+  inline void clear_has_team_create_type();
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
@@ -7178,9 +8626,10 @@ class TeamInfo : public ::google::protobuf::Message {
   ::google::protobuf::RepeatedPtrField< ::protocols::common::TeamMemberInfo > team_member_;
   ::google::protobuf::RepeatedPtrField< ::protocols::common::FighterInfo > fighter_info_;
   ::google::protobuf::int32 team_battle_skill_id_;
+  ::google::protobuf::int32 team_create_type_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(13 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(14 + 31) / 32];
   
   friend void  protobuf_AddDesc_game_5fcommon_2eproto();
   friend void protobuf_AssignDesc_game_5fcommon_2eproto();
@@ -7464,6 +8913,13 @@ class DailyCountLimit : public ::google::protobuf::Message {
   inline ::google::protobuf::int32 update_time() const;
   inline void set_update_time(::google::protobuf::int32 value);
   
+  // optional int32 add_count = 7;
+  inline bool has_add_count() const;
+  inline void clear_add_count();
+  static const int kAddCountFieldNumber = 7;
+  inline ::google::protobuf::int32 add_count() const;
+  inline void set_add_count(::google::protobuf::int32 value);
+  
   // @@protoc_insertion_point(class_scope:protocols.common.DailyCountLimit)
  private:
   inline void set_has_limit_type();
@@ -7478,6 +8934,8 @@ class DailyCountLimit : public ::google::protobuf::Message {
   inline void clear_has_current_purchase_count();
   inline void set_has_update_time();
   inline void clear_has_update_time();
+  inline void set_has_add_count();
+  inline void clear_has_add_count();
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
@@ -7487,9 +8945,10 @@ class DailyCountLimit : public ::google::protobuf::Message {
   ::google::protobuf::int32 limit_purchase_count_;
   ::google::protobuf::int32 current_purchase_count_;
   ::google::protobuf::int32 update_time_;
+  ::google::protobuf::int32 add_count_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(6 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(7 + 31) / 32];
   
   friend void  protobuf_AddDesc_game_5fcommon_2eproto();
   friend void protobuf_AssignDesc_game_5fcommon_2eproto();
@@ -7655,17 +9114,174 @@ class DBRoleLimitDataPb : public ::google::protobuf::Message {
   inline ::protocols::common::RoleDailyLimitPb* mutable_count_limit();
   inline ::protocols::common::RoleDailyLimitPb* release_count_limit();
   
+  // optional .protocols.common.RoleHiredYinglingCount hired_yingling_count = 3;
+  inline bool has_hired_yingling_count() const;
+  inline void clear_hired_yingling_count();
+  static const int kHiredYinglingCountFieldNumber = 3;
+  inline const ::protocols::common::RoleHiredYinglingCount& hired_yingling_count() const;
+  inline ::protocols::common::RoleHiredYinglingCount* mutable_hired_yingling_count();
+  inline ::protocols::common::RoleHiredYinglingCount* release_hired_yingling_count();
+  
+  // optional .protocols.common.RoleStrengthEquipCount strength_equip_count = 4;
+  inline bool has_strength_equip_count() const;
+  inline void clear_strength_equip_count();
+  static const int kStrengthEquipCountFieldNumber = 4;
+  inline const ::protocols::common::RoleStrengthEquipCount& strength_equip_count() const;
+  inline ::protocols::common::RoleStrengthEquipCount* mutable_strength_equip_count();
+  inline ::protocols::common::RoleStrengthEquipCount* release_strength_equip_count();
+  
+  // optional int32 guild_contrib = 5;
+  inline bool has_guild_contrib() const;
+  inline void clear_guild_contrib();
+  static const int kGuildContribFieldNumber = 5;
+  inline ::google::protobuf::int32 guild_contrib() const;
+  inline void set_guild_contrib(::google::protobuf::int32 value);
+  
+  // optional .protocols.common.YouLiMapData youli_data = 6;
+  inline bool has_youli_data() const;
+  inline void clear_youli_data();
+  static const int kYouliDataFieldNumber = 6;
+  inline const ::protocols::common::YouLiMapData& youli_data() const;
+  inline ::protocols::common::YouLiMapData* mutable_youli_data();
+  inline ::protocols::common::YouLiMapData* release_youli_data();
+  
+  // optional .protocols.common.YinglingComboStatus yingling_combo_data = 7;
+  inline bool has_yingling_combo_data() const;
+  inline void clear_yingling_combo_data();
+  static const int kYinglingComboDataFieldNumber = 7;
+  inline const ::protocols::common::YinglingComboStatus& yingling_combo_data() const;
+  inline ::protocols::common::YinglingComboStatus* mutable_yingling_combo_data();
+  inline ::protocols::common::YinglingComboStatus* release_yingling_combo_data();
+  
+  // optional .protocols.common.YinglingTrainStatus yingling_train_status = 8;
+  inline bool has_yingling_train_status() const;
+  inline void clear_yingling_train_status();
+  static const int kYinglingTrainStatusFieldNumber = 8;
+  inline const ::protocols::common::YinglingTrainStatus& yingling_train_status() const;
+  inline ::protocols::common::YinglingTrainStatus* mutable_yingling_train_status();
+  inline ::protocols::common::YinglingTrainStatus* release_yingling_train_status();
+  
   // @@protoc_insertion_point(class_scope:protocols.common.DBRoleLimitDataPb)
  private:
   inline void set_has_cool_down();
   inline void clear_has_cool_down();
   inline void set_has_count_limit();
   inline void clear_has_count_limit();
+  inline void set_has_hired_yingling_count();
+  inline void clear_has_hired_yingling_count();
+  inline void set_has_strength_equip_count();
+  inline void clear_has_strength_equip_count();
+  inline void set_has_guild_contrib();
+  inline void clear_has_guild_contrib();
+  inline void set_has_youli_data();
+  inline void clear_has_youli_data();
+  inline void set_has_yingling_combo_data();
+  inline void clear_has_yingling_combo_data();
+  inline void set_has_yingling_train_status();
+  inline void clear_has_yingling_train_status();
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
   ::protocols::common::RoleCoolDownPb* cool_down_;
   ::protocols::common::RoleDailyLimitPb* count_limit_;
+  ::protocols::common::RoleHiredYinglingCount* hired_yingling_count_;
+  ::protocols::common::RoleStrengthEquipCount* strength_equip_count_;
+  ::protocols::common::YouLiMapData* youli_data_;
+  ::protocols::common::YinglingComboStatus* yingling_combo_data_;
+  ::protocols::common::YinglingTrainStatus* yingling_train_status_;
+  ::google::protobuf::int32 guild_contrib_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(8 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_game_5fcommon_2eproto();
+  friend void protobuf_AssignDesc_game_5fcommon_2eproto();
+  friend void protobuf_ShutdownFile_game_5fcommon_2eproto();
+  
+  void InitAsDefaultInstance();
+  static DBRoleLimitDataPb* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class HiredYinglingCount : public ::google::protobuf::Message {
+ public:
+  HiredYinglingCount();
+  virtual ~HiredYinglingCount();
+  
+  HiredYinglingCount(const HiredYinglingCount& from);
+  
+  inline HiredYinglingCount& operator=(const HiredYinglingCount& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const HiredYinglingCount& default_instance();
+  
+  void Swap(HiredYinglingCount* other);
+  
+  // implements Message ----------------------------------------------
+  
+  HiredYinglingCount* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const HiredYinglingCount& from);
+  void MergeFrom(const HiredYinglingCount& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required int32 quality = 1;
+  inline bool has_quality() const;
+  inline void clear_quality();
+  static const int kQualityFieldNumber = 1;
+  inline ::google::protobuf::int32 quality() const;
+  inline void set_quality(::google::protobuf::int32 value);
+  
+  // required int32 count = 2;
+  inline bool has_count() const;
+  inline void clear_count();
+  static const int kCountFieldNumber = 2;
+  inline ::google::protobuf::int32 count() const;
+  inline void set_count(::google::protobuf::int32 value);
+  
+  // @@protoc_insertion_point(class_scope:protocols.common.HiredYinglingCount)
+ private:
+  inline void set_has_quality();
+  inline void clear_has_quality();
+  inline void set_has_count();
+  inline void clear_has_count();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::int32 quality_;
+  ::google::protobuf::int32 count_;
   
   mutable int _cached_size_;
   ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
@@ -7675,7 +9291,308 @@ class DBRoleLimitDataPb : public ::google::protobuf::Message {
   friend void protobuf_ShutdownFile_game_5fcommon_2eproto();
   
   void InitAsDefaultInstance();
-  static DBRoleLimitDataPb* default_instance_;
+  static HiredYinglingCount* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class RoleHiredYinglingCount : public ::google::protobuf::Message {
+ public:
+  RoleHiredYinglingCount();
+  virtual ~RoleHiredYinglingCount();
+  
+  RoleHiredYinglingCount(const RoleHiredYinglingCount& from);
+  
+  inline RoleHiredYinglingCount& operator=(const RoleHiredYinglingCount& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const RoleHiredYinglingCount& default_instance();
+  
+  void Swap(RoleHiredYinglingCount* other);
+  
+  // implements Message ----------------------------------------------
+  
+  RoleHiredYinglingCount* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const RoleHiredYinglingCount& from);
+  void MergeFrom(const RoleHiredYinglingCount& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // repeated .protocols.common.HiredYinglingCount data = 1;
+  inline int data_size() const;
+  inline void clear_data();
+  static const int kDataFieldNumber = 1;
+  inline const ::protocols::common::HiredYinglingCount& data(int index) const;
+  inline ::protocols::common::HiredYinglingCount* mutable_data(int index);
+  inline ::protocols::common::HiredYinglingCount* add_data();
+  inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::HiredYinglingCount >&
+      data() const;
+  inline ::google::protobuf::RepeatedPtrField< ::protocols::common::HiredYinglingCount >*
+      mutable_data();
+  
+  // repeated int32 yingling_tid = 2;
+  inline int yingling_tid_size() const;
+  inline void clear_yingling_tid();
+  static const int kYinglingTidFieldNumber = 2;
+  inline ::google::protobuf::int32 yingling_tid(int index) const;
+  inline void set_yingling_tid(int index, ::google::protobuf::int32 value);
+  inline void add_yingling_tid(::google::protobuf::int32 value);
+  inline const ::google::protobuf::RepeatedField< ::google::protobuf::int32 >&
+      yingling_tid() const;
+  inline ::google::protobuf::RepeatedField< ::google::protobuf::int32 >*
+      mutable_yingling_tid();
+  
+  // repeated .protocols.common.HiredYinglingCount yingling_pro = 3;
+  inline int yingling_pro_size() const;
+  inline void clear_yingling_pro();
+  static const int kYinglingProFieldNumber = 3;
+  inline const ::protocols::common::HiredYinglingCount& yingling_pro(int index) const;
+  inline ::protocols::common::HiredYinglingCount* mutable_yingling_pro(int index);
+  inline ::protocols::common::HiredYinglingCount* add_yingling_pro();
+  inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::HiredYinglingCount >&
+      yingling_pro() const;
+  inline ::google::protobuf::RepeatedPtrField< ::protocols::common::HiredYinglingCount >*
+      mutable_yingling_pro();
+  
+  // repeated .protocols.common.HiredYinglingCount yingling_quality = 4;
+  inline int yingling_quality_size() const;
+  inline void clear_yingling_quality();
+  static const int kYinglingQualityFieldNumber = 4;
+  inline const ::protocols::common::HiredYinglingCount& yingling_quality(int index) const;
+  inline ::protocols::common::HiredYinglingCount* mutable_yingling_quality(int index);
+  inline ::protocols::common::HiredYinglingCount* add_yingling_quality();
+  inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::HiredYinglingCount >&
+      yingling_quality() const;
+  inline ::google::protobuf::RepeatedPtrField< ::protocols::common::HiredYinglingCount >*
+      mutable_yingling_quality();
+  
+  // @@protoc_insertion_point(class_scope:protocols.common.RoleHiredYinglingCount)
+ private:
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::RepeatedPtrField< ::protocols::common::HiredYinglingCount > data_;
+  ::google::protobuf::RepeatedField< ::google::protobuf::int32 > yingling_tid_;
+  ::google::protobuf::RepeatedPtrField< ::protocols::common::HiredYinglingCount > yingling_pro_;
+  ::google::protobuf::RepeatedPtrField< ::protocols::common::HiredYinglingCount > yingling_quality_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(4 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_game_5fcommon_2eproto();
+  friend void protobuf_AssignDesc_game_5fcommon_2eproto();
+  friend void protobuf_ShutdownFile_game_5fcommon_2eproto();
+  
+  void InitAsDefaultInstance();
+  static RoleHiredYinglingCount* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class StrengthEquipCount : public ::google::protobuf::Message {
+ public:
+  StrengthEquipCount();
+  virtual ~StrengthEquipCount();
+  
+  StrengthEquipCount(const StrengthEquipCount& from);
+  
+  inline StrengthEquipCount& operator=(const StrengthEquipCount& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const StrengthEquipCount& default_instance();
+  
+  void Swap(StrengthEquipCount* other);
+  
+  // implements Message ----------------------------------------------
+  
+  StrengthEquipCount* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const StrengthEquipCount& from);
+  void MergeFrom(const StrengthEquipCount& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required int32 strength_level = 1;
+  inline bool has_strength_level() const;
+  inline void clear_strength_level();
+  static const int kStrengthLevelFieldNumber = 1;
+  inline ::google::protobuf::int32 strength_level() const;
+  inline void set_strength_level(::google::protobuf::int32 value);
+  
+  // required int32 count = 2;
+  inline bool has_count() const;
+  inline void clear_count();
+  static const int kCountFieldNumber = 2;
+  inline ::google::protobuf::int32 count() const;
+  inline void set_count(::google::protobuf::int32 value);
+  
+  // @@protoc_insertion_point(class_scope:protocols.common.StrengthEquipCount)
+ private:
+  inline void set_has_strength_level();
+  inline void clear_has_strength_level();
+  inline void set_has_count();
+  inline void clear_has_count();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::int32 strength_level_;
+  ::google::protobuf::int32 count_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_game_5fcommon_2eproto();
+  friend void protobuf_AssignDesc_game_5fcommon_2eproto();
+  friend void protobuf_ShutdownFile_game_5fcommon_2eproto();
+  
+  void InitAsDefaultInstance();
+  static StrengthEquipCount* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class RoleStrengthEquipCount : public ::google::protobuf::Message {
+ public:
+  RoleStrengthEquipCount();
+  virtual ~RoleStrengthEquipCount();
+  
+  RoleStrengthEquipCount(const RoleStrengthEquipCount& from);
+  
+  inline RoleStrengthEquipCount& operator=(const RoleStrengthEquipCount& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const RoleStrengthEquipCount& default_instance();
+  
+  void Swap(RoleStrengthEquipCount* other);
+  
+  // implements Message ----------------------------------------------
+  
+  RoleStrengthEquipCount* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const RoleStrengthEquipCount& from);
+  void MergeFrom(const RoleStrengthEquipCount& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // repeated .protocols.common.StrengthEquipCount data = 1;
+  inline int data_size() const;
+  inline void clear_data();
+  static const int kDataFieldNumber = 1;
+  inline const ::protocols::common::StrengthEquipCount& data(int index) const;
+  inline ::protocols::common::StrengthEquipCount* mutable_data(int index);
+  inline ::protocols::common::StrengthEquipCount* add_data();
+  inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::StrengthEquipCount >&
+      data() const;
+  inline ::google::protobuf::RepeatedPtrField< ::protocols::common::StrengthEquipCount >*
+      mutable_data();
+  
+  // @@protoc_insertion_point(class_scope:protocols.common.RoleStrengthEquipCount)
+ private:
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::RepeatedPtrField< ::protocols::common::StrengthEquipCount > data_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_game_5fcommon_2eproto();
+  friend void protobuf_AssignDesc_game_5fcommon_2eproto();
+  friend void protobuf_ShutdownFile_game_5fcommon_2eproto();
+  
+  void InitAsDefaultInstance();
+  static RoleStrengthEquipCount* default_instance_;
 };
 // -------------------------------------------------------------------
 
@@ -7897,19 +9814,30 @@ class DailyQuestPb : public ::google::protobuf::Message {
   inline ::protocols::common::XunluoQuestPb* mutable_xunluo_quest();
   inline ::protocols::common::XunluoQuestPb* release_xunluo_quest();
   
+  // optional .protocols.common.GuildCircleQuestPb guild_circle_quest = 4;
+  inline bool has_guild_circle_quest() const;
+  inline void clear_guild_circle_quest();
+  static const int kGuildCircleQuestFieldNumber = 4;
+  inline const ::protocols::common::GuildCircleQuestPb& guild_circle_quest() const;
+  inline ::protocols::common::GuildCircleQuestPb* mutable_guild_circle_quest();
+  inline ::protocols::common::GuildCircleQuestPb* release_guild_circle_quest();
+  
   // @@protoc_insertion_point(class_scope:protocols.common.DailyQuestPb)
  private:
   inline void set_has_xunluo_quest();
   inline void clear_has_xunluo_quest();
+  inline void set_has_guild_circle_quest();
+  inline void clear_has_guild_circle_quest();
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
   ::google::protobuf::RepeatedPtrField< ::protocols::common::DailyQuest > daily_quests_;
   ::google::protobuf::RepeatedPtrField< ::protocols::common::DailyQuest > accepted_daily_quests_;
   ::protocols::common::XunluoQuestPb* xunluo_quest_;
+  ::protocols::common::GuildCircleQuestPb* guild_circle_quest_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(3 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(4 + 31) / 32];
   
   friend void  protobuf_AddDesc_game_5fcommon_2eproto();
   friend void protobuf_AssignDesc_game_5fcommon_2eproto();
@@ -8029,6 +9957,98 @@ class XunluoQuestPb : public ::google::protobuf::Message {
   
   void InitAsDefaultInstance();
   static XunluoQuestPb* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class GuildCircleQuestPb : public ::google::protobuf::Message {
+ public:
+  GuildCircleQuestPb();
+  virtual ~GuildCircleQuestPb();
+  
+  GuildCircleQuestPb(const GuildCircleQuestPb& from);
+  
+  inline GuildCircleQuestPb& operator=(const GuildCircleQuestPb& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const GuildCircleQuestPb& default_instance();
+  
+  void Swap(GuildCircleQuestPb* other);
+  
+  // implements Message ----------------------------------------------
+  
+  GuildCircleQuestPb* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const GuildCircleQuestPb& from);
+  void MergeFrom(const GuildCircleQuestPb& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // optional int32 cur_circle_index = 1;
+  inline bool has_cur_circle_index() const;
+  inline void clear_cur_circle_index();
+  static const int kCurCircleIndexFieldNumber = 1;
+  inline ::google::protobuf::int32 cur_circle_index() const;
+  inline void set_cur_circle_index(::google::protobuf::int32 value);
+  
+  // optional int32 quest_id = 2;
+  inline bool has_quest_id() const;
+  inline void clear_quest_id();
+  static const int kQuestIdFieldNumber = 2;
+  inline ::google::protobuf::int32 quest_id() const;
+  inline void set_quest_id(::google::protobuf::int32 value);
+  
+  // @@protoc_insertion_point(class_scope:protocols.common.GuildCircleQuestPb)
+ private:
+  inline void set_has_cur_circle_index();
+  inline void clear_has_cur_circle_index();
+  inline void set_has_quest_id();
+  inline void clear_has_quest_id();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::int32 cur_circle_index_;
+  ::google::protobuf::int32 quest_id_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_game_5fcommon_2eproto();
+  friend void protobuf_AssignDesc_game_5fcommon_2eproto();
+  friend void protobuf_ShutdownFile_game_5fcommon_2eproto();
+  
+  void InitAsDefaultInstance();
+  static GuildCircleQuestPb* default_instance_;
 };
 // -------------------------------------------------------------------
 
@@ -8206,6 +10226,114 @@ class PlayerFlagDataPb : public ::google::protobuf::Message {
   
   void InitAsDefaultInstance();
   static PlayerFlagDataPb* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class TrainAttribute : public ::google::protobuf::Message {
+ public:
+  TrainAttribute();
+  virtual ~TrainAttribute();
+  
+  TrainAttribute(const TrainAttribute& from);
+  
+  inline TrainAttribute& operator=(const TrainAttribute& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const TrainAttribute& default_instance();
+  
+  void Swap(TrainAttribute* other);
+  
+  // implements Message ----------------------------------------------
+  
+  TrainAttribute* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const TrainAttribute& from);
+  void MergeFrom(const TrainAttribute& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // optional int64 guid = 1;
+  inline bool has_guid() const;
+  inline void clear_guid();
+  static const int kGuidFieldNumber = 1;
+  inline ::google::protobuf::int64 guid() const;
+  inline void set_guid(::google::protobuf::int64 value);
+  
+  // repeated .protocols.common.PBIntPair train_attribute = 2;
+  inline int train_attribute_size() const;
+  inline void clear_train_attribute();
+  static const int kTrainAttributeFieldNumber = 2;
+  inline const ::protocols::common::PBIntPair& train_attribute(int index) const;
+  inline ::protocols::common::PBIntPair* mutable_train_attribute(int index);
+  inline ::protocols::common::PBIntPair* add_train_attribute();
+  inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::PBIntPair >&
+      train_attribute() const;
+  inline ::google::protobuf::RepeatedPtrField< ::protocols::common::PBIntPair >*
+      mutable_train_attribute();
+  
+  // repeated .protocols.common.PBIntPair unsave_train_attribute = 3;
+  inline int unsave_train_attribute_size() const;
+  inline void clear_unsave_train_attribute();
+  static const int kUnsaveTrainAttributeFieldNumber = 3;
+  inline const ::protocols::common::PBIntPair& unsave_train_attribute(int index) const;
+  inline ::protocols::common::PBIntPair* mutable_unsave_train_attribute(int index);
+  inline ::protocols::common::PBIntPair* add_unsave_train_attribute();
+  inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::PBIntPair >&
+      unsave_train_attribute() const;
+  inline ::google::protobuf::RepeatedPtrField< ::protocols::common::PBIntPair >*
+      mutable_unsave_train_attribute();
+  
+  // @@protoc_insertion_point(class_scope:protocols.common.TrainAttribute)
+ private:
+  inline void set_has_guid();
+  inline void clear_has_guid();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::int64 guid_;
+  ::google::protobuf::RepeatedPtrField< ::protocols::common::PBIntPair > train_attribute_;
+  ::google::protobuf::RepeatedPtrField< ::protocols::common::PBIntPair > unsave_train_attribute_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(3 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_game_5fcommon_2eproto();
+  friend void protobuf_AssignDesc_game_5fcommon_2eproto();
+  friend void protobuf_ShutdownFile_game_5fcommon_2eproto();
+  
+  void InitAsDefaultInstance();
+  static TrainAttribute* default_instance_;
 };
 // -------------------------------------------------------------------
 
@@ -9366,6 +11494,602 @@ class GetBuddyTemplateAttributeResponse : public ::google::protobuf::Message {
   void InitAsDefaultInstance();
   static GetBuddyTemplateAttributeResponse* default_instance_;
 };
+// -------------------------------------------------------------------
+
+class YouLiMapData_GridData : public ::google::protobuf::Message {
+ public:
+  YouLiMapData_GridData();
+  virtual ~YouLiMapData_GridData();
+  
+  YouLiMapData_GridData(const YouLiMapData_GridData& from);
+  
+  inline YouLiMapData_GridData& operator=(const YouLiMapData_GridData& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const YouLiMapData_GridData& default_instance();
+  
+  void Swap(YouLiMapData_GridData* other);
+  
+  // implements Message ----------------------------------------------
+  
+  YouLiMapData_GridData* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const YouLiMapData_GridData& from);
+  void MergeFrom(const YouLiMapData_GridData& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required int32 grid_index = 1;
+  inline bool has_grid_index() const;
+  inline void clear_grid_index();
+  static const int kGridIndexFieldNumber = 1;
+  inline ::google::protobuf::int32 grid_index() const;
+  inline void set_grid_index(::google::protobuf::int32 value);
+  
+  // required int32 grid_type = 2;
+  inline bool has_grid_type() const;
+  inline void clear_grid_type();
+  static const int kGridTypeFieldNumber = 2;
+  inline ::google::protobuf::int32 grid_type() const;
+  inline void set_grid_type(::google::protobuf::int32 value);
+  
+  // @@protoc_insertion_point(class_scope:protocols.common.YouLiMapData.GridData)
+ private:
+  inline void set_has_grid_index();
+  inline void clear_has_grid_index();
+  inline void set_has_grid_type();
+  inline void clear_has_grid_type();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::int32 grid_index_;
+  ::google::protobuf::int32 grid_type_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_game_5fcommon_2eproto();
+  friend void protobuf_AssignDesc_game_5fcommon_2eproto();
+  friend void protobuf_ShutdownFile_game_5fcommon_2eproto();
+  
+  void InitAsDefaultInstance();
+  static YouLiMapData_GridData* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class YouLiMapData : public ::google::protobuf::Message {
+ public:
+  YouLiMapData();
+  virtual ~YouLiMapData();
+  
+  YouLiMapData(const YouLiMapData& from);
+  
+  inline YouLiMapData& operator=(const YouLiMapData& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const YouLiMapData& default_instance();
+  
+  void Swap(YouLiMapData* other);
+  
+  // implements Message ----------------------------------------------
+  
+  YouLiMapData* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const YouLiMapData& from);
+  void MergeFrom(const YouLiMapData& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  typedef YouLiMapData_GridData GridData;
+  
+  // accessors -------------------------------------------------------
+  
+  // repeated .protocols.common.YouLiMapData.GridData grid_data = 1;
+  inline int grid_data_size() const;
+  inline void clear_grid_data();
+  static const int kGridDataFieldNumber = 1;
+  inline const ::protocols::common::YouLiMapData_GridData& grid_data(int index) const;
+  inline ::protocols::common::YouLiMapData_GridData* mutable_grid_data(int index);
+  inline ::protocols::common::YouLiMapData_GridData* add_grid_data();
+  inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::YouLiMapData_GridData >&
+      grid_data() const;
+  inline ::google::protobuf::RepeatedPtrField< ::protocols::common::YouLiMapData_GridData >*
+      mutable_grid_data();
+  
+  // optional int32 cur_grid_index = 2;
+  inline bool has_cur_grid_index() const;
+  inline void clear_cur_grid_index();
+  static const int kCurGridIndexFieldNumber = 2;
+  inline ::google::protobuf::int32 cur_grid_index() const;
+  inline void set_cur_grid_index(::google::protobuf::int32 value);
+  
+  // optional int32 youli_num = 3;
+  inline bool has_youli_num() const;
+  inline void clear_youli_num();
+  static const int kYouliNumFieldNumber = 3;
+  inline ::google::protobuf::int32 youli_num() const;
+  inline void set_youli_num(::google::protobuf::int32 value);
+  
+  // optional int32 max_youli_num = 4;
+  inline bool has_max_youli_num() const;
+  inline void clear_max_youli_num();
+  static const int kMaxYouliNumFieldNumber = 4;
+  inline ::google::protobuf::int32 max_youli_num() const;
+  inline void set_max_youli_num(::google::protobuf::int32 value);
+  
+  // @@protoc_insertion_point(class_scope:protocols.common.YouLiMapData)
+ private:
+  inline void set_has_cur_grid_index();
+  inline void clear_has_cur_grid_index();
+  inline void set_has_youli_num();
+  inline void clear_has_youli_num();
+  inline void set_has_max_youli_num();
+  inline void clear_has_max_youli_num();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::RepeatedPtrField< ::protocols::common::YouLiMapData_GridData > grid_data_;
+  ::google::protobuf::int32 cur_grid_index_;
+  ::google::protobuf::int32 youli_num_;
+  ::google::protobuf::int32 max_youli_num_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(4 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_game_5fcommon_2eproto();
+  friend void protobuf_AssignDesc_game_5fcommon_2eproto();
+  friend void protobuf_ShutdownFile_game_5fcommon_2eproto();
+  
+  void InitAsDefaultInstance();
+  static YouLiMapData* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class YinglingComboStatus_ComboMember : public ::google::protobuf::Message {
+ public:
+  YinglingComboStatus_ComboMember();
+  virtual ~YinglingComboStatus_ComboMember();
+  
+  YinglingComboStatus_ComboMember(const YinglingComboStatus_ComboMember& from);
+  
+  inline YinglingComboStatus_ComboMember& operator=(const YinglingComboStatus_ComboMember& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const YinglingComboStatus_ComboMember& default_instance();
+  
+  void Swap(YinglingComboStatus_ComboMember* other);
+  
+  // implements Message ----------------------------------------------
+  
+  YinglingComboStatus_ComboMember* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const YinglingComboStatus_ComboMember& from);
+  void MergeFrom(const YinglingComboStatus_ComboMember& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // optional int32 type = 1;
+  inline bool has_type() const;
+  inline void clear_type();
+  static const int kTypeFieldNumber = 1;
+  inline ::google::protobuf::int32 type() const;
+  inline void set_type(::google::protobuf::int32 value);
+  
+  // optional int32 id = 2;
+  inline bool has_id() const;
+  inline void clear_id();
+  static const int kIdFieldNumber = 2;
+  inline ::google::protobuf::int32 id() const;
+  inline void set_id(::google::protobuf::int32 value);
+  
+  // optional int32 status = 3;
+  inline bool has_status() const;
+  inline void clear_status();
+  static const int kStatusFieldNumber = 3;
+  inline ::google::protobuf::int32 status() const;
+  inline void set_status(::google::protobuf::int32 value);
+  
+  // @@protoc_insertion_point(class_scope:protocols.common.YinglingComboStatus_ComboMember)
+ private:
+  inline void set_has_type();
+  inline void clear_has_type();
+  inline void set_has_id();
+  inline void clear_has_id();
+  inline void set_has_status();
+  inline void clear_has_status();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::int32 type_;
+  ::google::protobuf::int32 id_;
+  ::google::protobuf::int32 status_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(3 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_game_5fcommon_2eproto();
+  friend void protobuf_AssignDesc_game_5fcommon_2eproto();
+  friend void protobuf_ShutdownFile_game_5fcommon_2eproto();
+  
+  void InitAsDefaultInstance();
+  static YinglingComboStatus_ComboMember* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class YinglingComboStatus_Combo : public ::google::protobuf::Message {
+ public:
+  YinglingComboStatus_Combo();
+  virtual ~YinglingComboStatus_Combo();
+  
+  YinglingComboStatus_Combo(const YinglingComboStatus_Combo& from);
+  
+  inline YinglingComboStatus_Combo& operator=(const YinglingComboStatus_Combo& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const YinglingComboStatus_Combo& default_instance();
+  
+  void Swap(YinglingComboStatus_Combo* other);
+  
+  // implements Message ----------------------------------------------
+  
+  YinglingComboStatus_Combo* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const YinglingComboStatus_Combo& from);
+  void MergeFrom(const YinglingComboStatus_Combo& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // optional int32 combo_id = 1;
+  inline bool has_combo_id() const;
+  inline void clear_combo_id();
+  static const int kComboIdFieldNumber = 1;
+  inline ::google::protobuf::int32 combo_id() const;
+  inline void set_combo_id(::google::protobuf::int32 value);
+  
+  // optional int32 combo_level = 2;
+  inline bool has_combo_level() const;
+  inline void clear_combo_level();
+  static const int kComboLevelFieldNumber = 2;
+  inline ::google::protobuf::int32 combo_level() const;
+  inline void set_combo_level(::google::protobuf::int32 value);
+  
+  // optional int32 combo_status = 3;
+  inline bool has_combo_status() const;
+  inline void clear_combo_status();
+  static const int kComboStatusFieldNumber = 3;
+  inline ::google::protobuf::int32 combo_status() const;
+  inline void set_combo_status(::google::protobuf::int32 value);
+  
+  // repeated .protocols.common.YinglingComboStatus_ComboMember member_list = 4;
+  inline int member_list_size() const;
+  inline void clear_member_list();
+  static const int kMemberListFieldNumber = 4;
+  inline const ::protocols::common::YinglingComboStatus_ComboMember& member_list(int index) const;
+  inline ::protocols::common::YinglingComboStatus_ComboMember* mutable_member_list(int index);
+  inline ::protocols::common::YinglingComboStatus_ComboMember* add_member_list();
+  inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::YinglingComboStatus_ComboMember >&
+      member_list() const;
+  inline ::google::protobuf::RepeatedPtrField< ::protocols::common::YinglingComboStatus_ComboMember >*
+      mutable_member_list();
+  
+  // @@protoc_insertion_point(class_scope:protocols.common.YinglingComboStatus_Combo)
+ private:
+  inline void set_has_combo_id();
+  inline void clear_has_combo_id();
+  inline void set_has_combo_level();
+  inline void clear_has_combo_level();
+  inline void set_has_combo_status();
+  inline void clear_has_combo_status();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::int32 combo_id_;
+  ::google::protobuf::int32 combo_level_;
+  ::google::protobuf::RepeatedPtrField< ::protocols::common::YinglingComboStatus_ComboMember > member_list_;
+  ::google::protobuf::int32 combo_status_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(4 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_game_5fcommon_2eproto();
+  friend void protobuf_AssignDesc_game_5fcommon_2eproto();
+  friend void protobuf_ShutdownFile_game_5fcommon_2eproto();
+  
+  void InitAsDefaultInstance();
+  static YinglingComboStatus_Combo* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class YinglingComboStatus : public ::google::protobuf::Message {
+ public:
+  YinglingComboStatus();
+  virtual ~YinglingComboStatus();
+  
+  YinglingComboStatus(const YinglingComboStatus& from);
+  
+  inline YinglingComboStatus& operator=(const YinglingComboStatus& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const YinglingComboStatus& default_instance();
+  
+  void Swap(YinglingComboStatus* other);
+  
+  // implements Message ----------------------------------------------
+  
+  YinglingComboStatus* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const YinglingComboStatus& from);
+  void MergeFrom(const YinglingComboStatus& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // repeated .protocols.common.YinglingComboStatus_Combo combo_list = 1;
+  inline int combo_list_size() const;
+  inline void clear_combo_list();
+  static const int kComboListFieldNumber = 1;
+  inline const ::protocols::common::YinglingComboStatus_Combo& combo_list(int index) const;
+  inline ::protocols::common::YinglingComboStatus_Combo* mutable_combo_list(int index);
+  inline ::protocols::common::YinglingComboStatus_Combo* add_combo_list();
+  inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::YinglingComboStatus_Combo >&
+      combo_list() const;
+  inline ::google::protobuf::RepeatedPtrField< ::protocols::common::YinglingComboStatus_Combo >*
+      mutable_combo_list();
+  
+  // @@protoc_insertion_point(class_scope:protocols.common.YinglingComboStatus)
+ private:
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::RepeatedPtrField< ::protocols::common::YinglingComboStatus_Combo > combo_list_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_game_5fcommon_2eproto();
+  friend void protobuf_AssignDesc_game_5fcommon_2eproto();
+  friend void protobuf_ShutdownFile_game_5fcommon_2eproto();
+  
+  void InitAsDefaultInstance();
+  static YinglingComboStatus* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class YinglingTrainStatus : public ::google::protobuf::Message {
+ public:
+  YinglingTrainStatus();
+  virtual ~YinglingTrainStatus();
+  
+  YinglingTrainStatus(const YinglingTrainStatus& from);
+  
+  inline YinglingTrainStatus& operator=(const YinglingTrainStatus& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const YinglingTrainStatus& default_instance();
+  
+  void Swap(YinglingTrainStatus* other);
+  
+  // implements Message ----------------------------------------------
+  
+  YinglingTrainStatus* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const YinglingTrainStatus& from);
+  void MergeFrom(const YinglingTrainStatus& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // repeated .protocols.common.TrainAttribute train_attribute_list = 1;
+  inline int train_attribute_list_size() const;
+  inline void clear_train_attribute_list();
+  static const int kTrainAttributeListFieldNumber = 1;
+  inline const ::protocols::common::TrainAttribute& train_attribute_list(int index) const;
+  inline ::protocols::common::TrainAttribute* mutable_train_attribute_list(int index);
+  inline ::protocols::common::TrainAttribute* add_train_attribute_list();
+  inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::TrainAttribute >&
+      train_attribute_list() const;
+  inline ::google::protobuf::RepeatedPtrField< ::protocols::common::TrainAttribute >*
+      mutable_train_attribute_list();
+  
+  // @@protoc_insertion_point(class_scope:protocols.common.YinglingTrainStatus)
+ private:
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::RepeatedPtrField< ::protocols::common::TrainAttribute > train_attribute_list_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_game_5fcommon_2eproto();
+  friend void protobuf_AssignDesc_game_5fcommon_2eproto();
+  friend void protobuf_ShutdownFile_game_5fcommon_2eproto();
+  
+  void InitAsDefaultInstance();
+  static YinglingTrainStatus* default_instance_;
+};
 // ===================================================================
 
 
@@ -9718,15 +12442,37 @@ inline void Fighter::set_hp(::google::protobuf::int32 value) {
   hp_ = value;
 }
 
-// optional int32 level = 6;
-inline bool Fighter::has_level() const {
+// optional int32 max_hp = 16;
+inline bool Fighter::has_max_hp() const {
   return (_has_bits_[0] & 0x00000020u) != 0;
 }
-inline void Fighter::set_has_level() {
+inline void Fighter::set_has_max_hp() {
   _has_bits_[0] |= 0x00000020u;
 }
-inline void Fighter::clear_has_level() {
+inline void Fighter::clear_has_max_hp() {
   _has_bits_[0] &= ~0x00000020u;
+}
+inline void Fighter::clear_max_hp() {
+  max_hp_ = 0;
+  clear_has_max_hp();
+}
+inline ::google::protobuf::int32 Fighter::max_hp() const {
+  return max_hp_;
+}
+inline void Fighter::set_max_hp(::google::protobuf::int32 value) {
+  set_has_max_hp();
+  max_hp_ = value;
+}
+
+// optional int32 level = 6;
+inline bool Fighter::has_level() const {
+  return (_has_bits_[0] & 0x00000040u) != 0;
+}
+inline void Fighter::set_has_level() {
+  _has_bits_[0] |= 0x00000040u;
+}
+inline void Fighter::clear_has_level() {
+  _has_bits_[0] &= ~0x00000040u;
 }
 inline void Fighter::clear_level() {
   level_ = 0;
@@ -9742,13 +12488,13 @@ inline void Fighter::set_level(::google::protobuf::int32 value) {
 
 // optional int32 is_player = 7;
 inline bool Fighter::has_is_player() const {
-  return (_has_bits_[0] & 0x00000040u) != 0;
+  return (_has_bits_[0] & 0x00000080u) != 0;
 }
 inline void Fighter::set_has_is_player() {
-  _has_bits_[0] |= 0x00000040u;
+  _has_bits_[0] |= 0x00000080u;
 }
 inline void Fighter::clear_has_is_player() {
-  _has_bits_[0] &= ~0x00000040u;
+  _has_bits_[0] &= ~0x00000080u;
 }
 inline void Fighter::clear_is_player() {
   is_player_ = 0;
@@ -9764,13 +12510,13 @@ inline void Fighter::set_is_player(::google::protobuf::int32 value) {
 
 // optional int32 is_team_leader = 8;
 inline bool Fighter::has_is_team_leader() const {
-  return (_has_bits_[0] & 0x00000080u) != 0;
+  return (_has_bits_[0] & 0x00000100u) != 0;
 }
 inline void Fighter::set_has_is_team_leader() {
-  _has_bits_[0] |= 0x00000080u;
+  _has_bits_[0] |= 0x00000100u;
 }
 inline void Fighter::clear_has_is_team_leader() {
-  _has_bits_[0] &= ~0x00000080u;
+  _has_bits_[0] &= ~0x00000100u;
 }
 inline void Fighter::clear_is_team_leader() {
   is_team_leader_ = 0;
@@ -9786,13 +12532,13 @@ inline void Fighter::set_is_team_leader(::google::protobuf::int32 value) {
 
 // optional string name = 9;
 inline bool Fighter::has_name() const {
-  return (_has_bits_[0] & 0x00000100u) != 0;
+  return (_has_bits_[0] & 0x00000200u) != 0;
 }
 inline void Fighter::set_has_name() {
-  _has_bits_[0] |= 0x00000100u;
+  _has_bits_[0] |= 0x00000200u;
 }
 inline void Fighter::clear_has_name() {
-  _has_bits_[0] &= ~0x00000100u;
+  _has_bits_[0] &= ~0x00000200u;
 }
 inline void Fighter::clear_name() {
   if (name_ != &::google::protobuf::internal::kEmptyString) {
@@ -9844,13 +12590,13 @@ inline ::std::string* Fighter::release_name() {
 
 // optional string owner_name = 15;
 inline bool Fighter::has_owner_name() const {
-  return (_has_bits_[0] & 0x00000200u) != 0;
+  return (_has_bits_[0] & 0x00000400u) != 0;
 }
 inline void Fighter::set_has_owner_name() {
-  _has_bits_[0] |= 0x00000200u;
+  _has_bits_[0] |= 0x00000400u;
 }
 inline void Fighter::clear_has_owner_name() {
-  _has_bits_[0] &= ~0x00000200u;
+  _has_bits_[0] &= ~0x00000400u;
 }
 inline void Fighter::clear_owner_name() {
   if (owner_name_ != &::google::protobuf::internal::kEmptyString) {
@@ -9902,13 +12648,13 @@ inline ::std::string* Fighter::release_owner_name() {
 
 // optional int32 quality = 10;
 inline bool Fighter::has_quality() const {
-  return (_has_bits_[0] & 0x00000400u) != 0;
+  return (_has_bits_[0] & 0x00000800u) != 0;
 }
 inline void Fighter::set_has_quality() {
-  _has_bits_[0] |= 0x00000400u;
+  _has_bits_[0] |= 0x00000800u;
 }
 inline void Fighter::clear_has_quality() {
-  _has_bits_[0] &= ~0x00000400u;
+  _has_bits_[0] &= ~0x00000800u;
 }
 inline void Fighter::clear_quality() {
   quality_ = 0;
@@ -9924,13 +12670,13 @@ inline void Fighter::set_quality(::google::protobuf::int32 value) {
 
 // optional int32 phy_attack = 11;
 inline bool Fighter::has_phy_attack() const {
-  return (_has_bits_[0] & 0x00000800u) != 0;
+  return (_has_bits_[0] & 0x00001000u) != 0;
 }
 inline void Fighter::set_has_phy_attack() {
-  _has_bits_[0] |= 0x00000800u;
+  _has_bits_[0] |= 0x00001000u;
 }
 inline void Fighter::clear_has_phy_attack() {
-  _has_bits_[0] &= ~0x00000800u;
+  _has_bits_[0] &= ~0x00001000u;
 }
 inline void Fighter::clear_phy_attack() {
   phy_attack_ = 0;
@@ -9946,13 +12692,13 @@ inline void Fighter::set_phy_attack(::google::protobuf::int32 value) {
 
 // optional int32 phy_defence = 12;
 inline bool Fighter::has_phy_defence() const {
-  return (_has_bits_[0] & 0x00001000u) != 0;
+  return (_has_bits_[0] & 0x00002000u) != 0;
 }
 inline void Fighter::set_has_phy_defence() {
-  _has_bits_[0] |= 0x00001000u;
+  _has_bits_[0] |= 0x00002000u;
 }
 inline void Fighter::clear_has_phy_defence() {
-  _has_bits_[0] &= ~0x00001000u;
+  _has_bits_[0] &= ~0x00002000u;
 }
 inline void Fighter::clear_phy_defence() {
   phy_defence_ = 0;
@@ -9968,13 +12714,13 @@ inline void Fighter::set_phy_defence(::google::protobuf::int32 value) {
 
 // optional int32 mag_attack = 13;
 inline bool Fighter::has_mag_attack() const {
-  return (_has_bits_[0] & 0x00002000u) != 0;
+  return (_has_bits_[0] & 0x00004000u) != 0;
 }
 inline void Fighter::set_has_mag_attack() {
-  _has_bits_[0] |= 0x00002000u;
+  _has_bits_[0] |= 0x00004000u;
 }
 inline void Fighter::clear_has_mag_attack() {
-  _has_bits_[0] &= ~0x00002000u;
+  _has_bits_[0] &= ~0x00004000u;
 }
 inline void Fighter::clear_mag_attack() {
   mag_attack_ = 0;
@@ -9990,13 +12736,13 @@ inline void Fighter::set_mag_attack(::google::protobuf::int32 value) {
 
 // optional int32 mag_defence = 14;
 inline bool Fighter::has_mag_defence() const {
-  return (_has_bits_[0] & 0x00004000u) != 0;
+  return (_has_bits_[0] & 0x00008000u) != 0;
 }
 inline void Fighter::set_has_mag_defence() {
-  _has_bits_[0] |= 0x00004000u;
+  _has_bits_[0] |= 0x00008000u;
 }
 inline void Fighter::clear_has_mag_defence() {
-  _has_bits_[0] &= ~0x00004000u;
+  _has_bits_[0] &= ~0x00008000u;
 }
 inline void Fighter::clear_mag_defence() {
   mag_defence_ = 0;
@@ -10078,800 +12824,6 @@ inline ::google::protobuf::int32 SkillBonus::exp_bonus() const {
 inline void SkillBonus::set_exp_bonus(::google::protobuf::int32 value) {
   set_has_exp_bonus();
   exp_bonus_ = value;
-}
-
-// -------------------------------------------------------------------
-
-// Bonus
-
-// optional int64 guid = 1;
-inline bool Bonus::has_guid() const {
-  return (_has_bits_[0] & 0x00000001u) != 0;
-}
-inline void Bonus::set_has_guid() {
-  _has_bits_[0] |= 0x00000001u;
-}
-inline void Bonus::clear_has_guid() {
-  _has_bits_[0] &= ~0x00000001u;
-}
-inline void Bonus::clear_guid() {
-  guid_ = GOOGLE_LONGLONG(0);
-  clear_has_guid();
-}
-inline ::google::protobuf::int64 Bonus::guid() const {
-  return guid_;
-}
-inline void Bonus::set_guid(::google::protobuf::int64 value) {
-  set_has_guid();
-  guid_ = value;
-}
-
-// optional int32 exp_bonus = 2;
-inline bool Bonus::has_exp_bonus() const {
-  return (_has_bits_[0] & 0x00000002u) != 0;
-}
-inline void Bonus::set_has_exp_bonus() {
-  _has_bits_[0] |= 0x00000002u;
-}
-inline void Bonus::clear_has_exp_bonus() {
-  _has_bits_[0] &= ~0x00000002u;
-}
-inline void Bonus::clear_exp_bonus() {
-  exp_bonus_ = 0;
-  clear_has_exp_bonus();
-}
-inline ::google::protobuf::int32 Bonus::exp_bonus() const {
-  return exp_bonus_;
-}
-inline void Bonus::set_exp_bonus(::google::protobuf::int32 value) {
-  set_has_exp_bonus();
-  exp_bonus_ = value;
-}
-
-// optional int32 vip_level = 13;
-inline bool Bonus::has_vip_level() const {
-  return (_has_bits_[0] & 0x00000004u) != 0;
-}
-inline void Bonus::set_has_vip_level() {
-  _has_bits_[0] |= 0x00000004u;
-}
-inline void Bonus::clear_has_vip_level() {
-  _has_bits_[0] &= ~0x00000004u;
-}
-inline void Bonus::clear_vip_level() {
-  vip_level_ = 0;
-  clear_has_vip_level();
-}
-inline ::google::protobuf::int32 Bonus::vip_level() const {
-  return vip_level_;
-}
-inline void Bonus::set_vip_level(::google::protobuf::int32 value) {
-  set_has_vip_level();
-  vip_level_ = value;
-}
-
-// optional int32 vip_exp_factor = 10;
-inline bool Bonus::has_vip_exp_factor() const {
-  return (_has_bits_[0] & 0x00000008u) != 0;
-}
-inline void Bonus::set_has_vip_exp_factor() {
-  _has_bits_[0] |= 0x00000008u;
-}
-inline void Bonus::clear_has_vip_exp_factor() {
-  _has_bits_[0] &= ~0x00000008u;
-}
-inline void Bonus::clear_vip_exp_factor() {
-  vip_exp_factor_ = 0;
-  clear_has_vip_exp_factor();
-}
-inline ::google::protobuf::int32 Bonus::vip_exp_factor() const {
-  return vip_exp_factor_;
-}
-inline void Bonus::set_vip_exp_factor(::google::protobuf::int32 value) {
-  set_has_vip_exp_factor();
-  vip_exp_factor_ = value;
-}
-
-// optional int32 team_exp_factor = 11;
-inline bool Bonus::has_team_exp_factor() const {
-  return (_has_bits_[0] & 0x00000010u) != 0;
-}
-inline void Bonus::set_has_team_exp_factor() {
-  _has_bits_[0] |= 0x00000010u;
-}
-inline void Bonus::clear_has_team_exp_factor() {
-  _has_bits_[0] &= ~0x00000010u;
-}
-inline void Bonus::clear_team_exp_factor() {
-  team_exp_factor_ = 0;
-  clear_has_team_exp_factor();
-}
-inline ::google::protobuf::int32 Bonus::team_exp_factor() const {
-  return team_exp_factor_;
-}
-inline void Bonus::set_team_exp_factor(::google::protobuf::int32 value) {
-  set_has_team_exp_factor();
-  team_exp_factor_ = value;
-}
-
-// optional int32 other_exp_factor = 12;
-inline bool Bonus::has_other_exp_factor() const {
-  return (_has_bits_[0] & 0x00000020u) != 0;
-}
-inline void Bonus::set_has_other_exp_factor() {
-  _has_bits_[0] |= 0x00000020u;
-}
-inline void Bonus::clear_has_other_exp_factor() {
-  _has_bits_[0] &= ~0x00000020u;
-}
-inline void Bonus::clear_other_exp_factor() {
-  other_exp_factor_ = 0;
-  clear_has_other_exp_factor();
-}
-inline ::google::protobuf::int32 Bonus::other_exp_factor() const {
-  return other_exp_factor_;
-}
-inline void Bonus::set_other_exp_factor(::google::protobuf::int32 value) {
-  set_has_other_exp_factor();
-  other_exp_factor_ = value;
-}
-
-// repeated .protocols.common.SkillBonus skill_bonus = 3;
-inline int Bonus::skill_bonus_size() const {
-  return skill_bonus_.size();
-}
-inline void Bonus::clear_skill_bonus() {
-  skill_bonus_.Clear();
-}
-inline const ::protocols::common::SkillBonus& Bonus::skill_bonus(int index) const {
-  return skill_bonus_.Get(index);
-}
-inline ::protocols::common::SkillBonus* Bonus::mutable_skill_bonus(int index) {
-  return skill_bonus_.Mutable(index);
-}
-inline ::protocols::common::SkillBonus* Bonus::add_skill_bonus() {
-  return skill_bonus_.Add();
-}
-inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::SkillBonus >&
-Bonus::skill_bonus() const {
-  return skill_bonus_;
-}
-inline ::google::protobuf::RepeatedPtrField< ::protocols::common::SkillBonus >*
-Bonus::mutable_skill_bonus() {
-  return &skill_bonus_;
-}
-
-// optional int32 gold_coin_bonus = 8;
-inline bool Bonus::has_gold_coin_bonus() const {
-  return (_has_bits_[0] & 0x00000080u) != 0;
-}
-inline void Bonus::set_has_gold_coin_bonus() {
-  _has_bits_[0] |= 0x00000080u;
-}
-inline void Bonus::clear_has_gold_coin_bonus() {
-  _has_bits_[0] &= ~0x00000080u;
-}
-inline void Bonus::clear_gold_coin_bonus() {
-  gold_coin_bonus_ = 0;
-  clear_has_gold_coin_bonus();
-}
-inline ::google::protobuf::int32 Bonus::gold_coin_bonus() const {
-  return gold_coin_bonus_;
-}
-inline void Bonus::set_gold_coin_bonus(::google::protobuf::int32 value) {
-  set_has_gold_coin_bonus();
-  gold_coin_bonus_ = value;
-}
-
-// optional int32 bag_has_enough_slots = 4;
-inline bool Bonus::has_bag_has_enough_slots() const {
-  return (_has_bits_[0] & 0x00000100u) != 0;
-}
-inline void Bonus::set_has_bag_has_enough_slots() {
-  _has_bits_[0] |= 0x00000100u;
-}
-inline void Bonus::clear_has_bag_has_enough_slots() {
-  _has_bits_[0] &= ~0x00000100u;
-}
-inline void Bonus::clear_bag_has_enough_slots() {
-  bag_has_enough_slots_ = 0;
-  clear_has_bag_has_enough_slots();
-}
-inline ::google::protobuf::int32 Bonus::bag_has_enough_slots() const {
-  return bag_has_enough_slots_;
-}
-inline void Bonus::set_bag_has_enough_slots(::google::protobuf::int32 value) {
-  set_has_bag_has_enough_slots();
-  bag_has_enough_slots_ = value;
-}
-
-// optional int32 base_exp_bonus = 9;
-inline bool Bonus::has_base_exp_bonus() const {
-  return (_has_bits_[0] & 0x00000200u) != 0;
-}
-inline void Bonus::set_has_base_exp_bonus() {
-  _has_bits_[0] |= 0x00000200u;
-}
-inline void Bonus::clear_has_base_exp_bonus() {
-  _has_bits_[0] &= ~0x00000200u;
-}
-inline void Bonus::clear_base_exp_bonus() {
-  base_exp_bonus_ = 0;
-  clear_has_base_exp_bonus();
-}
-inline ::google::protobuf::int32 Bonus::base_exp_bonus() const {
-  return base_exp_bonus_;
-}
-inline void Bonus::set_base_exp_bonus(::google::protobuf::int32 value) {
-  set_has_base_exp_bonus();
-  base_exp_bonus_ = value;
-}
-
-// optional int32 base_gold_coin_bonus = 14;
-inline bool Bonus::has_base_gold_coin_bonus() const {
-  return (_has_bits_[0] & 0x00000400u) != 0;
-}
-inline void Bonus::set_has_base_gold_coin_bonus() {
-  _has_bits_[0] |= 0x00000400u;
-}
-inline void Bonus::clear_has_base_gold_coin_bonus() {
-  _has_bits_[0] &= ~0x00000400u;
-}
-inline void Bonus::clear_base_gold_coin_bonus() {
-  base_gold_coin_bonus_ = 0;
-  clear_has_base_gold_coin_bonus();
-}
-inline ::google::protobuf::int32 Bonus::base_gold_coin_bonus() const {
-  return base_gold_coin_bonus_;
-}
-inline void Bonus::set_base_gold_coin_bonus(::google::protobuf::int32 value) {
-  set_has_base_gold_coin_bonus();
-  base_gold_coin_bonus_ = value;
-}
-
-// optional int32 cont_win_exp_bonus = 15;
-inline bool Bonus::has_cont_win_exp_bonus() const {
-  return (_has_bits_[0] & 0x00000800u) != 0;
-}
-inline void Bonus::set_has_cont_win_exp_bonus() {
-  _has_bits_[0] |= 0x00000800u;
-}
-inline void Bonus::clear_has_cont_win_exp_bonus() {
-  _has_bits_[0] &= ~0x00000800u;
-}
-inline void Bonus::clear_cont_win_exp_bonus() {
-  cont_win_exp_bonus_ = 0;
-  clear_has_cont_win_exp_bonus();
-}
-inline ::google::protobuf::int32 Bonus::cont_win_exp_bonus() const {
-  return cont_win_exp_bonus_;
-}
-inline void Bonus::set_cont_win_exp_bonus(::google::protobuf::int32 value) {
-  set_has_cont_win_exp_bonus();
-  cont_win_exp_bonus_ = value;
-}
-
-// optional int32 cont_win_gold_bonus = 16;
-inline bool Bonus::has_cont_win_gold_bonus() const {
-  return (_has_bits_[0] & 0x00001000u) != 0;
-}
-inline void Bonus::set_has_cont_win_gold_bonus() {
-  _has_bits_[0] |= 0x00001000u;
-}
-inline void Bonus::clear_has_cont_win_gold_bonus() {
-  _has_bits_[0] &= ~0x00001000u;
-}
-inline void Bonus::clear_cont_win_gold_bonus() {
-  cont_win_gold_bonus_ = 0;
-  clear_has_cont_win_gold_bonus();
-}
-inline ::google::protobuf::int32 Bonus::cont_win_gold_bonus() const {
-  return cont_win_gold_bonus_;
-}
-inline void Bonus::set_cont_win_gold_bonus(::google::protobuf::int32 value) {
-  set_has_cont_win_gold_bonus();
-  cont_win_gold_bonus_ = value;
-}
-
-// optional int32 de_cont_win_exp_bonus = 17;
-inline bool Bonus::has_de_cont_win_exp_bonus() const {
-  return (_has_bits_[0] & 0x00002000u) != 0;
-}
-inline void Bonus::set_has_de_cont_win_exp_bonus() {
-  _has_bits_[0] |= 0x00002000u;
-}
-inline void Bonus::clear_has_de_cont_win_exp_bonus() {
-  _has_bits_[0] &= ~0x00002000u;
-}
-inline void Bonus::clear_de_cont_win_exp_bonus() {
-  de_cont_win_exp_bonus_ = 0;
-  clear_has_de_cont_win_exp_bonus();
-}
-inline ::google::protobuf::int32 Bonus::de_cont_win_exp_bonus() const {
-  return de_cont_win_exp_bonus_;
-}
-inline void Bonus::set_de_cont_win_exp_bonus(::google::protobuf::int32 value) {
-  set_has_de_cont_win_exp_bonus();
-  de_cont_win_exp_bonus_ = value;
-}
-
-// optional int32 de_cont_win_gold_bonus = 18;
-inline bool Bonus::has_de_cont_win_gold_bonus() const {
-  return (_has_bits_[0] & 0x00004000u) != 0;
-}
-inline void Bonus::set_has_de_cont_win_gold_bonus() {
-  _has_bits_[0] |= 0x00004000u;
-}
-inline void Bonus::clear_has_de_cont_win_gold_bonus() {
-  _has_bits_[0] &= ~0x00004000u;
-}
-inline void Bonus::clear_de_cont_win_gold_bonus() {
-  de_cont_win_gold_bonus_ = 0;
-  clear_has_de_cont_win_gold_bonus();
-}
-inline ::google::protobuf::int32 Bonus::de_cont_win_gold_bonus() const {
-  return de_cont_win_gold_bonus_;
-}
-inline void Bonus::set_de_cont_win_gold_bonus(::google::protobuf::int32 value) {
-  set_has_de_cont_win_gold_bonus();
-  de_cont_win_gold_bonus_ = value;
-}
-
-// repeated .protocols.common.ItemInfo drop_item = 5;
-inline int Bonus::drop_item_size() const {
-  return drop_item_.size();
-}
-inline void Bonus::clear_drop_item() {
-  drop_item_.Clear();
-}
-inline const ::protocols::common::ItemInfo& Bonus::drop_item(int index) const {
-  return drop_item_.Get(index);
-}
-inline ::protocols::common::ItemInfo* Bonus::mutable_drop_item(int index) {
-  return drop_item_.Mutable(index);
-}
-inline ::protocols::common::ItemInfo* Bonus::add_drop_item() {
-  return drop_item_.Add();
-}
-inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::ItemInfo >&
-Bonus::drop_item() const {
-  return drop_item_;
-}
-inline ::google::protobuf::RepeatedPtrField< ::protocols::common::ItemInfo >*
-Bonus::mutable_drop_item() {
-  return &drop_item_;
-}
-
-// repeated .protocols.common.ItemInfo quest_drop_item = 7;
-inline int Bonus::quest_drop_item_size() const {
-  return quest_drop_item_.size();
-}
-inline void Bonus::clear_quest_drop_item() {
-  quest_drop_item_.Clear();
-}
-inline const ::protocols::common::ItemInfo& Bonus::quest_drop_item(int index) const {
-  return quest_drop_item_.Get(index);
-}
-inline ::protocols::common::ItemInfo* Bonus::mutable_quest_drop_item(int index) {
-  return quest_drop_item_.Mutable(index);
-}
-inline ::protocols::common::ItemInfo* Bonus::add_quest_drop_item() {
-  return quest_drop_item_.Add();
-}
-inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::ItemInfo >&
-Bonus::quest_drop_item() const {
-  return quest_drop_item_;
-}
-inline ::google::protobuf::RepeatedPtrField< ::protocols::common::ItemInfo >*
-Bonus::mutable_quest_drop_item() {
-  return &quest_drop_item_;
-}
-
-// repeated .protocols.common.EquipDetail equipment = 6;
-inline int Bonus::equipment_size() const {
-  return equipment_.size();
-}
-inline void Bonus::clear_equipment() {
-  equipment_.Clear();
-}
-inline const ::protocols::common::EquipDetail& Bonus::equipment(int index) const {
-  return equipment_.Get(index);
-}
-inline ::protocols::common::EquipDetail* Bonus::mutable_equipment(int index) {
-  return equipment_.Mutable(index);
-}
-inline ::protocols::common::EquipDetail* Bonus::add_equipment() {
-  return equipment_.Add();
-}
-inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::EquipDetail >&
-Bonus::equipment() const {
-  return equipment_;
-}
-inline ::google::protobuf::RepeatedPtrField< ::protocols::common::EquipDetail >*
-Bonus::mutable_equipment() {
-  return &equipment_;
-}
-
-// -------------------------------------------------------------------
-
-// FightResult
-
-// required int32 battle_id = 5;
-inline bool FightResult::has_battle_id() const {
-  return (_has_bits_[0] & 0x00000001u) != 0;
-}
-inline void FightResult::set_has_battle_id() {
-  _has_bits_[0] |= 0x00000001u;
-}
-inline void FightResult::clear_has_battle_id() {
-  _has_bits_[0] &= ~0x00000001u;
-}
-inline void FightResult::clear_battle_id() {
-  battle_id_ = 0;
-  clear_has_battle_id();
-}
-inline ::google::protobuf::int32 FightResult::battle_id() const {
-  return battle_id_;
-}
-inline void FightResult::set_battle_id(::google::protobuf::int32 value) {
-  set_has_battle_id();
-  battle_id_ = value;
-}
-
-// repeated .protocols.common.Fighter fighter = 1;
-inline int FightResult::fighter_size() const {
-  return fighter_.size();
-}
-inline void FightResult::clear_fighter() {
-  fighter_.Clear();
-}
-inline const ::protocols::common::Fighter& FightResult::fighter(int index) const {
-  return fighter_.Get(index);
-}
-inline ::protocols::common::Fighter* FightResult::mutable_fighter(int index) {
-  return fighter_.Mutable(index);
-}
-inline ::protocols::common::Fighter* FightResult::add_fighter() {
-  return fighter_.Add();
-}
-inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::Fighter >&
-FightResult::fighter() const {
-  return fighter_;
-}
-inline ::google::protobuf::RepeatedPtrField< ::protocols::common::Fighter >*
-FightResult::mutable_fighter() {
-  return &fighter_;
-}
-
-// optional int32 winner = 2;
-inline bool FightResult::has_winner() const {
-  return (_has_bits_[0] & 0x00000004u) != 0;
-}
-inline void FightResult::set_has_winner() {
-  _has_bits_[0] |= 0x00000004u;
-}
-inline void FightResult::clear_has_winner() {
-  _has_bits_[0] &= ~0x00000004u;
-}
-inline void FightResult::clear_winner() {
-  winner_ = 0;
-  clear_has_winner();
-}
-inline ::google::protobuf::int32 FightResult::winner() const {
-  return winner_;
-}
-inline void FightResult::set_winner(::google::protobuf::int32 value) {
-  set_has_winner();
-  winner_ = value;
-}
-
-// repeated .protocols.common.Bonus bonus = 3;
-inline int FightResult::bonus_size() const {
-  return bonus_.size();
-}
-inline void FightResult::clear_bonus() {
-  bonus_.Clear();
-}
-inline const ::protocols::common::Bonus& FightResult::bonus(int index) const {
-  return bonus_.Get(index);
-}
-inline ::protocols::common::Bonus* FightResult::mutable_bonus(int index) {
-  return bonus_.Mutable(index);
-}
-inline ::protocols::common::Bonus* FightResult::add_bonus() {
-  return bonus_.Add();
-}
-inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::Bonus >&
-FightResult::bonus() const {
-  return bonus_;
-}
-inline ::google::protobuf::RepeatedPtrField< ::protocols::common::Bonus >*
-FightResult::mutable_bonus() {
-  return &bonus_;
-}
-
-// repeated .protocols.common.SkillInfo camp_a_battle_skills = 6;
-inline int FightResult::camp_a_battle_skills_size() const {
-  return camp_a_battle_skills_.size();
-}
-inline void FightResult::clear_camp_a_battle_skills() {
-  camp_a_battle_skills_.Clear();
-}
-inline const ::protocols::common::SkillInfo& FightResult::camp_a_battle_skills(int index) const {
-  return camp_a_battle_skills_.Get(index);
-}
-inline ::protocols::common::SkillInfo* FightResult::mutable_camp_a_battle_skills(int index) {
-  return camp_a_battle_skills_.Mutable(index);
-}
-inline ::protocols::common::SkillInfo* FightResult::add_camp_a_battle_skills() {
-  return camp_a_battle_skills_.Add();
-}
-inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::SkillInfo >&
-FightResult::camp_a_battle_skills() const {
-  return camp_a_battle_skills_;
-}
-inline ::google::protobuf::RepeatedPtrField< ::protocols::common::SkillInfo >*
-FightResult::mutable_camp_a_battle_skills() {
-  return &camp_a_battle_skills_;
-}
-
-// repeated .protocols.common.SkillInfo camp_b_battle_skills = 7;
-inline int FightResult::camp_b_battle_skills_size() const {
-  return camp_b_battle_skills_.size();
-}
-inline void FightResult::clear_camp_b_battle_skills() {
-  camp_b_battle_skills_.Clear();
-}
-inline const ::protocols::common::SkillInfo& FightResult::camp_b_battle_skills(int index) const {
-  return camp_b_battle_skills_.Get(index);
-}
-inline ::protocols::common::SkillInfo* FightResult::mutable_camp_b_battle_skills(int index) {
-  return camp_b_battle_skills_.Mutable(index);
-}
-inline ::protocols::common::SkillInfo* FightResult::add_camp_b_battle_skills() {
-  return camp_b_battle_skills_.Add();
-}
-inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::SkillInfo >&
-FightResult::camp_b_battle_skills() const {
-  return camp_b_battle_skills_;
-}
-inline ::google::protobuf::RepeatedPtrField< ::protocols::common::SkillInfo >*
-FightResult::mutable_camp_b_battle_skills() {
-  return &camp_b_battle_skills_;
-}
-
-// repeated bytes round_data = 4;
-inline int FightResult::round_data_size() const {
-  return round_data_.size();
-}
-inline void FightResult::clear_round_data() {
-  round_data_.Clear();
-}
-inline const ::std::string& FightResult::round_data(int index) const {
-  return round_data_.Get(index);
-}
-inline ::std::string* FightResult::mutable_round_data(int index) {
-  return round_data_.Mutable(index);
-}
-inline void FightResult::set_round_data(int index, const ::std::string& value) {
-  round_data_.Mutable(index)->assign(value);
-}
-inline void FightResult::set_round_data(int index, const char* value) {
-  round_data_.Mutable(index)->assign(value);
-}
-inline void FightResult::set_round_data(int index, const void* value, size_t size) {
-  round_data_.Mutable(index)->assign(
-    reinterpret_cast<const char*>(value), size);
-}
-inline ::std::string* FightResult::add_round_data() {
-  return round_data_.Add();
-}
-inline void FightResult::add_round_data(const ::std::string& value) {
-  round_data_.Add()->assign(value);
-}
-inline void FightResult::add_round_data(const char* value) {
-  round_data_.Add()->assign(value);
-}
-inline void FightResult::add_round_data(const void* value, size_t size) {
-  round_data_.Add()->assign(reinterpret_cast<const char*>(value), size);
-}
-inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
-FightResult::round_data() const {
-  return round_data_;
-}
-inline ::google::protobuf::RepeatedPtrField< ::std::string>*
-FightResult::mutable_round_data() {
-  return &round_data_;
-}
-
-// optional string npc_name = 8;
-inline bool FightResult::has_npc_name() const {
-  return (_has_bits_[0] & 0x00000080u) != 0;
-}
-inline void FightResult::set_has_npc_name() {
-  _has_bits_[0] |= 0x00000080u;
-}
-inline void FightResult::clear_has_npc_name() {
-  _has_bits_[0] &= ~0x00000080u;
-}
-inline void FightResult::clear_npc_name() {
-  if (npc_name_ != &::google::protobuf::internal::kEmptyString) {
-    npc_name_->clear();
-  }
-  clear_has_npc_name();
-}
-inline const ::std::string& FightResult::npc_name() const {
-  return *npc_name_;
-}
-inline void FightResult::set_npc_name(const ::std::string& value) {
-  set_has_npc_name();
-  if (npc_name_ == &::google::protobuf::internal::kEmptyString) {
-    npc_name_ = new ::std::string;
-  }
-  npc_name_->assign(value);
-}
-inline void FightResult::set_npc_name(const char* value) {
-  set_has_npc_name();
-  if (npc_name_ == &::google::protobuf::internal::kEmptyString) {
-    npc_name_ = new ::std::string;
-  }
-  npc_name_->assign(value);
-}
-inline void FightResult::set_npc_name(const char* value, size_t size) {
-  set_has_npc_name();
-  if (npc_name_ == &::google::protobuf::internal::kEmptyString) {
-    npc_name_ = new ::std::string;
-  }
-  npc_name_->assign(reinterpret_cast<const char*>(value), size);
-}
-inline ::std::string* FightResult::mutable_npc_name() {
-  set_has_npc_name();
-  if (npc_name_ == &::google::protobuf::internal::kEmptyString) {
-    npc_name_ = new ::std::string;
-  }
-  return npc_name_;
-}
-inline ::std::string* FightResult::release_npc_name() {
-  clear_has_npc_name();
-  if (npc_name_ == &::google::protobuf::internal::kEmptyString) {
-    return NULL;
-  } else {
-    ::std::string* temp = npc_name_;
-    npc_name_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
-    return temp;
-  }
-}
-
-// optional int32 npc_level = 11;
-inline bool FightResult::has_npc_level() const {
-  return (_has_bits_[0] & 0x00000100u) != 0;
-}
-inline void FightResult::set_has_npc_level() {
-  _has_bits_[0] |= 0x00000100u;
-}
-inline void FightResult::clear_has_npc_level() {
-  _has_bits_[0] &= ~0x00000100u;
-}
-inline void FightResult::clear_npc_level() {
-  npc_level_ = 0;
-  clear_has_npc_level();
-}
-inline ::google::protobuf::int32 FightResult::npc_level() const {
-  return npc_level_;
-}
-inline void FightResult::set_npc_level(::google::protobuf::int32 value) {
-  set_has_npc_level();
-  npc_level_ = value;
-}
-
-// optional int32 left_free_skip_times = 9;
-inline bool FightResult::has_left_free_skip_times() const {
-  return (_has_bits_[0] & 0x00000200u) != 0;
-}
-inline void FightResult::set_has_left_free_skip_times() {
-  _has_bits_[0] |= 0x00000200u;
-}
-inline void FightResult::clear_has_left_free_skip_times() {
-  _has_bits_[0] &= ~0x00000200u;
-}
-inline void FightResult::clear_left_free_skip_times() {
-  left_free_skip_times_ = 0;
-  clear_has_left_free_skip_times();
-}
-inline ::google::protobuf::int32 FightResult::left_free_skip_times() const {
-  return left_free_skip_times_;
-}
-inline void FightResult::set_left_free_skip_times(::google::protobuf::int32 value) {
-  set_has_left_free_skip_times();
-  left_free_skip_times_ = value;
-}
-
-// optional int32 auto_skip_time_limit = 10;
-inline bool FightResult::has_auto_skip_time_limit() const {
-  return (_has_bits_[0] & 0x00000400u) != 0;
-}
-inline void FightResult::set_has_auto_skip_time_limit() {
-  _has_bits_[0] |= 0x00000400u;
-}
-inline void FightResult::clear_has_auto_skip_time_limit() {
-  _has_bits_[0] &= ~0x00000400u;
-}
-inline void FightResult::clear_auto_skip_time_limit() {
-  auto_skip_time_limit_ = 0;
-  clear_has_auto_skip_time_limit();
-}
-inline ::google::protobuf::int32 FightResult::auto_skip_time_limit() const {
-  return auto_skip_time_limit_;
-}
-inline void FightResult::set_auto_skip_time_limit(::google::protobuf::int32 value) {
-  set_has_auto_skip_time_limit();
-  auto_skip_time_limit_ = value;
-}
-
-// optional int32 camp_a_dead_persons = 12;
-inline bool FightResult::has_camp_a_dead_persons() const {
-  return (_has_bits_[0] & 0x00000800u) != 0;
-}
-inline void FightResult::set_has_camp_a_dead_persons() {
-  _has_bits_[0] |= 0x00000800u;
-}
-inline void FightResult::clear_has_camp_a_dead_persons() {
-  _has_bits_[0] &= ~0x00000800u;
-}
-inline void FightResult::clear_camp_a_dead_persons() {
-  camp_a_dead_persons_ = 0;
-  clear_has_camp_a_dead_persons();
-}
-inline ::google::protobuf::int32 FightResult::camp_a_dead_persons() const {
-  return camp_a_dead_persons_;
-}
-inline void FightResult::set_camp_a_dead_persons(::google::protobuf::int32 value) {
-  set_has_camp_a_dead_persons();
-  camp_a_dead_persons_ = value;
-}
-
-// optional int32 camp_b_dead_persons = 13;
-inline bool FightResult::has_camp_b_dead_persons() const {
-  return (_has_bits_[0] & 0x00001000u) != 0;
-}
-inline void FightResult::set_has_camp_b_dead_persons() {
-  _has_bits_[0] |= 0x00001000u;
-}
-inline void FightResult::clear_has_camp_b_dead_persons() {
-  _has_bits_[0] &= ~0x00001000u;
-}
-inline void FightResult::clear_camp_b_dead_persons() {
-  camp_b_dead_persons_ = 0;
-  clear_has_camp_b_dead_persons();
-}
-inline ::google::protobuf::int32 FightResult::camp_b_dead_persons() const {
-  return camp_b_dead_persons_;
-}
-inline void FightResult::set_camp_b_dead_persons(::google::protobuf::int32 value) {
-  set_has_camp_b_dead_persons();
-  camp_b_dead_persons_ = value;
-}
-
-// optional int32 battle_group_id = 14;
-inline bool FightResult::has_battle_group_id() const {
-  return (_has_bits_[0] & 0x00002000u) != 0;
-}
-inline void FightResult::set_has_battle_group_id() {
-  _has_bits_[0] |= 0x00002000u;
-}
-inline void FightResult::clear_has_battle_group_id() {
-  _has_bits_[0] &= ~0x00002000u;
-}
-inline void FightResult::clear_battle_group_id() {
-  battle_group_id_ = 0;
-  clear_has_battle_group_id();
-}
-inline ::google::protobuf::int32 FightResult::battle_group_id() const {
-  return battle_group_id_;
-}
-inline void FightResult::set_battle_group_id(::google::protobuf::int32 value) {
-  set_has_battle_group_id();
-  battle_group_id_ = value;
 }
 
 // -------------------------------------------------------------------
@@ -11191,7 +13143,7 @@ inline void PlayerInfo::set_flag(::google::protobuf::int32 value) {
   flag_ = value;
 }
 
-// required string name = 9;
+// optional string name = 9;
 inline bool PlayerInfo::has_name() const {
   return (_has_bits_[0] & 0x00000200u) != 0;
 }
@@ -11578,6 +13530,138 @@ inline ::google::protobuf::int64 PlayerInfo::follow_guid() const {
 inline void PlayerInfo::set_follow_guid(::google::protobuf::int64 value) {
   set_has_follow_guid();
   follow_guid_ = value;
+}
+
+// optional int32 direction = 25 [default = 1];
+inline bool PlayerInfo::has_direction() const {
+  return (_has_bits_[0] & 0x00800000u) != 0;
+}
+inline void PlayerInfo::set_has_direction() {
+  _has_bits_[0] |= 0x00800000u;
+}
+inline void PlayerInfo::clear_has_direction() {
+  _has_bits_[0] &= ~0x00800000u;
+}
+inline void PlayerInfo::clear_direction() {
+  direction_ = 1;
+  clear_has_direction();
+}
+inline ::google::protobuf::int32 PlayerInfo::direction() const {
+  return direction_;
+}
+inline void PlayerInfo::set_direction(::google::protobuf::int32 value) {
+  set_has_direction();
+  direction_ = value;
+}
+
+// optional int64 role_create_time = 26;
+inline bool PlayerInfo::has_role_create_time() const {
+  return (_has_bits_[0] & 0x01000000u) != 0;
+}
+inline void PlayerInfo::set_has_role_create_time() {
+  _has_bits_[0] |= 0x01000000u;
+}
+inline void PlayerInfo::clear_has_role_create_time() {
+  _has_bits_[0] &= ~0x01000000u;
+}
+inline void PlayerInfo::clear_role_create_time() {
+  role_create_time_ = GOOGLE_LONGLONG(0);
+  clear_has_role_create_time();
+}
+inline ::google::protobuf::int64 PlayerInfo::role_create_time() const {
+  return role_create_time_;
+}
+inline void PlayerInfo::set_role_create_time(::google::protobuf::int64 value) {
+  set_has_role_create_time();
+  role_create_time_ = value;
+}
+
+// optional int32 wing_tid = 27 [default = 0];
+inline bool PlayerInfo::has_wing_tid() const {
+  return (_has_bits_[0] & 0x02000000u) != 0;
+}
+inline void PlayerInfo::set_has_wing_tid() {
+  _has_bits_[0] |= 0x02000000u;
+}
+inline void PlayerInfo::clear_has_wing_tid() {
+  _has_bits_[0] &= ~0x02000000u;
+}
+inline void PlayerInfo::clear_wing_tid() {
+  wing_tid_ = 0;
+  clear_has_wing_tid();
+}
+inline ::google::protobuf::int32 PlayerInfo::wing_tid() const {
+  return wing_tid_;
+}
+inline void PlayerInfo::set_wing_tid(::google::protobuf::int32 value) {
+  set_has_wing_tid();
+  wing_tid_ = value;
+}
+
+// optional int32 guild_title = 28 [default = 0];
+inline bool PlayerInfo::has_guild_title() const {
+  return (_has_bits_[0] & 0x04000000u) != 0;
+}
+inline void PlayerInfo::set_has_guild_title() {
+  _has_bits_[0] |= 0x04000000u;
+}
+inline void PlayerInfo::clear_has_guild_title() {
+  _has_bits_[0] &= ~0x04000000u;
+}
+inline void PlayerInfo::clear_guild_title() {
+  guild_title_ = 0;
+  clear_has_guild_title();
+}
+inline ::google::protobuf::int32 PlayerInfo::guild_title() const {
+  return guild_title_;
+}
+inline void PlayerInfo::set_guild_title(::google::protobuf::int32 value) {
+  set_has_guild_title();
+  guild_title_ = value;
+}
+
+// optional int32 title = 29 [default = 0];
+inline bool PlayerInfo::has_title() const {
+  return (_has_bits_[0] & 0x08000000u) != 0;
+}
+inline void PlayerInfo::set_has_title() {
+  _has_bits_[0] |= 0x08000000u;
+}
+inline void PlayerInfo::clear_has_title() {
+  _has_bits_[0] &= ~0x08000000u;
+}
+inline void PlayerInfo::clear_title() {
+  title_ = 0;
+  clear_has_title();
+}
+inline ::google::protobuf::int32 PlayerInfo::title() const {
+  return title_;
+}
+inline void PlayerInfo::set_title(::google::protobuf::int32 value) {
+  set_has_title();
+  title_ = value;
+}
+
+// optional int32 practice_exp = 30 [default = 0];
+inline bool PlayerInfo::has_practice_exp() const {
+  return (_has_bits_[0] & 0x10000000u) != 0;
+}
+inline void PlayerInfo::set_has_practice_exp() {
+  _has_bits_[0] |= 0x10000000u;
+}
+inline void PlayerInfo::clear_has_practice_exp() {
+  _has_bits_[0] &= ~0x10000000u;
+}
+inline void PlayerInfo::clear_practice_exp() {
+  practice_exp_ = 0;
+  clear_has_practice_exp();
+}
+inline ::google::protobuf::int32 PlayerInfo::practice_exp() const {
+  return practice_exp_;
+}
+inline void PlayerInfo::set_practice_exp(::google::protobuf::int32 value) {
+  set_has_practice_exp();
+  practice_exp_ = value;
 }
 
 // -------------------------------------------------------------------
@@ -12092,6 +14176,72 @@ inline ::google::protobuf::int32 SkillInfo::practice_time() const {
 inline void SkillInfo::set_practice_time(::google::protobuf::int32 value) {
   set_has_practice_time();
   practice_time_ = value;
+}
+
+// optional int32 status = 9;
+inline bool SkillInfo::has_status() const {
+  return (_has_bits_[0] & 0x00000100u) != 0;
+}
+inline void SkillInfo::set_has_status() {
+  _has_bits_[0] |= 0x00000100u;
+}
+inline void SkillInfo::clear_has_status() {
+  _has_bits_[0] &= ~0x00000100u;
+}
+inline void SkillInfo::clear_status() {
+  status_ = 0;
+  clear_has_status();
+}
+inline ::google::protobuf::int32 SkillInfo::status() const {
+  return status_;
+}
+inline void SkillInfo::set_status(::google::protobuf::int32 value) {
+  set_has_status();
+  status_ = value;
+}
+
+// optional int32 time_left_for_research = 10;
+inline bool SkillInfo::has_time_left_for_research() const {
+  return (_has_bits_[0] & 0x00000200u) != 0;
+}
+inline void SkillInfo::set_has_time_left_for_research() {
+  _has_bits_[0] |= 0x00000200u;
+}
+inline void SkillInfo::clear_has_time_left_for_research() {
+  _has_bits_[0] &= ~0x00000200u;
+}
+inline void SkillInfo::clear_time_left_for_research() {
+  time_left_for_research_ = 0;
+  clear_has_time_left_for_research();
+}
+inline ::google::protobuf::int32 SkillInfo::time_left_for_research() const {
+  return time_left_for_research_;
+}
+inline void SkillInfo::set_time_left_for_research(::google::protobuf::int32 value) {
+  set_has_time_left_for_research();
+  time_left_for_research_ = value;
+}
+
+// optional int32 is_used = 11;
+inline bool SkillInfo::has_is_used() const {
+  return (_has_bits_[0] & 0x00000400u) != 0;
+}
+inline void SkillInfo::set_has_is_used() {
+  _has_bits_[0] |= 0x00000400u;
+}
+inline void SkillInfo::clear_has_is_used() {
+  _has_bits_[0] &= ~0x00000400u;
+}
+inline void SkillInfo::clear_is_used() {
+  is_used_ = 0;
+  clear_has_is_used();
+}
+inline ::google::protobuf::int32 SkillInfo::is_used() const {
+  return is_used_;
+}
+inline void SkillInfo::set_is_used(::google::protobuf::int32 value) {
+  set_has_is_used();
+  is_used_ = value;
 }
 
 // -------------------------------------------------------------------
@@ -12789,6 +14939,54 @@ inline void BuddyDetailInfo::set_fight_capacity(::google::protobuf::int32 value)
 
 // -------------------------------------------------------------------
 
+// PBIntPair
+
+// required int32 key = 1;
+inline bool PBIntPair::has_key() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void PBIntPair::set_has_key() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void PBIntPair::clear_has_key() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void PBIntPair::clear_key() {
+  key_ = 0;
+  clear_has_key();
+}
+inline ::google::protobuf::int32 PBIntPair::key() const {
+  return key_;
+}
+inline void PBIntPair::set_key(::google::protobuf::int32 value) {
+  set_has_key();
+  key_ = value;
+}
+
+// required int32 value = 2;
+inline bool PBIntPair::has_value() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void PBIntPair::set_has_value() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void PBIntPair::clear_has_value() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void PBIntPair::clear_value() {
+  value_ = 0;
+  clear_has_value();
+}
+inline ::google::protobuf::int32 PBIntPair::value() const {
+  return value_;
+}
+inline void PBIntPair::set_value(::google::protobuf::int32 value) {
+  set_has_value();
+  value_ = value;
+}
+
+// -------------------------------------------------------------------
+
 // Relation
 
 // required int64 guid = 1;
@@ -13388,6 +15586,526 @@ inline ::std::string* MonsterInfo::release_icon_id() {
 
 // -------------------------------------------------------------------
 
+// WingSpiritInfo
+
+// optional int64 item_id = 1;
+inline bool WingSpiritInfo::has_item_id() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void WingSpiritInfo::set_has_item_id() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void WingSpiritInfo::clear_has_item_id() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void WingSpiritInfo::clear_item_id() {
+  item_id_ = GOOGLE_LONGLONG(0);
+  clear_has_item_id();
+}
+inline ::google::protobuf::int64 WingSpiritInfo::item_id() const {
+  return item_id_;
+}
+inline void WingSpiritInfo::set_item_id(::google::protobuf::int64 value) {
+  set_has_item_id();
+  item_id_ = value;
+}
+
+// optional int32 t_id = 9;
+inline bool WingSpiritInfo::has_t_id() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void WingSpiritInfo::set_has_t_id() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void WingSpiritInfo::clear_has_t_id() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void WingSpiritInfo::clear_t_id() {
+  t_id_ = 0;
+  clear_has_t_id();
+}
+inline ::google::protobuf::int32 WingSpiritInfo::t_id() const {
+  return t_id_;
+}
+inline void WingSpiritInfo::set_t_id(::google::protobuf::int32 value) {
+  set_has_t_id();
+  t_id_ = value;
+}
+
+// optional bool is_fragment = 2;
+inline bool WingSpiritInfo::has_is_fragment() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void WingSpiritInfo::set_has_is_fragment() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void WingSpiritInfo::clear_has_is_fragment() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void WingSpiritInfo::clear_is_fragment() {
+  is_fragment_ = false;
+  clear_has_is_fragment();
+}
+inline bool WingSpiritInfo::is_fragment() const {
+  return is_fragment_;
+}
+inline void WingSpiritInfo::set_is_fragment(bool value) {
+  set_has_is_fragment();
+  is_fragment_ = value;
+}
+
+// optional int32 level = 3;
+inline bool WingSpiritInfo::has_level() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void WingSpiritInfo::set_has_level() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void WingSpiritInfo::clear_has_level() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void WingSpiritInfo::clear_level() {
+  level_ = 0;
+  clear_has_level();
+}
+inline ::google::protobuf::int32 WingSpiritInfo::level() const {
+  return level_;
+}
+inline void WingSpiritInfo::set_level(::google::protobuf::int32 value) {
+  set_has_level();
+  level_ = value;
+}
+
+// optional int32 self_exp = 4;
+inline bool WingSpiritInfo::has_self_exp() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void WingSpiritInfo::set_has_self_exp() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void WingSpiritInfo::clear_has_self_exp() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void WingSpiritInfo::clear_self_exp() {
+  self_exp_ = 0;
+  clear_has_self_exp();
+}
+inline ::google::protobuf::int32 WingSpiritInfo::self_exp() const {
+  return self_exp_;
+}
+inline void WingSpiritInfo::set_self_exp(::google::protobuf::int32 value) {
+  set_has_self_exp();
+  self_exp_ = value;
+}
+
+// optional int32 add_exp = 5;
+inline bool WingSpiritInfo::has_add_exp() const {
+  return (_has_bits_[0] & 0x00000020u) != 0;
+}
+inline void WingSpiritInfo::set_has_add_exp() {
+  _has_bits_[0] |= 0x00000020u;
+}
+inline void WingSpiritInfo::clear_has_add_exp() {
+  _has_bits_[0] &= ~0x00000020u;
+}
+inline void WingSpiritInfo::clear_add_exp() {
+  add_exp_ = 0;
+  clear_has_add_exp();
+}
+inline ::google::protobuf::int32 WingSpiritInfo::add_exp() const {
+  return add_exp_;
+}
+inline void WingSpiritInfo::set_add_exp(::google::protobuf::int32 value) {
+  set_has_add_exp();
+  add_exp_ = value;
+}
+
+// optional int32 max_exp = 6;
+inline bool WingSpiritInfo::has_max_exp() const {
+  return (_has_bits_[0] & 0x00000040u) != 0;
+}
+inline void WingSpiritInfo::set_has_max_exp() {
+  _has_bits_[0] |= 0x00000040u;
+}
+inline void WingSpiritInfo::clear_has_max_exp() {
+  _has_bits_[0] &= ~0x00000040u;
+}
+inline void WingSpiritInfo::clear_max_exp() {
+  max_exp_ = 0;
+  clear_has_max_exp();
+}
+inline ::google::protobuf::int32 WingSpiritInfo::max_exp() const {
+  return max_exp_;
+}
+inline void WingSpiritInfo::set_max_exp(::google::protobuf::int32 value) {
+  set_has_max_exp();
+  max_exp_ = value;
+}
+
+// repeated .protocols.common.AttributeData attr_plus = 7;
+inline int WingSpiritInfo::attr_plus_size() const {
+  return attr_plus_.size();
+}
+inline void WingSpiritInfo::clear_attr_plus() {
+  attr_plus_.Clear();
+}
+inline const ::protocols::common::AttributeData& WingSpiritInfo::attr_plus(int index) const {
+  return attr_plus_.Get(index);
+}
+inline ::protocols::common::AttributeData* WingSpiritInfo::mutable_attr_plus(int index) {
+  return attr_plus_.Mutable(index);
+}
+inline ::protocols::common::AttributeData* WingSpiritInfo::add_attr_plus() {
+  return attr_plus_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::AttributeData >&
+WingSpiritInfo::attr_plus() const {
+  return attr_plus_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::protocols::common::AttributeData >*
+WingSpiritInfo::mutable_attr_plus() {
+  return &attr_plus_;
+}
+
+// optional int32 index = 8;
+inline bool WingSpiritInfo::has_index() const {
+  return (_has_bits_[0] & 0x00000100u) != 0;
+}
+inline void WingSpiritInfo::set_has_index() {
+  _has_bits_[0] |= 0x00000100u;
+}
+inline void WingSpiritInfo::clear_has_index() {
+  _has_bits_[0] &= ~0x00000100u;
+}
+inline void WingSpiritInfo::clear_index() {
+  index_ = 0;
+  clear_has_index();
+}
+inline ::google::protobuf::int32 WingSpiritInfo::index() const {
+  return index_;
+}
+inline void WingSpiritInfo::set_index(::google::protobuf::int32 value) {
+  set_has_index();
+  index_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// WingSlotInfo
+
+// optional int32 slot_num = 1;
+inline bool WingSlotInfo::has_slot_num() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void WingSlotInfo::set_has_slot_num() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void WingSlotInfo::clear_has_slot_num() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void WingSlotInfo::clear_slot_num() {
+  slot_num_ = 0;
+  clear_has_slot_num();
+}
+inline ::google::protobuf::int32 WingSlotInfo::slot_num() const {
+  return slot_num_;
+}
+inline void WingSlotInfo::set_slot_num(::google::protobuf::int32 value) {
+  set_has_slot_num();
+  slot_num_ = value;
+}
+
+// optional .protocols.common.WingSpiritInfo spirit = 2;
+inline bool WingSlotInfo::has_spirit() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void WingSlotInfo::set_has_spirit() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void WingSlotInfo::clear_has_spirit() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void WingSlotInfo::clear_spirit() {
+  if (spirit_ != NULL) spirit_->::protocols::common::WingSpiritInfo::Clear();
+  clear_has_spirit();
+}
+inline const ::protocols::common::WingSpiritInfo& WingSlotInfo::spirit() const {
+  return spirit_ != NULL ? *spirit_ : *default_instance_->spirit_;
+}
+inline ::protocols::common::WingSpiritInfo* WingSlotInfo::mutable_spirit() {
+  set_has_spirit();
+  if (spirit_ == NULL) spirit_ = new ::protocols::common::WingSpiritInfo;
+  return spirit_;
+}
+inline ::protocols::common::WingSpiritInfo* WingSlotInfo::release_spirit() {
+  clear_has_spirit();
+  ::protocols::common::WingSpiritInfo* temp = spirit_;
+  spirit_ = NULL;
+  return temp;
+}
+
+// -------------------------------------------------------------------
+
+// WingItemInfo
+
+// optional int32 wing_tid = 1;
+inline bool WingItemInfo::has_wing_tid() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void WingItemInfo::set_has_wing_tid() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void WingItemInfo::clear_has_wing_tid() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void WingItemInfo::clear_wing_tid() {
+  wing_tid_ = 0;
+  clear_has_wing_tid();
+}
+inline ::google::protobuf::int32 WingItemInfo::wing_tid() const {
+  return wing_tid_;
+}
+inline void WingItemInfo::set_wing_tid(::google::protobuf::int32 value) {
+  set_has_wing_tid();
+  wing_tid_ = value;
+}
+
+// optional int64 wing_item_id = 5;
+inline bool WingItemInfo::has_wing_item_id() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void WingItemInfo::set_has_wing_item_id() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void WingItemInfo::clear_has_wing_item_id() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void WingItemInfo::clear_wing_item_id() {
+  wing_item_id_ = GOOGLE_LONGLONG(0);
+  clear_has_wing_item_id();
+}
+inline ::google::protobuf::int64 WingItemInfo::wing_item_id() const {
+  return wing_item_id_;
+}
+inline void WingItemInfo::set_wing_item_id(::google::protobuf::int64 value) {
+  set_has_wing_item_id();
+  wing_item_id_ = value;
+}
+
+// optional int64 equipt_guid = 2;
+inline bool WingItemInfo::has_equipt_guid() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void WingItemInfo::set_has_equipt_guid() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void WingItemInfo::clear_has_equipt_guid() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void WingItemInfo::clear_equipt_guid() {
+  equipt_guid_ = GOOGLE_LONGLONG(0);
+  clear_has_equipt_guid();
+}
+inline ::google::protobuf::int64 WingItemInfo::equipt_guid() const {
+  return equipt_guid_;
+}
+inline void WingItemInfo::set_equipt_guid(::google::protobuf::int64 value) {
+  set_has_equipt_guid();
+  equipt_guid_ = value;
+}
+
+// repeated .protocols.common.WingSlotInfo slots = 3;
+inline int WingItemInfo::slots_size() const {
+  return slots_.size();
+}
+inline void WingItemInfo::clear_slots() {
+  slots_.Clear();
+}
+inline const ::protocols::common::WingSlotInfo& WingItemInfo::slots(int index) const {
+  return slots_.Get(index);
+}
+inline ::protocols::common::WingSlotInfo* WingItemInfo::mutable_slots(int index) {
+  return slots_.Mutable(index);
+}
+inline ::protocols::common::WingSlotInfo* WingItemInfo::add_slots() {
+  return slots_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::WingSlotInfo >&
+WingItemInfo::slots() const {
+  return slots_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::protocols::common::WingSlotInfo >*
+WingItemInfo::mutable_slots() {
+  return &slots_;
+}
+
+// optional int64 point = 4;
+inline bool WingItemInfo::has_point() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void WingItemInfo::set_has_point() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void WingItemInfo::clear_has_point() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void WingItemInfo::clear_point() {
+  point_ = GOOGLE_LONGLONG(0);
+  clear_has_point();
+}
+inline ::google::protobuf::int64 WingItemInfo::point() const {
+  return point_;
+}
+inline void WingItemInfo::set_point(::google::protobuf::int64 value) {
+  set_has_point();
+  point_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// WingSpiritBag
+
+// optional int32 max_num = 1;
+inline bool WingSpiritBag::has_max_num() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void WingSpiritBag::set_has_max_num() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void WingSpiritBag::clear_has_max_num() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void WingSpiritBag::clear_max_num() {
+  max_num_ = 0;
+  clear_has_max_num();
+}
+inline ::google::protobuf::int32 WingSpiritBag::max_num() const {
+  return max_num_;
+}
+inline void WingSpiritBag::set_max_num(::google::protobuf::int32 value) {
+  set_has_max_num();
+  max_num_ = value;
+}
+
+// optional int32 open_num = 2;
+inline bool WingSpiritBag::has_open_num() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void WingSpiritBag::set_has_open_num() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void WingSpiritBag::clear_has_open_num() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void WingSpiritBag::clear_open_num() {
+  open_num_ = 0;
+  clear_has_open_num();
+}
+inline ::google::protobuf::int32 WingSpiritBag::open_num() const {
+  return open_num_;
+}
+inline void WingSpiritBag::set_open_num(::google::protobuf::int32 value) {
+  set_has_open_num();
+  open_num_ = value;
+}
+
+// repeated .protocols.common.WingSpiritInfo spirits = 3;
+inline int WingSpiritBag::spirits_size() const {
+  return spirits_.size();
+}
+inline void WingSpiritBag::clear_spirits() {
+  spirits_.Clear();
+}
+inline const ::protocols::common::WingSpiritInfo& WingSpiritBag::spirits(int index) const {
+  return spirits_.Get(index);
+}
+inline ::protocols::common::WingSpiritInfo* WingSpiritBag::mutable_spirits(int index) {
+  return spirits_.Mutable(index);
+}
+inline ::protocols::common::WingSpiritInfo* WingSpiritBag::add_spirits() {
+  return spirits_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::WingSpiritInfo >&
+WingSpiritBag::spirits() const {
+  return spirits_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::protocols::common::WingSpiritInfo >*
+WingSpiritBag::mutable_spirits() {
+  return &spirits_;
+}
+
+// -------------------------------------------------------------------
+
+// SpiritGeneratorInfo
+
+// optional int32 level = 1;
+inline bool SpiritGeneratorInfo::has_level() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void SpiritGeneratorInfo::set_has_level() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void SpiritGeneratorInfo::clear_has_level() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void SpiritGeneratorInfo::clear_level() {
+  level_ = 0;
+  clear_has_level();
+}
+inline ::google::protobuf::int32 SpiritGeneratorInfo::level() const {
+  return level_;
+}
+inline void SpiritGeneratorInfo::set_level(::google::protobuf::int32 value) {
+  set_has_level();
+  level_ = value;
+}
+
+// optional bool is_on = 2;
+inline bool SpiritGeneratorInfo::has_is_on() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void SpiritGeneratorInfo::set_has_is_on() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void SpiritGeneratorInfo::clear_has_is_on() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void SpiritGeneratorInfo::clear_is_on() {
+  is_on_ = false;
+  clear_has_is_on();
+}
+inline bool SpiritGeneratorInfo::is_on() const {
+  return is_on_;
+}
+inline void SpiritGeneratorInfo::set_is_on(bool value) {
+  set_has_is_on();
+  is_on_ = value;
+}
+
+// optional int32 cost_money = 3;
+inline bool SpiritGeneratorInfo::has_cost_money() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void SpiritGeneratorInfo::set_has_cost_money() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void SpiritGeneratorInfo::clear_has_cost_money() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void SpiritGeneratorInfo::clear_cost_money() {
+  cost_money_ = 0;
+  clear_has_cost_money();
+}
+inline ::google::protobuf::int32 SpiritGeneratorInfo::cost_money() const {
+  return cost_money_;
+}
+inline void SpiritGeneratorInfo::set_cost_money(::google::protobuf::int32 value) {
+  set_has_cost_money();
+  cost_money_ = value;
+}
+
+// -------------------------------------------------------------------
+
 // EquipInfo
 
 // required int64 item_id = 1;
@@ -13525,6 +16243,292 @@ inline ::google::protobuf::int32 AttributeData::value() const {
 inline void AttributeData::set_value(::google::protobuf::int32 value) {
   set_has_value();
   value_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// EquipStoneData_StoneData
+
+// optional int32 slot_index = 1;
+inline bool EquipStoneData_StoneData::has_slot_index() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void EquipStoneData_StoneData::set_has_slot_index() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void EquipStoneData_StoneData::clear_has_slot_index() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void EquipStoneData_StoneData::clear_slot_index() {
+  slot_index_ = 0;
+  clear_has_slot_index();
+}
+inline ::google::protobuf::int32 EquipStoneData_StoneData::slot_index() const {
+  return slot_index_;
+}
+inline void EquipStoneData_StoneData::set_slot_index(::google::protobuf::int32 value) {
+  set_has_slot_index();
+  slot_index_ = value;
+}
+
+// optional int32 stone_id = 2;
+inline bool EquipStoneData_StoneData::has_stone_id() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void EquipStoneData_StoneData::set_has_stone_id() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void EquipStoneData_StoneData::clear_has_stone_id() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void EquipStoneData_StoneData::clear_stone_id() {
+  stone_id_ = 0;
+  clear_has_stone_id();
+}
+inline ::google::protobuf::int32 EquipStoneData_StoneData::stone_id() const {
+  return stone_id_;
+}
+inline void EquipStoneData_StoneData::set_stone_id(::google::protobuf::int32 value) {
+  set_has_stone_id();
+  stone_id_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// EquipStoneData
+
+// repeated .protocols.common.EquipStoneData.StoneData stone_data = 2;
+inline int EquipStoneData::stone_data_size() const {
+  return stone_data_.size();
+}
+inline void EquipStoneData::clear_stone_data() {
+  stone_data_.Clear();
+}
+inline const ::protocols::common::EquipStoneData_StoneData& EquipStoneData::stone_data(int index) const {
+  return stone_data_.Get(index);
+}
+inline ::protocols::common::EquipStoneData_StoneData* EquipStoneData::mutable_stone_data(int index) {
+  return stone_data_.Mutable(index);
+}
+inline ::protocols::common::EquipStoneData_StoneData* EquipStoneData::add_stone_data() {
+  return stone_data_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::EquipStoneData_StoneData >&
+EquipStoneData::stone_data() const {
+  return stone_data_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::protocols::common::EquipStoneData_StoneData >*
+EquipStoneData::mutable_stone_data() {
+  return &stone_data_;
+}
+
+// optional int32 cur_socket_count = 3;
+inline bool EquipStoneData::has_cur_socket_count() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void EquipStoneData::set_has_cur_socket_count() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void EquipStoneData::clear_has_cur_socket_count() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void EquipStoneData::clear_cur_socket_count() {
+  cur_socket_count_ = 0;
+  clear_has_cur_socket_count();
+}
+inline ::google::protobuf::int32 EquipStoneData::cur_socket_count() const {
+  return cur_socket_count_;
+}
+inline void EquipStoneData::set_cur_socket_count(::google::protobuf::int32 value) {
+  set_has_cur_socket_count();
+  cur_socket_count_ = value;
+}
+
+// optional int32 max_socket_count = 4;
+inline bool EquipStoneData::has_max_socket_count() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void EquipStoneData::set_has_max_socket_count() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void EquipStoneData::clear_has_max_socket_count() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void EquipStoneData::clear_max_socket_count() {
+  max_socket_count_ = 0;
+  clear_has_max_socket_count();
+}
+inline ::google::protobuf::int32 EquipStoneData::max_socket_count() const {
+  return max_socket_count_;
+}
+inline void EquipStoneData::set_max_socket_count(::google::protobuf::int32 value) {
+  set_has_max_socket_count();
+  max_socket_count_ = value;
+}
+
+// optional int32 strength_client_chance = 5;
+inline bool EquipStoneData::has_strength_client_chance() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void EquipStoneData::set_has_strength_client_chance() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void EquipStoneData::clear_has_strength_client_chance() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void EquipStoneData::clear_strength_client_chance() {
+  strength_client_chance_ = 0;
+  clear_has_strength_client_chance();
+}
+inline ::google::protobuf::int32 EquipStoneData::strength_client_chance() const {
+  return strength_client_chance_;
+}
+inline void EquipStoneData::set_strength_client_chance(::google::protobuf::int32 value) {
+  set_has_strength_client_chance();
+  strength_client_chance_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// DBSlotData
+
+// optional int32 locked_attr_bits = 1;
+inline bool DBSlotData::has_locked_attr_bits() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void DBSlotData::set_has_locked_attr_bits() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void DBSlotData::clear_has_locked_attr_bits() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void DBSlotData::clear_locked_attr_bits() {
+  locked_attr_bits_ = 0;
+  clear_has_locked_attr_bits();
+}
+inline ::google::protobuf::int32 DBSlotData::locked_attr_bits() const {
+  return locked_attr_bits_;
+}
+inline void DBSlotData::set_locked_attr_bits(::google::protobuf::int32 value) {
+  set_has_locked_attr_bits();
+  locked_attr_bits_ = value;
+}
+
+// optional .protocols.common.EquipStoneData stone_data = 2;
+inline bool DBSlotData::has_stone_data() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void DBSlotData::set_has_stone_data() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void DBSlotData::clear_has_stone_data() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void DBSlotData::clear_stone_data() {
+  if (stone_data_ != NULL) stone_data_->::protocols::common::EquipStoneData::Clear();
+  clear_has_stone_data();
+}
+inline const ::protocols::common::EquipStoneData& DBSlotData::stone_data() const {
+  return stone_data_ != NULL ? *stone_data_ : *default_instance_->stone_data_;
+}
+inline ::protocols::common::EquipStoneData* DBSlotData::mutable_stone_data() {
+  set_has_stone_data();
+  if (stone_data_ == NULL) stone_data_ = new ::protocols::common::EquipStoneData;
+  return stone_data_;
+}
+inline ::protocols::common::EquipStoneData* DBSlotData::release_stone_data() {
+  clear_has_stone_data();
+  ::protocols::common::EquipStoneData* temp = stone_data_;
+  stone_data_ = NULL;
+  return temp;
+}
+
+// optional int32 socket_num = 3;
+inline bool DBSlotData::has_socket_num() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void DBSlotData::set_has_socket_num() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void DBSlotData::clear_has_socket_num() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void DBSlotData::clear_socket_num() {
+  socket_num_ = 0;
+  clear_has_socket_num();
+}
+inline ::google::protobuf::int32 DBSlotData::socket_num() const {
+  return socket_num_;
+}
+inline void DBSlotData::set_socket_num(::google::protobuf::int32 value) {
+  set_has_socket_num();
+  socket_num_ = value;
+}
+
+// optional int32 strength_fail_num = 4;
+inline bool DBSlotData::has_strength_fail_num() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void DBSlotData::set_has_strength_fail_num() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void DBSlotData::clear_has_strength_fail_num() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void DBSlotData::clear_strength_fail_num() {
+  strength_fail_num_ = 0;
+  clear_has_strength_fail_num();
+}
+inline ::google::protobuf::int32 DBSlotData::strength_fail_num() const {
+  return strength_fail_num_;
+}
+inline void DBSlotData::set_strength_fail_num(::google::protobuf::int32 value) {
+  set_has_strength_fail_num();
+  strength_fail_num_ = value;
+}
+
+// optional int32 strength_chance = 5;
+inline bool DBSlotData::has_strength_chance() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void DBSlotData::set_has_strength_chance() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void DBSlotData::clear_has_strength_chance() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void DBSlotData::clear_strength_chance() {
+  strength_chance_ = 0;
+  clear_has_strength_chance();
+}
+inline ::google::protobuf::int32 DBSlotData::strength_chance() const {
+  return strength_chance_;
+}
+inline void DBSlotData::set_strength_chance(::google::protobuf::int32 value) {
+  set_has_strength_chance();
+  strength_chance_ = value;
+}
+
+// optional int32 strength_client_chance = 6;
+inline bool DBSlotData::has_strength_client_chance() const {
+  return (_has_bits_[0] & 0x00000020u) != 0;
+}
+inline void DBSlotData::set_has_strength_client_chance() {
+  _has_bits_[0] |= 0x00000020u;
+}
+inline void DBSlotData::clear_has_strength_client_chance() {
+  _has_bits_[0] &= ~0x00000020u;
+}
+inline void DBSlotData::clear_strength_client_chance() {
+  strength_client_chance_ = 0;
+  clear_has_strength_client_chance();
+}
+inline ::google::protobuf::int32 DBSlotData::strength_client_chance() const {
+  return strength_client_chance_;
+}
+inline void DBSlotData::set_strength_client_chance(::google::protobuf::int32 value) {
+  set_has_strength_client_chance();
+  strength_client_chance_ = value;
 }
 
 // -------------------------------------------------------------------
@@ -13814,290 +16818,33 @@ inline ::protocols::common::EquipStoneData* EquipDetail::release_stone_data() {
   return temp;
 }
 
-// -------------------------------------------------------------------
-
-// EquipStoneData_StoneData
-
-// optional int32 slot_index = 1;
-inline bool EquipStoneData_StoneData::has_slot_index() const {
-  return (_has_bits_[0] & 0x00000001u) != 0;
+// optional .protocols.common.WingItemInfo wing_info = 14;
+inline bool EquipDetail::has_wing_info() const {
+  return (_has_bits_[0] & 0x00001000u) != 0;
 }
-inline void EquipStoneData_StoneData::set_has_slot_index() {
-  _has_bits_[0] |= 0x00000001u;
+inline void EquipDetail::set_has_wing_info() {
+  _has_bits_[0] |= 0x00001000u;
 }
-inline void EquipStoneData_StoneData::clear_has_slot_index() {
-  _has_bits_[0] &= ~0x00000001u;
+inline void EquipDetail::clear_has_wing_info() {
+  _has_bits_[0] &= ~0x00001000u;
 }
-inline void EquipStoneData_StoneData::clear_slot_index() {
-  slot_index_ = 0;
-  clear_has_slot_index();
+inline void EquipDetail::clear_wing_info() {
+  if (wing_info_ != NULL) wing_info_->::protocols::common::WingItemInfo::Clear();
+  clear_has_wing_info();
 }
-inline ::google::protobuf::int32 EquipStoneData_StoneData::slot_index() const {
-  return slot_index_;
+inline const ::protocols::common::WingItemInfo& EquipDetail::wing_info() const {
+  return wing_info_ != NULL ? *wing_info_ : *default_instance_->wing_info_;
 }
-inline void EquipStoneData_StoneData::set_slot_index(::google::protobuf::int32 value) {
-  set_has_slot_index();
-  slot_index_ = value;
+inline ::protocols::common::WingItemInfo* EquipDetail::mutable_wing_info() {
+  set_has_wing_info();
+  if (wing_info_ == NULL) wing_info_ = new ::protocols::common::WingItemInfo;
+  return wing_info_;
 }
-
-// optional int32 stone_id = 2;
-inline bool EquipStoneData_StoneData::has_stone_id() const {
-  return (_has_bits_[0] & 0x00000002u) != 0;
-}
-inline void EquipStoneData_StoneData::set_has_stone_id() {
-  _has_bits_[0] |= 0x00000002u;
-}
-inline void EquipStoneData_StoneData::clear_has_stone_id() {
-  _has_bits_[0] &= ~0x00000002u;
-}
-inline void EquipStoneData_StoneData::clear_stone_id() {
-  stone_id_ = 0;
-  clear_has_stone_id();
-}
-inline ::google::protobuf::int32 EquipStoneData_StoneData::stone_id() const {
-  return stone_id_;
-}
-inline void EquipStoneData_StoneData::set_stone_id(::google::protobuf::int32 value) {
-  set_has_stone_id();
-  stone_id_ = value;
-}
-
-// -------------------------------------------------------------------
-
-// EquipStoneData
-
-// repeated .protocols.common.EquipStoneData.StoneData stone_data = 2;
-inline int EquipStoneData::stone_data_size() const {
-  return stone_data_.size();
-}
-inline void EquipStoneData::clear_stone_data() {
-  stone_data_.Clear();
-}
-inline const ::protocols::common::EquipStoneData_StoneData& EquipStoneData::stone_data(int index) const {
-  return stone_data_.Get(index);
-}
-inline ::protocols::common::EquipStoneData_StoneData* EquipStoneData::mutable_stone_data(int index) {
-  return stone_data_.Mutable(index);
-}
-inline ::protocols::common::EquipStoneData_StoneData* EquipStoneData::add_stone_data() {
-  return stone_data_.Add();
-}
-inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::EquipStoneData_StoneData >&
-EquipStoneData::stone_data() const {
-  return stone_data_;
-}
-inline ::google::protobuf::RepeatedPtrField< ::protocols::common::EquipStoneData_StoneData >*
-EquipStoneData::mutable_stone_data() {
-  return &stone_data_;
-}
-
-// optional int32 cur_socket_count = 3;
-inline bool EquipStoneData::has_cur_socket_count() const {
-  return (_has_bits_[0] & 0x00000002u) != 0;
-}
-inline void EquipStoneData::set_has_cur_socket_count() {
-  _has_bits_[0] |= 0x00000002u;
-}
-inline void EquipStoneData::clear_has_cur_socket_count() {
-  _has_bits_[0] &= ~0x00000002u;
-}
-inline void EquipStoneData::clear_cur_socket_count() {
-  cur_socket_count_ = 0;
-  clear_has_cur_socket_count();
-}
-inline ::google::protobuf::int32 EquipStoneData::cur_socket_count() const {
-  return cur_socket_count_;
-}
-inline void EquipStoneData::set_cur_socket_count(::google::protobuf::int32 value) {
-  set_has_cur_socket_count();
-  cur_socket_count_ = value;
-}
-
-// optional int32 max_socket_count = 4;
-inline bool EquipStoneData::has_max_socket_count() const {
-  return (_has_bits_[0] & 0x00000004u) != 0;
-}
-inline void EquipStoneData::set_has_max_socket_count() {
-  _has_bits_[0] |= 0x00000004u;
-}
-inline void EquipStoneData::clear_has_max_socket_count() {
-  _has_bits_[0] &= ~0x00000004u;
-}
-inline void EquipStoneData::clear_max_socket_count() {
-  max_socket_count_ = 0;
-  clear_has_max_socket_count();
-}
-inline ::google::protobuf::int32 EquipStoneData::max_socket_count() const {
-  return max_socket_count_;
-}
-inline void EquipStoneData::set_max_socket_count(::google::protobuf::int32 value) {
-  set_has_max_socket_count();
-  max_socket_count_ = value;
-}
-
-// optional int32 strength_client_chance = 5;
-inline bool EquipStoneData::has_strength_client_chance() const {
-  return (_has_bits_[0] & 0x00000008u) != 0;
-}
-inline void EquipStoneData::set_has_strength_client_chance() {
-  _has_bits_[0] |= 0x00000008u;
-}
-inline void EquipStoneData::clear_has_strength_client_chance() {
-  _has_bits_[0] &= ~0x00000008u;
-}
-inline void EquipStoneData::clear_strength_client_chance() {
-  strength_client_chance_ = 0;
-  clear_has_strength_client_chance();
-}
-inline ::google::protobuf::int32 EquipStoneData::strength_client_chance() const {
-  return strength_client_chance_;
-}
-inline void EquipStoneData::set_strength_client_chance(::google::protobuf::int32 value) {
-  set_has_strength_client_chance();
-  strength_client_chance_ = value;
-}
-
-// -------------------------------------------------------------------
-
-// DBSlotData
-
-// optional int32 locked_attr_bits = 1;
-inline bool DBSlotData::has_locked_attr_bits() const {
-  return (_has_bits_[0] & 0x00000001u) != 0;
-}
-inline void DBSlotData::set_has_locked_attr_bits() {
-  _has_bits_[0] |= 0x00000001u;
-}
-inline void DBSlotData::clear_has_locked_attr_bits() {
-  _has_bits_[0] &= ~0x00000001u;
-}
-inline void DBSlotData::clear_locked_attr_bits() {
-  locked_attr_bits_ = 0;
-  clear_has_locked_attr_bits();
-}
-inline ::google::protobuf::int32 DBSlotData::locked_attr_bits() const {
-  return locked_attr_bits_;
-}
-inline void DBSlotData::set_locked_attr_bits(::google::protobuf::int32 value) {
-  set_has_locked_attr_bits();
-  locked_attr_bits_ = value;
-}
-
-// optional .protocols.common.EquipStoneData stone_data = 2;
-inline bool DBSlotData::has_stone_data() const {
-  return (_has_bits_[0] & 0x00000002u) != 0;
-}
-inline void DBSlotData::set_has_stone_data() {
-  _has_bits_[0] |= 0x00000002u;
-}
-inline void DBSlotData::clear_has_stone_data() {
-  _has_bits_[0] &= ~0x00000002u;
-}
-inline void DBSlotData::clear_stone_data() {
-  if (stone_data_ != NULL) stone_data_->::protocols::common::EquipStoneData::Clear();
-  clear_has_stone_data();
-}
-inline const ::protocols::common::EquipStoneData& DBSlotData::stone_data() const {
-  return stone_data_ != NULL ? *stone_data_ : *default_instance_->stone_data_;
-}
-inline ::protocols::common::EquipStoneData* DBSlotData::mutable_stone_data() {
-  set_has_stone_data();
-  if (stone_data_ == NULL) stone_data_ = new ::protocols::common::EquipStoneData;
-  return stone_data_;
-}
-inline ::protocols::common::EquipStoneData* DBSlotData::release_stone_data() {
-  clear_has_stone_data();
-  ::protocols::common::EquipStoneData* temp = stone_data_;
-  stone_data_ = NULL;
+inline ::protocols::common::WingItemInfo* EquipDetail::release_wing_info() {
+  clear_has_wing_info();
+  ::protocols::common::WingItemInfo* temp = wing_info_;
+  wing_info_ = NULL;
   return temp;
-}
-
-// optional int32 socket_num = 3;
-inline bool DBSlotData::has_socket_num() const {
-  return (_has_bits_[0] & 0x00000004u) != 0;
-}
-inline void DBSlotData::set_has_socket_num() {
-  _has_bits_[0] |= 0x00000004u;
-}
-inline void DBSlotData::clear_has_socket_num() {
-  _has_bits_[0] &= ~0x00000004u;
-}
-inline void DBSlotData::clear_socket_num() {
-  socket_num_ = 0;
-  clear_has_socket_num();
-}
-inline ::google::protobuf::int32 DBSlotData::socket_num() const {
-  return socket_num_;
-}
-inline void DBSlotData::set_socket_num(::google::protobuf::int32 value) {
-  set_has_socket_num();
-  socket_num_ = value;
-}
-
-// optional int32 strength_fail_num = 4;
-inline bool DBSlotData::has_strength_fail_num() const {
-  return (_has_bits_[0] & 0x00000008u) != 0;
-}
-inline void DBSlotData::set_has_strength_fail_num() {
-  _has_bits_[0] |= 0x00000008u;
-}
-inline void DBSlotData::clear_has_strength_fail_num() {
-  _has_bits_[0] &= ~0x00000008u;
-}
-inline void DBSlotData::clear_strength_fail_num() {
-  strength_fail_num_ = 0;
-  clear_has_strength_fail_num();
-}
-inline ::google::protobuf::int32 DBSlotData::strength_fail_num() const {
-  return strength_fail_num_;
-}
-inline void DBSlotData::set_strength_fail_num(::google::protobuf::int32 value) {
-  set_has_strength_fail_num();
-  strength_fail_num_ = value;
-}
-
-// optional int32 strength_chance = 5;
-inline bool DBSlotData::has_strength_chance() const {
-  return (_has_bits_[0] & 0x00000010u) != 0;
-}
-inline void DBSlotData::set_has_strength_chance() {
-  _has_bits_[0] |= 0x00000010u;
-}
-inline void DBSlotData::clear_has_strength_chance() {
-  _has_bits_[0] &= ~0x00000010u;
-}
-inline void DBSlotData::clear_strength_chance() {
-  strength_chance_ = 0;
-  clear_has_strength_chance();
-}
-inline ::google::protobuf::int32 DBSlotData::strength_chance() const {
-  return strength_chance_;
-}
-inline void DBSlotData::set_strength_chance(::google::protobuf::int32 value) {
-  set_has_strength_chance();
-  strength_chance_ = value;
-}
-
-// optional int32 strength_client_chance = 6;
-inline bool DBSlotData::has_strength_client_chance() const {
-  return (_has_bits_[0] & 0x00000020u) != 0;
-}
-inline void DBSlotData::set_has_strength_client_chance() {
-  _has_bits_[0] |= 0x00000020u;
-}
-inline void DBSlotData::clear_has_strength_client_chance() {
-  _has_bits_[0] &= ~0x00000020u;
-}
-inline void DBSlotData::clear_strength_client_chance() {
-  strength_client_chance_ = 0;
-  clear_has_strength_client_chance();
-}
-inline ::google::protobuf::int32 DBSlotData::strength_client_chance() const {
-  return strength_client_chance_;
-}
-inline void DBSlotData::set_strength_client_chance(::google::protobuf::int32 value) {
-  set_has_strength_client_chance();
-  strength_client_chance_ = value;
 }
 
 // -------------------------------------------------------------------
@@ -14927,6 +17674,72 @@ inline void QuestPreCondition::set_daily_reset(bool value) {
   daily_reset_ = value;
 }
 
+// optional bool need_guild = 14;
+inline bool QuestPreCondition::has_need_guild() const {
+  return (_has_bits_[0] & 0x00002000u) != 0;
+}
+inline void QuestPreCondition::set_has_need_guild() {
+  _has_bits_[0] |= 0x00002000u;
+}
+inline void QuestPreCondition::clear_has_need_guild() {
+  _has_bits_[0] &= ~0x00002000u;
+}
+inline void QuestPreCondition::clear_need_guild() {
+  need_guild_ = false;
+  clear_has_need_guild();
+}
+inline bool QuestPreCondition::need_guild() const {
+  return need_guild_;
+}
+inline void QuestPreCondition::set_need_guild(bool value) {
+  set_has_need_guild();
+  need_guild_ = value;
+}
+
+// optional bool need_guild_check = 15;
+inline bool QuestPreCondition::has_need_guild_check() const {
+  return (_has_bits_[0] & 0x00004000u) != 0;
+}
+inline void QuestPreCondition::set_has_need_guild_check() {
+  _has_bits_[0] |= 0x00004000u;
+}
+inline void QuestPreCondition::clear_has_need_guild_check() {
+  _has_bits_[0] &= ~0x00004000u;
+}
+inline void QuestPreCondition::clear_need_guild_check() {
+  need_guild_check_ = false;
+  clear_has_need_guild_check();
+}
+inline bool QuestPreCondition::need_guild_check() const {
+  return need_guild_check_;
+}
+inline void QuestPreCondition::set_need_guild_check(bool value) {
+  set_has_need_guild_check();
+  need_guild_check_ = value;
+}
+
+// optional bool repeatable = 16;
+inline bool QuestPreCondition::has_repeatable() const {
+  return (_has_bits_[0] & 0x00008000u) != 0;
+}
+inline void QuestPreCondition::set_has_repeatable() {
+  _has_bits_[0] |= 0x00008000u;
+}
+inline void QuestPreCondition::clear_has_repeatable() {
+  _has_bits_[0] &= ~0x00008000u;
+}
+inline void QuestPreCondition::clear_repeatable() {
+  repeatable_ = false;
+  clear_has_repeatable();
+}
+inline bool QuestPreCondition::repeatable() const {
+  return repeatable_;
+}
+inline void QuestPreCondition::set_repeatable(bool value) {
+  set_has_repeatable();
+  repeatable_ = value;
+}
+
 // -------------------------------------------------------------------
 
 // QuestRewards_QuestRewardItem
@@ -15046,6 +17859,72 @@ QuestRewards::item() const {
 inline ::google::protobuf::RepeatedPtrField< ::protocols::common::QuestRewards_QuestRewardItem >*
 QuestRewards::mutable_item() {
   return &item_;
+}
+
+// optional int32 guild_contribution = 4;
+inline bool QuestRewards::has_guild_contribution() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void QuestRewards::set_has_guild_contribution() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void QuestRewards::clear_has_guild_contribution() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void QuestRewards::clear_guild_contribution() {
+  guild_contribution_ = 0;
+  clear_has_guild_contribution();
+}
+inline ::google::protobuf::int32 QuestRewards::guild_contribution() const {
+  return guild_contribution_;
+}
+inline void QuestRewards::set_guild_contribution(::google::protobuf::int32 value) {
+  set_has_guild_contribution();
+  guild_contribution_ = value;
+}
+
+// optional int32 guild_exp = 5;
+inline bool QuestRewards::has_guild_exp() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void QuestRewards::set_has_guild_exp() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void QuestRewards::clear_has_guild_exp() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void QuestRewards::clear_guild_exp() {
+  guild_exp_ = 0;
+  clear_has_guild_exp();
+}
+inline ::google::protobuf::int32 QuestRewards::guild_exp() const {
+  return guild_exp_;
+}
+inline void QuestRewards::set_guild_exp(::google::protobuf::int32 value) {
+  set_has_guild_exp();
+  guild_exp_ = value;
+}
+
+// optional int32 guild_crystal = 6;
+inline bool QuestRewards::has_guild_crystal() const {
+  return (_has_bits_[0] & 0x00000020u) != 0;
+}
+inline void QuestRewards::set_has_guild_crystal() {
+  _has_bits_[0] |= 0x00000020u;
+}
+inline void QuestRewards::clear_has_guild_crystal() {
+  _has_bits_[0] &= ~0x00000020u;
+}
+inline void QuestRewards::clear_guild_crystal() {
+  guild_crystal_ = 0;
+  clear_has_guild_crystal();
+}
+inline ::google::protobuf::int32 QuestRewards::guild_crystal() const {
+  return guild_crystal_;
+}
+inline void QuestRewards::set_guild_crystal(::google::protobuf::int32 value) {
+  set_has_guild_crystal();
+  guild_crystal_ = value;
 }
 
 // -------------------------------------------------------------------
@@ -15236,6 +18115,601 @@ inline void QuestProtoype::set_quest_type(protocols::common::QuestType value) {
   GOOGLE_DCHECK(protocols::common::QuestType_IsValid(value));
   set_has_quest_type();
   quest_type_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// GuildCrystalReward
+
+// optional int32 x = 1;
+inline bool GuildCrystalReward::has_x() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void GuildCrystalReward::set_has_x() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void GuildCrystalReward::clear_has_x() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void GuildCrystalReward::clear_x() {
+  x_ = 0;
+  clear_has_x();
+}
+inline ::google::protobuf::int32 GuildCrystalReward::x() const {
+  return x_;
+}
+inline void GuildCrystalReward::set_x(::google::protobuf::int32 value) {
+  set_has_x();
+  x_ = value;
+}
+
+// optional int32 y = 2;
+inline bool GuildCrystalReward::has_y() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void GuildCrystalReward::set_has_y() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void GuildCrystalReward::clear_has_y() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void GuildCrystalReward::clear_y() {
+  y_ = 0;
+  clear_has_y();
+}
+inline ::google::protobuf::int32 GuildCrystalReward::y() const {
+  return y_;
+}
+inline void GuildCrystalReward::set_y(::google::protobuf::int32 value) {
+  set_has_y();
+  y_ = value;
+}
+
+// optional int32 item_id = 3;
+inline bool GuildCrystalReward::has_item_id() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void GuildCrystalReward::set_has_item_id() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void GuildCrystalReward::clear_has_item_id() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void GuildCrystalReward::clear_item_id() {
+  item_id_ = 0;
+  clear_has_item_id();
+}
+inline ::google::protobuf::int32 GuildCrystalReward::item_id() const {
+  return item_id_;
+}
+inline void GuildCrystalReward::set_item_id(::google::protobuf::int32 value) {
+  set_has_item_id();
+  item_id_ = value;
+}
+
+// optional int32 item_count = 4;
+inline bool GuildCrystalReward::has_item_count() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void GuildCrystalReward::set_has_item_count() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void GuildCrystalReward::clear_has_item_count() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void GuildCrystalReward::clear_item_count() {
+  item_count_ = 0;
+  clear_has_item_count();
+}
+inline ::google::protobuf::int32 GuildCrystalReward::item_count() const {
+  return item_count_;
+}
+inline void GuildCrystalReward::set_item_count(::google::protobuf::int32 value) {
+  set_has_item_count();
+  item_count_ = value;
+}
+
+// optional bool picked = 5;
+inline bool GuildCrystalReward::has_picked() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void GuildCrystalReward::set_has_picked() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void GuildCrystalReward::clear_has_picked() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void GuildCrystalReward::clear_picked() {
+  picked_ = false;
+  clear_has_picked();
+}
+inline bool GuildCrystalReward::picked() const {
+  return picked_;
+}
+inline void GuildCrystalReward::set_picked(bool value) {
+  set_has_picked();
+  picked_ = value;
+}
+
+// optional int32 collecting_player_id = 6;
+inline bool GuildCrystalReward::has_collecting_player_id() const {
+  return (_has_bits_[0] & 0x00000020u) != 0;
+}
+inline void GuildCrystalReward::set_has_collecting_player_id() {
+  _has_bits_[0] |= 0x00000020u;
+}
+inline void GuildCrystalReward::clear_has_collecting_player_id() {
+  _has_bits_[0] &= ~0x00000020u;
+}
+inline void GuildCrystalReward::clear_collecting_player_id() {
+  collecting_player_id_ = 0;
+  clear_has_collecting_player_id();
+}
+inline ::google::protobuf::int32 GuildCrystalReward::collecting_player_id() const {
+  return collecting_player_id_;
+}
+inline void GuildCrystalReward::set_collecting_player_id(::google::protobuf::int32 value) {
+  set_has_collecting_player_id();
+  collecting_player_id_ = value;
+}
+
+// optional int32 collecting_tick = 7;
+inline bool GuildCrystalReward::has_collecting_tick() const {
+  return (_has_bits_[0] & 0x00000040u) != 0;
+}
+inline void GuildCrystalReward::set_has_collecting_tick() {
+  _has_bits_[0] |= 0x00000040u;
+}
+inline void GuildCrystalReward::clear_has_collecting_tick() {
+  _has_bits_[0] &= ~0x00000040u;
+}
+inline void GuildCrystalReward::clear_collecting_tick() {
+  collecting_tick_ = 0;
+  clear_has_collecting_tick();
+}
+inline ::google::protobuf::int32 GuildCrystalReward::collecting_tick() const {
+  return collecting_tick_;
+}
+inline void GuildCrystalReward::set_collecting_tick(::google::protobuf::int32 value) {
+  set_has_collecting_tick();
+  collecting_tick_ = value;
+}
+
+// optional int32 display_id = 8;
+inline bool GuildCrystalReward::has_display_id() const {
+  return (_has_bits_[0] & 0x00000080u) != 0;
+}
+inline void GuildCrystalReward::set_has_display_id() {
+  _has_bits_[0] |= 0x00000080u;
+}
+inline void GuildCrystalReward::clear_has_display_id() {
+  _has_bits_[0] &= ~0x00000080u;
+}
+inline void GuildCrystalReward::clear_display_id() {
+  display_id_ = 0;
+  clear_has_display_id();
+}
+inline ::google::protobuf::int32 GuildCrystalReward::display_id() const {
+  return display_id_;
+}
+inline void GuildCrystalReward::set_display_id(::google::protobuf::int32 value) {
+  set_has_display_id();
+  display_id_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// TreasureBoxReward
+
+// optional int32 act_id = 1;
+inline bool TreasureBoxReward::has_act_id() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void TreasureBoxReward::set_has_act_id() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void TreasureBoxReward::clear_has_act_id() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void TreasureBoxReward::clear_act_id() {
+  act_id_ = 0;
+  clear_has_act_id();
+}
+inline ::google::protobuf::int32 TreasureBoxReward::act_id() const {
+  return act_id_;
+}
+inline void TreasureBoxReward::set_act_id(::google::protobuf::int32 value) {
+  set_has_act_id();
+  act_id_ = value;
+}
+
+// optional int32 index = 2;
+inline bool TreasureBoxReward::has_index() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void TreasureBoxReward::set_has_index() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void TreasureBoxReward::clear_has_index() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void TreasureBoxReward::clear_index() {
+  index_ = 0;
+  clear_has_index();
+}
+inline ::google::protobuf::int32 TreasureBoxReward::index() const {
+  return index_;
+}
+inline void TreasureBoxReward::set_index(::google::protobuf::int32 value) {
+  set_has_index();
+  index_ = value;
+}
+
+// optional int32 map_id = 3;
+inline bool TreasureBoxReward::has_map_id() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void TreasureBoxReward::set_has_map_id() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void TreasureBoxReward::clear_has_map_id() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void TreasureBoxReward::clear_map_id() {
+  map_id_ = 0;
+  clear_has_map_id();
+}
+inline ::google::protobuf::int32 TreasureBoxReward::map_id() const {
+  return map_id_;
+}
+inline void TreasureBoxReward::set_map_id(::google::protobuf::int32 value) {
+  set_has_map_id();
+  map_id_ = value;
+}
+
+// optional int32 map_x = 4;
+inline bool TreasureBoxReward::has_map_x() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void TreasureBoxReward::set_has_map_x() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void TreasureBoxReward::clear_has_map_x() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void TreasureBoxReward::clear_map_x() {
+  map_x_ = 0;
+  clear_has_map_x();
+}
+inline ::google::protobuf::int32 TreasureBoxReward::map_x() const {
+  return map_x_;
+}
+inline void TreasureBoxReward::set_map_x(::google::protobuf::int32 value) {
+  set_has_map_x();
+  map_x_ = value;
+}
+
+// optional int32 map_y = 5;
+inline bool TreasureBoxReward::has_map_y() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void TreasureBoxReward::set_has_map_y() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void TreasureBoxReward::clear_has_map_y() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void TreasureBoxReward::clear_map_y() {
+  map_y_ = 0;
+  clear_has_map_y();
+}
+inline ::google::protobuf::int32 TreasureBoxReward::map_y() const {
+  return map_y_;
+}
+inline void TreasureBoxReward::set_map_y(::google::protobuf::int32 value) {
+  set_has_map_y();
+  map_y_ = value;
+}
+
+// optional int32 icon_id = 6;
+inline bool TreasureBoxReward::has_icon_id() const {
+  return (_has_bits_[0] & 0x00000020u) != 0;
+}
+inline void TreasureBoxReward::set_has_icon_id() {
+  _has_bits_[0] |= 0x00000020u;
+}
+inline void TreasureBoxReward::clear_has_icon_id() {
+  _has_bits_[0] &= ~0x00000020u;
+}
+inline void TreasureBoxReward::clear_icon_id() {
+  icon_id_ = 0;
+  clear_has_icon_id();
+}
+inline ::google::protobuf::int32 TreasureBoxReward::icon_id() const {
+  return icon_id_;
+}
+inline void TreasureBoxReward::set_icon_id(::google::protobuf::int32 value) {
+  set_has_icon_id();
+  icon_id_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// GuildCrystalTowerActivityData
+
+// optional int32 last_activity_time_sec = 1;
+inline bool GuildCrystalTowerActivityData::has_last_activity_time_sec() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void GuildCrystalTowerActivityData::set_has_last_activity_time_sec() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void GuildCrystalTowerActivityData::clear_has_last_activity_time_sec() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void GuildCrystalTowerActivityData::clear_last_activity_time_sec() {
+  last_activity_time_sec_ = 0;
+  clear_has_last_activity_time_sec();
+}
+inline ::google::protobuf::int32 GuildCrystalTowerActivityData::last_activity_time_sec() const {
+  return last_activity_time_sec_;
+}
+inline void GuildCrystalTowerActivityData::set_last_activity_time_sec(::google::protobuf::int32 value) {
+  set_has_last_activity_time_sec();
+  last_activity_time_sec_ = value;
+}
+
+// optional int32 tower_category = 2;
+inline bool GuildCrystalTowerActivityData::has_tower_category() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void GuildCrystalTowerActivityData::set_has_tower_category() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void GuildCrystalTowerActivityData::clear_has_tower_category() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void GuildCrystalTowerActivityData::clear_tower_category() {
+  tower_category_ = 0;
+  clear_has_tower_category();
+}
+inline ::google::protobuf::int32 GuildCrystalTowerActivityData::tower_category() const {
+  return tower_category_;
+}
+inline void GuildCrystalTowerActivityData::set_tower_category(::google::protobuf::int32 value) {
+  set_has_tower_category();
+  tower_category_ = value;
+}
+
+// optional int32 start_sec = 3;
+inline bool GuildCrystalTowerActivityData::has_start_sec() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void GuildCrystalTowerActivityData::set_has_start_sec() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void GuildCrystalTowerActivityData::clear_has_start_sec() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void GuildCrystalTowerActivityData::clear_start_sec() {
+  start_sec_ = 0;
+  clear_has_start_sec();
+}
+inline ::google::protobuf::int32 GuildCrystalTowerActivityData::start_sec() const {
+  return start_sec_;
+}
+inline void GuildCrystalTowerActivityData::set_start_sec(::google::protobuf::int32 value) {
+  set_has_start_sec();
+  start_sec_ = value;
+}
+
+// optional int32 activity_duration = 4;
+inline bool GuildCrystalTowerActivityData::has_activity_duration() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void GuildCrystalTowerActivityData::set_has_activity_duration() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void GuildCrystalTowerActivityData::clear_has_activity_duration() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void GuildCrystalTowerActivityData::clear_activity_duration() {
+  activity_duration_ = 0;
+  clear_has_activity_duration();
+}
+inline ::google::protobuf::int32 GuildCrystalTowerActivityData::activity_duration() const {
+  return activity_duration_;
+}
+inline void GuildCrystalTowerActivityData::set_activity_duration(::google::protobuf::int32 value) {
+  set_has_activity_duration();
+  activity_duration_ = value;
+}
+
+// optional int32 reward_count_down_sec = 5;
+inline bool GuildCrystalTowerActivityData::has_reward_count_down_sec() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void GuildCrystalTowerActivityData::set_has_reward_count_down_sec() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void GuildCrystalTowerActivityData::clear_has_reward_count_down_sec() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void GuildCrystalTowerActivityData::clear_reward_count_down_sec() {
+  reward_count_down_sec_ = 0;
+  clear_has_reward_count_down_sec();
+}
+inline ::google::protobuf::int32 GuildCrystalTowerActivityData::reward_count_down_sec() const {
+  return reward_count_down_sec_;
+}
+inline void GuildCrystalTowerActivityData::set_reward_count_down_sec(::google::protobuf::int32 value) {
+  set_has_reward_count_down_sec();
+  reward_count_down_sec_ = value;
+}
+
+// repeated int32 piece_count = 6;
+inline int GuildCrystalTowerActivityData::piece_count_size() const {
+  return piece_count_.size();
+}
+inline void GuildCrystalTowerActivityData::clear_piece_count() {
+  piece_count_.Clear();
+}
+inline ::google::protobuf::int32 GuildCrystalTowerActivityData::piece_count(int index) const {
+  return piece_count_.Get(index);
+}
+inline void GuildCrystalTowerActivityData::set_piece_count(int index, ::google::protobuf::int32 value) {
+  piece_count_.Set(index, value);
+}
+inline void GuildCrystalTowerActivityData::add_piece_count(::google::protobuf::int32 value) {
+  piece_count_.Add(value);
+}
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::int32 >&
+GuildCrystalTowerActivityData::piece_count() const {
+  return piece_count_;
+}
+inline ::google::protobuf::RepeatedField< ::google::protobuf::int32 >*
+GuildCrystalTowerActivityData::mutable_piece_count() {
+  return &piece_count_;
+}
+
+// repeated .protocols.common.GuildCrystalReward rewards = 7;
+inline int GuildCrystalTowerActivityData::rewards_size() const {
+  return rewards_.size();
+}
+inline void GuildCrystalTowerActivityData::clear_rewards() {
+  rewards_.Clear();
+}
+inline const ::protocols::common::GuildCrystalReward& GuildCrystalTowerActivityData::rewards(int index) const {
+  return rewards_.Get(index);
+}
+inline ::protocols::common::GuildCrystalReward* GuildCrystalTowerActivityData::mutable_rewards(int index) {
+  return rewards_.Mutable(index);
+}
+inline ::protocols::common::GuildCrystalReward* GuildCrystalTowerActivityData::add_rewards() {
+  return rewards_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::GuildCrystalReward >&
+GuildCrystalTowerActivityData::rewards() const {
+  return rewards_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::protocols::common::GuildCrystalReward >*
+GuildCrystalTowerActivityData::mutable_rewards() {
+  return &rewards_;
+}
+
+// optional int32 tower_level = 8;
+inline bool GuildCrystalTowerActivityData::has_tower_level() const {
+  return (_has_bits_[0] & 0x00000080u) != 0;
+}
+inline void GuildCrystalTowerActivityData::set_has_tower_level() {
+  _has_bits_[0] |= 0x00000080u;
+}
+inline void GuildCrystalTowerActivityData::clear_has_tower_level() {
+  _has_bits_[0] &= ~0x00000080u;
+}
+inline void GuildCrystalTowerActivityData::clear_tower_level() {
+  tower_level_ = 0;
+  clear_has_tower_level();
+}
+inline ::google::protobuf::int32 GuildCrystalTowerActivityData::tower_level() const {
+  return tower_level_;
+}
+inline void GuildCrystalTowerActivityData::set_tower_level(::google::protobuf::int32 value) {
+  set_has_tower_level();
+  tower_level_ = value;
+}
+
+// optional .protocols.common.ActivityStatus activity_status = 9;
+inline bool GuildCrystalTowerActivityData::has_activity_status() const {
+  return (_has_bits_[0] & 0x00000100u) != 0;
+}
+inline void GuildCrystalTowerActivityData::set_has_activity_status() {
+  _has_bits_[0] |= 0x00000100u;
+}
+inline void GuildCrystalTowerActivityData::clear_has_activity_status() {
+  _has_bits_[0] &= ~0x00000100u;
+}
+inline void GuildCrystalTowerActivityData::clear_activity_status() {
+  activity_status_ = 0;
+  clear_has_activity_status();
+}
+inline protocols::common::ActivityStatus GuildCrystalTowerActivityData::activity_status() const {
+  return static_cast< protocols::common::ActivityStatus >(activity_status_);
+}
+inline void GuildCrystalTowerActivityData::set_activity_status(protocols::common::ActivityStatus value) {
+  GOOGLE_DCHECK(protocols::common::ActivityStatus_IsValid(value));
+  set_has_activity_status();
+  activity_status_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// PlayerPosBeforeInstance
+
+// required int32 map_id = 1;
+inline bool PlayerPosBeforeInstance::has_map_id() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void PlayerPosBeforeInstance::set_has_map_id() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void PlayerPosBeforeInstance::clear_has_map_id() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void PlayerPosBeforeInstance::clear_map_id() {
+  map_id_ = 0;
+  clear_has_map_id();
+}
+inline ::google::protobuf::int32 PlayerPosBeforeInstance::map_id() const {
+  return map_id_;
+}
+inline void PlayerPosBeforeInstance::set_map_id(::google::protobuf::int32 value) {
+  set_has_map_id();
+  map_id_ = value;
+}
+
+// required int32 map_x = 2;
+inline bool PlayerPosBeforeInstance::has_map_x() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void PlayerPosBeforeInstance::set_has_map_x() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void PlayerPosBeforeInstance::clear_has_map_x() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void PlayerPosBeforeInstance::clear_map_x() {
+  map_x_ = 0;
+  clear_has_map_x();
+}
+inline ::google::protobuf::int32 PlayerPosBeforeInstance::map_x() const {
+  return map_x_;
+}
+inline void PlayerPosBeforeInstance::set_map_x(::google::protobuf::int32 value) {
+  set_has_map_x();
+  map_x_ = value;
+}
+
+// required int32 map_y = 3;
+inline bool PlayerPosBeforeInstance::has_map_y() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void PlayerPosBeforeInstance::set_has_map_y() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void PlayerPosBeforeInstance::clear_has_map_y() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void PlayerPosBeforeInstance::clear_map_y() {
+  map_y_ = 0;
+  clear_has_map_y();
+}
+inline ::google::protobuf::int32 PlayerPosBeforeInstance::map_y() const {
+  return map_y_;
+}
+inline void PlayerPosBeforeInstance::set_map_y(::google::protobuf::int32 value) {
+  set_has_map_y();
+  map_y_ = value;
 }
 
 // -------------------------------------------------------------------
@@ -15456,6 +18930,72 @@ TeamMemberInfo::yingling_info() const {
 inline ::google::protobuf::RepeatedPtrField< ::protocols::common::YinglingInfo >*
 TeamMemberInfo::mutable_yingling_info() {
   return &yingling_info_;
+}
+
+// optional bool is_ready = 9;
+inline bool TeamMemberInfo::has_is_ready() const {
+  return (_has_bits_[0] & 0x00000100u) != 0;
+}
+inline void TeamMemberInfo::set_has_is_ready() {
+  _has_bits_[0] |= 0x00000100u;
+}
+inline void TeamMemberInfo::clear_has_is_ready() {
+  _has_bits_[0] &= ~0x00000100u;
+}
+inline void TeamMemberInfo::clear_is_ready() {
+  is_ready_ = false;
+  clear_has_is_ready();
+}
+inline bool TeamMemberInfo::is_ready() const {
+  return is_ready_;
+}
+inline void TeamMemberInfo::set_is_ready(bool value) {
+  set_has_is_ready();
+  is_ready_ = value;
+}
+
+// optional int32 wing_id = 10;
+inline bool TeamMemberInfo::has_wing_id() const {
+  return (_has_bits_[0] & 0x00000200u) != 0;
+}
+inline void TeamMemberInfo::set_has_wing_id() {
+  _has_bits_[0] |= 0x00000200u;
+}
+inline void TeamMemberInfo::clear_has_wing_id() {
+  _has_bits_[0] &= ~0x00000200u;
+}
+inline void TeamMemberInfo::clear_wing_id() {
+  wing_id_ = 0;
+  clear_has_wing_id();
+}
+inline ::google::protobuf::int32 TeamMemberInfo::wing_id() const {
+  return wing_id_;
+}
+inline void TeamMemberInfo::set_wing_id(::google::protobuf::int32 value) {
+  set_has_wing_id();
+  wing_id_ = value;
+}
+
+// optional int32 titile = 11;
+inline bool TeamMemberInfo::has_titile() const {
+  return (_has_bits_[0] & 0x00000400u) != 0;
+}
+inline void TeamMemberInfo::set_has_titile() {
+  _has_bits_[0] |= 0x00000400u;
+}
+inline void TeamMemberInfo::clear_has_titile() {
+  _has_bits_[0] &= ~0x00000400u;
+}
+inline void TeamMemberInfo::clear_titile() {
+  titile_ = 0;
+  clear_has_titile();
+}
+inline ::google::protobuf::int32 TeamMemberInfo::titile() const {
+  return titile_;
+}
+inline void TeamMemberInfo::set_titile(::google::protobuf::int32 value) {
+  set_has_titile();
+  titile_ = value;
 }
 
 // -------------------------------------------------------------------
@@ -15793,6 +19333,28 @@ TeamInfo::mutable_fighter_info() {
   return &fighter_info_;
 }
 
+// optional int32 team_create_type = 15 [default = 1];
+inline bool TeamInfo::has_team_create_type() const {
+  return (_has_bits_[0] & 0x00002000u) != 0;
+}
+inline void TeamInfo::set_has_team_create_type() {
+  _has_bits_[0] |= 0x00002000u;
+}
+inline void TeamInfo::clear_has_team_create_type() {
+  _has_bits_[0] &= ~0x00002000u;
+}
+inline void TeamInfo::clear_team_create_type() {
+  team_create_type_ = 1;
+  clear_has_team_create_type();
+}
+inline ::google::protobuf::int32 TeamInfo::team_create_type() const {
+  return team_create_type_;
+}
+inline void TeamInfo::set_team_create_type(::google::protobuf::int32 value) {
+  set_has_team_create_type();
+  team_create_type_ = value;
+}
+
 // -------------------------------------------------------------------
 
 // CoolDown
@@ -16006,6 +19568,28 @@ inline void DailyCountLimit::set_update_time(::google::protobuf::int32 value) {
   update_time_ = value;
 }
 
+// optional int32 add_count = 7;
+inline bool DailyCountLimit::has_add_count() const {
+  return (_has_bits_[0] & 0x00000040u) != 0;
+}
+inline void DailyCountLimit::set_has_add_count() {
+  _has_bits_[0] |= 0x00000040u;
+}
+inline void DailyCountLimit::clear_has_add_count() {
+  _has_bits_[0] &= ~0x00000040u;
+}
+inline void DailyCountLimit::clear_add_count() {
+  add_count_ = 0;
+  clear_has_add_count();
+}
+inline ::google::protobuf::int32 DailyCountLimit::add_count() const {
+  return add_count_;
+}
+inline void DailyCountLimit::set_add_count(::google::protobuf::int32 value) {
+  set_has_add_count();
+  add_count_ = value;
+}
+
 // -------------------------------------------------------------------
 
 // RoleDailyLimitPb
@@ -16095,6 +19679,402 @@ inline ::protocols::common::RoleDailyLimitPb* DBRoleLimitDataPb::release_count_l
   ::protocols::common::RoleDailyLimitPb* temp = count_limit_;
   count_limit_ = NULL;
   return temp;
+}
+
+// optional .protocols.common.RoleHiredYinglingCount hired_yingling_count = 3;
+inline bool DBRoleLimitDataPb::has_hired_yingling_count() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void DBRoleLimitDataPb::set_has_hired_yingling_count() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void DBRoleLimitDataPb::clear_has_hired_yingling_count() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void DBRoleLimitDataPb::clear_hired_yingling_count() {
+  if (hired_yingling_count_ != NULL) hired_yingling_count_->::protocols::common::RoleHiredYinglingCount::Clear();
+  clear_has_hired_yingling_count();
+}
+inline const ::protocols::common::RoleHiredYinglingCount& DBRoleLimitDataPb::hired_yingling_count() const {
+  return hired_yingling_count_ != NULL ? *hired_yingling_count_ : *default_instance_->hired_yingling_count_;
+}
+inline ::protocols::common::RoleHiredYinglingCount* DBRoleLimitDataPb::mutable_hired_yingling_count() {
+  set_has_hired_yingling_count();
+  if (hired_yingling_count_ == NULL) hired_yingling_count_ = new ::protocols::common::RoleHiredYinglingCount;
+  return hired_yingling_count_;
+}
+inline ::protocols::common::RoleHiredYinglingCount* DBRoleLimitDataPb::release_hired_yingling_count() {
+  clear_has_hired_yingling_count();
+  ::protocols::common::RoleHiredYinglingCount* temp = hired_yingling_count_;
+  hired_yingling_count_ = NULL;
+  return temp;
+}
+
+// optional .protocols.common.RoleStrengthEquipCount strength_equip_count = 4;
+inline bool DBRoleLimitDataPb::has_strength_equip_count() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void DBRoleLimitDataPb::set_has_strength_equip_count() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void DBRoleLimitDataPb::clear_has_strength_equip_count() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void DBRoleLimitDataPb::clear_strength_equip_count() {
+  if (strength_equip_count_ != NULL) strength_equip_count_->::protocols::common::RoleStrengthEquipCount::Clear();
+  clear_has_strength_equip_count();
+}
+inline const ::protocols::common::RoleStrengthEquipCount& DBRoleLimitDataPb::strength_equip_count() const {
+  return strength_equip_count_ != NULL ? *strength_equip_count_ : *default_instance_->strength_equip_count_;
+}
+inline ::protocols::common::RoleStrengthEquipCount* DBRoleLimitDataPb::mutable_strength_equip_count() {
+  set_has_strength_equip_count();
+  if (strength_equip_count_ == NULL) strength_equip_count_ = new ::protocols::common::RoleStrengthEquipCount;
+  return strength_equip_count_;
+}
+inline ::protocols::common::RoleStrengthEquipCount* DBRoleLimitDataPb::release_strength_equip_count() {
+  clear_has_strength_equip_count();
+  ::protocols::common::RoleStrengthEquipCount* temp = strength_equip_count_;
+  strength_equip_count_ = NULL;
+  return temp;
+}
+
+// optional int32 guild_contrib = 5;
+inline bool DBRoleLimitDataPb::has_guild_contrib() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void DBRoleLimitDataPb::set_has_guild_contrib() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void DBRoleLimitDataPb::clear_has_guild_contrib() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void DBRoleLimitDataPb::clear_guild_contrib() {
+  guild_contrib_ = 0;
+  clear_has_guild_contrib();
+}
+inline ::google::protobuf::int32 DBRoleLimitDataPb::guild_contrib() const {
+  return guild_contrib_;
+}
+inline void DBRoleLimitDataPb::set_guild_contrib(::google::protobuf::int32 value) {
+  set_has_guild_contrib();
+  guild_contrib_ = value;
+}
+
+// optional .protocols.common.YouLiMapData youli_data = 6;
+inline bool DBRoleLimitDataPb::has_youli_data() const {
+  return (_has_bits_[0] & 0x00000020u) != 0;
+}
+inline void DBRoleLimitDataPb::set_has_youli_data() {
+  _has_bits_[0] |= 0x00000020u;
+}
+inline void DBRoleLimitDataPb::clear_has_youli_data() {
+  _has_bits_[0] &= ~0x00000020u;
+}
+inline void DBRoleLimitDataPb::clear_youli_data() {
+  if (youli_data_ != NULL) youli_data_->::protocols::common::YouLiMapData::Clear();
+  clear_has_youli_data();
+}
+inline const ::protocols::common::YouLiMapData& DBRoleLimitDataPb::youli_data() const {
+  return youli_data_ != NULL ? *youli_data_ : *default_instance_->youli_data_;
+}
+inline ::protocols::common::YouLiMapData* DBRoleLimitDataPb::mutable_youli_data() {
+  set_has_youli_data();
+  if (youli_data_ == NULL) youli_data_ = new ::protocols::common::YouLiMapData;
+  return youli_data_;
+}
+inline ::protocols::common::YouLiMapData* DBRoleLimitDataPb::release_youli_data() {
+  clear_has_youli_data();
+  ::protocols::common::YouLiMapData* temp = youli_data_;
+  youli_data_ = NULL;
+  return temp;
+}
+
+// optional .protocols.common.YinglingComboStatus yingling_combo_data = 7;
+inline bool DBRoleLimitDataPb::has_yingling_combo_data() const {
+  return (_has_bits_[0] & 0x00000040u) != 0;
+}
+inline void DBRoleLimitDataPb::set_has_yingling_combo_data() {
+  _has_bits_[0] |= 0x00000040u;
+}
+inline void DBRoleLimitDataPb::clear_has_yingling_combo_data() {
+  _has_bits_[0] &= ~0x00000040u;
+}
+inline void DBRoleLimitDataPb::clear_yingling_combo_data() {
+  if (yingling_combo_data_ != NULL) yingling_combo_data_->::protocols::common::YinglingComboStatus::Clear();
+  clear_has_yingling_combo_data();
+}
+inline const ::protocols::common::YinglingComboStatus& DBRoleLimitDataPb::yingling_combo_data() const {
+  return yingling_combo_data_ != NULL ? *yingling_combo_data_ : *default_instance_->yingling_combo_data_;
+}
+inline ::protocols::common::YinglingComboStatus* DBRoleLimitDataPb::mutable_yingling_combo_data() {
+  set_has_yingling_combo_data();
+  if (yingling_combo_data_ == NULL) yingling_combo_data_ = new ::protocols::common::YinglingComboStatus;
+  return yingling_combo_data_;
+}
+inline ::protocols::common::YinglingComboStatus* DBRoleLimitDataPb::release_yingling_combo_data() {
+  clear_has_yingling_combo_data();
+  ::protocols::common::YinglingComboStatus* temp = yingling_combo_data_;
+  yingling_combo_data_ = NULL;
+  return temp;
+}
+
+// optional .protocols.common.YinglingTrainStatus yingling_train_status = 8;
+inline bool DBRoleLimitDataPb::has_yingling_train_status() const {
+  return (_has_bits_[0] & 0x00000080u) != 0;
+}
+inline void DBRoleLimitDataPb::set_has_yingling_train_status() {
+  _has_bits_[0] |= 0x00000080u;
+}
+inline void DBRoleLimitDataPb::clear_has_yingling_train_status() {
+  _has_bits_[0] &= ~0x00000080u;
+}
+inline void DBRoleLimitDataPb::clear_yingling_train_status() {
+  if (yingling_train_status_ != NULL) yingling_train_status_->::protocols::common::YinglingTrainStatus::Clear();
+  clear_has_yingling_train_status();
+}
+inline const ::protocols::common::YinglingTrainStatus& DBRoleLimitDataPb::yingling_train_status() const {
+  return yingling_train_status_ != NULL ? *yingling_train_status_ : *default_instance_->yingling_train_status_;
+}
+inline ::protocols::common::YinglingTrainStatus* DBRoleLimitDataPb::mutable_yingling_train_status() {
+  set_has_yingling_train_status();
+  if (yingling_train_status_ == NULL) yingling_train_status_ = new ::protocols::common::YinglingTrainStatus;
+  return yingling_train_status_;
+}
+inline ::protocols::common::YinglingTrainStatus* DBRoleLimitDataPb::release_yingling_train_status() {
+  clear_has_yingling_train_status();
+  ::protocols::common::YinglingTrainStatus* temp = yingling_train_status_;
+  yingling_train_status_ = NULL;
+  return temp;
+}
+
+// -------------------------------------------------------------------
+
+// HiredYinglingCount
+
+// required int32 quality = 1;
+inline bool HiredYinglingCount::has_quality() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void HiredYinglingCount::set_has_quality() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void HiredYinglingCount::clear_has_quality() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void HiredYinglingCount::clear_quality() {
+  quality_ = 0;
+  clear_has_quality();
+}
+inline ::google::protobuf::int32 HiredYinglingCount::quality() const {
+  return quality_;
+}
+inline void HiredYinglingCount::set_quality(::google::protobuf::int32 value) {
+  set_has_quality();
+  quality_ = value;
+}
+
+// required int32 count = 2;
+inline bool HiredYinglingCount::has_count() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void HiredYinglingCount::set_has_count() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void HiredYinglingCount::clear_has_count() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void HiredYinglingCount::clear_count() {
+  count_ = 0;
+  clear_has_count();
+}
+inline ::google::protobuf::int32 HiredYinglingCount::count() const {
+  return count_;
+}
+inline void HiredYinglingCount::set_count(::google::protobuf::int32 value) {
+  set_has_count();
+  count_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// RoleHiredYinglingCount
+
+// repeated .protocols.common.HiredYinglingCount data = 1;
+inline int RoleHiredYinglingCount::data_size() const {
+  return data_.size();
+}
+inline void RoleHiredYinglingCount::clear_data() {
+  data_.Clear();
+}
+inline const ::protocols::common::HiredYinglingCount& RoleHiredYinglingCount::data(int index) const {
+  return data_.Get(index);
+}
+inline ::protocols::common::HiredYinglingCount* RoleHiredYinglingCount::mutable_data(int index) {
+  return data_.Mutable(index);
+}
+inline ::protocols::common::HiredYinglingCount* RoleHiredYinglingCount::add_data() {
+  return data_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::HiredYinglingCount >&
+RoleHiredYinglingCount::data() const {
+  return data_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::protocols::common::HiredYinglingCount >*
+RoleHiredYinglingCount::mutable_data() {
+  return &data_;
+}
+
+// repeated int32 yingling_tid = 2;
+inline int RoleHiredYinglingCount::yingling_tid_size() const {
+  return yingling_tid_.size();
+}
+inline void RoleHiredYinglingCount::clear_yingling_tid() {
+  yingling_tid_.Clear();
+}
+inline ::google::protobuf::int32 RoleHiredYinglingCount::yingling_tid(int index) const {
+  return yingling_tid_.Get(index);
+}
+inline void RoleHiredYinglingCount::set_yingling_tid(int index, ::google::protobuf::int32 value) {
+  yingling_tid_.Set(index, value);
+}
+inline void RoleHiredYinglingCount::add_yingling_tid(::google::protobuf::int32 value) {
+  yingling_tid_.Add(value);
+}
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::int32 >&
+RoleHiredYinglingCount::yingling_tid() const {
+  return yingling_tid_;
+}
+inline ::google::protobuf::RepeatedField< ::google::protobuf::int32 >*
+RoleHiredYinglingCount::mutable_yingling_tid() {
+  return &yingling_tid_;
+}
+
+// repeated .protocols.common.HiredYinglingCount yingling_pro = 3;
+inline int RoleHiredYinglingCount::yingling_pro_size() const {
+  return yingling_pro_.size();
+}
+inline void RoleHiredYinglingCount::clear_yingling_pro() {
+  yingling_pro_.Clear();
+}
+inline const ::protocols::common::HiredYinglingCount& RoleHiredYinglingCount::yingling_pro(int index) const {
+  return yingling_pro_.Get(index);
+}
+inline ::protocols::common::HiredYinglingCount* RoleHiredYinglingCount::mutable_yingling_pro(int index) {
+  return yingling_pro_.Mutable(index);
+}
+inline ::protocols::common::HiredYinglingCount* RoleHiredYinglingCount::add_yingling_pro() {
+  return yingling_pro_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::HiredYinglingCount >&
+RoleHiredYinglingCount::yingling_pro() const {
+  return yingling_pro_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::protocols::common::HiredYinglingCount >*
+RoleHiredYinglingCount::mutable_yingling_pro() {
+  return &yingling_pro_;
+}
+
+// repeated .protocols.common.HiredYinglingCount yingling_quality = 4;
+inline int RoleHiredYinglingCount::yingling_quality_size() const {
+  return yingling_quality_.size();
+}
+inline void RoleHiredYinglingCount::clear_yingling_quality() {
+  yingling_quality_.Clear();
+}
+inline const ::protocols::common::HiredYinglingCount& RoleHiredYinglingCount::yingling_quality(int index) const {
+  return yingling_quality_.Get(index);
+}
+inline ::protocols::common::HiredYinglingCount* RoleHiredYinglingCount::mutable_yingling_quality(int index) {
+  return yingling_quality_.Mutable(index);
+}
+inline ::protocols::common::HiredYinglingCount* RoleHiredYinglingCount::add_yingling_quality() {
+  return yingling_quality_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::HiredYinglingCount >&
+RoleHiredYinglingCount::yingling_quality() const {
+  return yingling_quality_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::protocols::common::HiredYinglingCount >*
+RoleHiredYinglingCount::mutable_yingling_quality() {
+  return &yingling_quality_;
+}
+
+// -------------------------------------------------------------------
+
+// StrengthEquipCount
+
+// required int32 strength_level = 1;
+inline bool StrengthEquipCount::has_strength_level() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void StrengthEquipCount::set_has_strength_level() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void StrengthEquipCount::clear_has_strength_level() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void StrengthEquipCount::clear_strength_level() {
+  strength_level_ = 0;
+  clear_has_strength_level();
+}
+inline ::google::protobuf::int32 StrengthEquipCount::strength_level() const {
+  return strength_level_;
+}
+inline void StrengthEquipCount::set_strength_level(::google::protobuf::int32 value) {
+  set_has_strength_level();
+  strength_level_ = value;
+}
+
+// required int32 count = 2;
+inline bool StrengthEquipCount::has_count() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void StrengthEquipCount::set_has_count() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void StrengthEquipCount::clear_has_count() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void StrengthEquipCount::clear_count() {
+  count_ = 0;
+  clear_has_count();
+}
+inline ::google::protobuf::int32 StrengthEquipCount::count() const {
+  return count_;
+}
+inline void StrengthEquipCount::set_count(::google::protobuf::int32 value) {
+  set_has_count();
+  count_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// RoleStrengthEquipCount
+
+// repeated .protocols.common.StrengthEquipCount data = 1;
+inline int RoleStrengthEquipCount::data_size() const {
+  return data_.size();
+}
+inline void RoleStrengthEquipCount::clear_data() {
+  data_.Clear();
+}
+inline const ::protocols::common::StrengthEquipCount& RoleStrengthEquipCount::data(int index) const {
+  return data_.Get(index);
+}
+inline ::protocols::common::StrengthEquipCount* RoleStrengthEquipCount::mutable_data(int index) {
+  return data_.Mutable(index);
+}
+inline ::protocols::common::StrengthEquipCount* RoleStrengthEquipCount::add_data() {
+  return data_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::StrengthEquipCount >&
+RoleStrengthEquipCount::data() const {
+  return data_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::protocols::common::StrengthEquipCount >*
+RoleStrengthEquipCount::mutable_data() {
+  return &data_;
 }
 
 // -------------------------------------------------------------------
@@ -16316,6 +20296,35 @@ inline ::protocols::common::XunluoQuestPb* DailyQuestPb::release_xunluo_quest() 
   return temp;
 }
 
+// optional .protocols.common.GuildCircleQuestPb guild_circle_quest = 4;
+inline bool DailyQuestPb::has_guild_circle_quest() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void DailyQuestPb::set_has_guild_circle_quest() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void DailyQuestPb::clear_has_guild_circle_quest() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void DailyQuestPb::clear_guild_circle_quest() {
+  if (guild_circle_quest_ != NULL) guild_circle_quest_->::protocols::common::GuildCircleQuestPb::Clear();
+  clear_has_guild_circle_quest();
+}
+inline const ::protocols::common::GuildCircleQuestPb& DailyQuestPb::guild_circle_quest() const {
+  return guild_circle_quest_ != NULL ? *guild_circle_quest_ : *default_instance_->guild_circle_quest_;
+}
+inline ::protocols::common::GuildCircleQuestPb* DailyQuestPb::mutable_guild_circle_quest() {
+  set_has_guild_circle_quest();
+  if (guild_circle_quest_ == NULL) guild_circle_quest_ = new ::protocols::common::GuildCircleQuestPb;
+  return guild_circle_quest_;
+}
+inline ::protocols::common::GuildCircleQuestPb* DailyQuestPb::release_guild_circle_quest() {
+  clear_has_guild_circle_quest();
+  ::protocols::common::GuildCircleQuestPb* temp = guild_circle_quest_;
+  guild_circle_quest_ = NULL;
+  return temp;
+}
+
 // -------------------------------------------------------------------
 
 // XunluoQuestPb
@@ -16410,6 +20419,54 @@ inline void XunluoQuestPb::set_xunluo_reward_coin(::google::protobuf::int32 valu
 
 // -------------------------------------------------------------------
 
+// GuildCircleQuestPb
+
+// optional int32 cur_circle_index = 1;
+inline bool GuildCircleQuestPb::has_cur_circle_index() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void GuildCircleQuestPb::set_has_cur_circle_index() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void GuildCircleQuestPb::clear_has_cur_circle_index() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void GuildCircleQuestPb::clear_cur_circle_index() {
+  cur_circle_index_ = 0;
+  clear_has_cur_circle_index();
+}
+inline ::google::protobuf::int32 GuildCircleQuestPb::cur_circle_index() const {
+  return cur_circle_index_;
+}
+inline void GuildCircleQuestPb::set_cur_circle_index(::google::protobuf::int32 value) {
+  set_has_cur_circle_index();
+  cur_circle_index_ = value;
+}
+
+// optional int32 quest_id = 2;
+inline bool GuildCircleQuestPb::has_quest_id() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void GuildCircleQuestPb::set_has_quest_id() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void GuildCircleQuestPb::clear_has_quest_id() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void GuildCircleQuestPb::clear_quest_id() {
+  quest_id_ = 0;
+  clear_has_quest_id();
+}
+inline ::google::protobuf::int32 GuildCircleQuestPb::quest_id() const {
+  return quest_id_;
+}
+inline void GuildCircleQuestPb::set_quest_id(::google::protobuf::int32 value) {
+  set_has_quest_id();
+  quest_id_ = value;
+}
+
+// -------------------------------------------------------------------
+
 // PlayerFlagPb
 
 // required int32 type = 1;
@@ -16483,6 +20540,82 @@ PlayerFlagDataPb::data() const {
 inline ::google::protobuf::RepeatedPtrField< ::protocols::common::PlayerFlagPb >*
 PlayerFlagDataPb::mutable_data() {
   return &data_;
+}
+
+// -------------------------------------------------------------------
+
+// TrainAttribute
+
+// optional int64 guid = 1;
+inline bool TrainAttribute::has_guid() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void TrainAttribute::set_has_guid() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void TrainAttribute::clear_has_guid() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void TrainAttribute::clear_guid() {
+  guid_ = GOOGLE_LONGLONG(0);
+  clear_has_guid();
+}
+inline ::google::protobuf::int64 TrainAttribute::guid() const {
+  return guid_;
+}
+inline void TrainAttribute::set_guid(::google::protobuf::int64 value) {
+  set_has_guid();
+  guid_ = value;
+}
+
+// repeated .protocols.common.PBIntPair train_attribute = 2;
+inline int TrainAttribute::train_attribute_size() const {
+  return train_attribute_.size();
+}
+inline void TrainAttribute::clear_train_attribute() {
+  train_attribute_.Clear();
+}
+inline const ::protocols::common::PBIntPair& TrainAttribute::train_attribute(int index) const {
+  return train_attribute_.Get(index);
+}
+inline ::protocols::common::PBIntPair* TrainAttribute::mutable_train_attribute(int index) {
+  return train_attribute_.Mutable(index);
+}
+inline ::protocols::common::PBIntPair* TrainAttribute::add_train_attribute() {
+  return train_attribute_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::PBIntPair >&
+TrainAttribute::train_attribute() const {
+  return train_attribute_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::protocols::common::PBIntPair >*
+TrainAttribute::mutable_train_attribute() {
+  return &train_attribute_;
+}
+
+// repeated .protocols.common.PBIntPair unsave_train_attribute = 3;
+inline int TrainAttribute::unsave_train_attribute_size() const {
+  return unsave_train_attribute_.size();
+}
+inline void TrainAttribute::clear_unsave_train_attribute() {
+  unsave_train_attribute_.Clear();
+}
+inline const ::protocols::common::PBIntPair& TrainAttribute::unsave_train_attribute(int index) const {
+  return unsave_train_attribute_.Get(index);
+}
+inline ::protocols::common::PBIntPair* TrainAttribute::mutable_unsave_train_attribute(int index) {
+  return unsave_train_attribute_.Mutable(index);
+}
+inline ::protocols::common::PBIntPair* TrainAttribute::add_unsave_train_attribute() {
+  return unsave_train_attribute_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::PBIntPair >&
+TrainAttribute::unsave_train_attribute() const {
+  return unsave_train_attribute_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::protocols::common::PBIntPair >*
+TrainAttribute::mutable_unsave_train_attribute() {
+  return &unsave_train_attribute_;
 }
 
 // -------------------------------------------------------------------
@@ -17374,6 +21507,372 @@ GetBuddyTemplateAttributeResponse::mutable_bare_attr_list() {
   return &bare_attr_list_;
 }
 
+// -------------------------------------------------------------------
+
+// YouLiMapData_GridData
+
+// required int32 grid_index = 1;
+inline bool YouLiMapData_GridData::has_grid_index() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void YouLiMapData_GridData::set_has_grid_index() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void YouLiMapData_GridData::clear_has_grid_index() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void YouLiMapData_GridData::clear_grid_index() {
+  grid_index_ = 0;
+  clear_has_grid_index();
+}
+inline ::google::protobuf::int32 YouLiMapData_GridData::grid_index() const {
+  return grid_index_;
+}
+inline void YouLiMapData_GridData::set_grid_index(::google::protobuf::int32 value) {
+  set_has_grid_index();
+  grid_index_ = value;
+}
+
+// required int32 grid_type = 2;
+inline bool YouLiMapData_GridData::has_grid_type() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void YouLiMapData_GridData::set_has_grid_type() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void YouLiMapData_GridData::clear_has_grid_type() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void YouLiMapData_GridData::clear_grid_type() {
+  grid_type_ = 0;
+  clear_has_grid_type();
+}
+inline ::google::protobuf::int32 YouLiMapData_GridData::grid_type() const {
+  return grid_type_;
+}
+inline void YouLiMapData_GridData::set_grid_type(::google::protobuf::int32 value) {
+  set_has_grid_type();
+  grid_type_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// YouLiMapData
+
+// repeated .protocols.common.YouLiMapData.GridData grid_data = 1;
+inline int YouLiMapData::grid_data_size() const {
+  return grid_data_.size();
+}
+inline void YouLiMapData::clear_grid_data() {
+  grid_data_.Clear();
+}
+inline const ::protocols::common::YouLiMapData_GridData& YouLiMapData::grid_data(int index) const {
+  return grid_data_.Get(index);
+}
+inline ::protocols::common::YouLiMapData_GridData* YouLiMapData::mutable_grid_data(int index) {
+  return grid_data_.Mutable(index);
+}
+inline ::protocols::common::YouLiMapData_GridData* YouLiMapData::add_grid_data() {
+  return grid_data_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::YouLiMapData_GridData >&
+YouLiMapData::grid_data() const {
+  return grid_data_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::protocols::common::YouLiMapData_GridData >*
+YouLiMapData::mutable_grid_data() {
+  return &grid_data_;
+}
+
+// optional int32 cur_grid_index = 2;
+inline bool YouLiMapData::has_cur_grid_index() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void YouLiMapData::set_has_cur_grid_index() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void YouLiMapData::clear_has_cur_grid_index() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void YouLiMapData::clear_cur_grid_index() {
+  cur_grid_index_ = 0;
+  clear_has_cur_grid_index();
+}
+inline ::google::protobuf::int32 YouLiMapData::cur_grid_index() const {
+  return cur_grid_index_;
+}
+inline void YouLiMapData::set_cur_grid_index(::google::protobuf::int32 value) {
+  set_has_cur_grid_index();
+  cur_grid_index_ = value;
+}
+
+// optional int32 youli_num = 3;
+inline bool YouLiMapData::has_youli_num() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void YouLiMapData::set_has_youli_num() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void YouLiMapData::clear_has_youli_num() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void YouLiMapData::clear_youli_num() {
+  youli_num_ = 0;
+  clear_has_youli_num();
+}
+inline ::google::protobuf::int32 YouLiMapData::youli_num() const {
+  return youli_num_;
+}
+inline void YouLiMapData::set_youli_num(::google::protobuf::int32 value) {
+  set_has_youli_num();
+  youli_num_ = value;
+}
+
+// optional int32 max_youli_num = 4;
+inline bool YouLiMapData::has_max_youli_num() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void YouLiMapData::set_has_max_youli_num() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void YouLiMapData::clear_has_max_youli_num() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void YouLiMapData::clear_max_youli_num() {
+  max_youli_num_ = 0;
+  clear_has_max_youli_num();
+}
+inline ::google::protobuf::int32 YouLiMapData::max_youli_num() const {
+  return max_youli_num_;
+}
+inline void YouLiMapData::set_max_youli_num(::google::protobuf::int32 value) {
+  set_has_max_youli_num();
+  max_youli_num_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// YinglingComboStatus_ComboMember
+
+// optional int32 type = 1;
+inline bool YinglingComboStatus_ComboMember::has_type() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void YinglingComboStatus_ComboMember::set_has_type() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void YinglingComboStatus_ComboMember::clear_has_type() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void YinglingComboStatus_ComboMember::clear_type() {
+  type_ = 0;
+  clear_has_type();
+}
+inline ::google::protobuf::int32 YinglingComboStatus_ComboMember::type() const {
+  return type_;
+}
+inline void YinglingComboStatus_ComboMember::set_type(::google::protobuf::int32 value) {
+  set_has_type();
+  type_ = value;
+}
+
+// optional int32 id = 2;
+inline bool YinglingComboStatus_ComboMember::has_id() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void YinglingComboStatus_ComboMember::set_has_id() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void YinglingComboStatus_ComboMember::clear_has_id() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void YinglingComboStatus_ComboMember::clear_id() {
+  id_ = 0;
+  clear_has_id();
+}
+inline ::google::protobuf::int32 YinglingComboStatus_ComboMember::id() const {
+  return id_;
+}
+inline void YinglingComboStatus_ComboMember::set_id(::google::protobuf::int32 value) {
+  set_has_id();
+  id_ = value;
+}
+
+// optional int32 status = 3;
+inline bool YinglingComboStatus_ComboMember::has_status() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void YinglingComboStatus_ComboMember::set_has_status() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void YinglingComboStatus_ComboMember::clear_has_status() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void YinglingComboStatus_ComboMember::clear_status() {
+  status_ = 0;
+  clear_has_status();
+}
+inline ::google::protobuf::int32 YinglingComboStatus_ComboMember::status() const {
+  return status_;
+}
+inline void YinglingComboStatus_ComboMember::set_status(::google::protobuf::int32 value) {
+  set_has_status();
+  status_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// YinglingComboStatus_Combo
+
+// optional int32 combo_id = 1;
+inline bool YinglingComboStatus_Combo::has_combo_id() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void YinglingComboStatus_Combo::set_has_combo_id() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void YinglingComboStatus_Combo::clear_has_combo_id() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void YinglingComboStatus_Combo::clear_combo_id() {
+  combo_id_ = 0;
+  clear_has_combo_id();
+}
+inline ::google::protobuf::int32 YinglingComboStatus_Combo::combo_id() const {
+  return combo_id_;
+}
+inline void YinglingComboStatus_Combo::set_combo_id(::google::protobuf::int32 value) {
+  set_has_combo_id();
+  combo_id_ = value;
+}
+
+// optional int32 combo_level = 2;
+inline bool YinglingComboStatus_Combo::has_combo_level() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void YinglingComboStatus_Combo::set_has_combo_level() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void YinglingComboStatus_Combo::clear_has_combo_level() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void YinglingComboStatus_Combo::clear_combo_level() {
+  combo_level_ = 0;
+  clear_has_combo_level();
+}
+inline ::google::protobuf::int32 YinglingComboStatus_Combo::combo_level() const {
+  return combo_level_;
+}
+inline void YinglingComboStatus_Combo::set_combo_level(::google::protobuf::int32 value) {
+  set_has_combo_level();
+  combo_level_ = value;
+}
+
+// optional int32 combo_status = 3;
+inline bool YinglingComboStatus_Combo::has_combo_status() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void YinglingComboStatus_Combo::set_has_combo_status() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void YinglingComboStatus_Combo::clear_has_combo_status() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void YinglingComboStatus_Combo::clear_combo_status() {
+  combo_status_ = 0;
+  clear_has_combo_status();
+}
+inline ::google::protobuf::int32 YinglingComboStatus_Combo::combo_status() const {
+  return combo_status_;
+}
+inline void YinglingComboStatus_Combo::set_combo_status(::google::protobuf::int32 value) {
+  set_has_combo_status();
+  combo_status_ = value;
+}
+
+// repeated .protocols.common.YinglingComboStatus_ComboMember member_list = 4;
+inline int YinglingComboStatus_Combo::member_list_size() const {
+  return member_list_.size();
+}
+inline void YinglingComboStatus_Combo::clear_member_list() {
+  member_list_.Clear();
+}
+inline const ::protocols::common::YinglingComboStatus_ComboMember& YinglingComboStatus_Combo::member_list(int index) const {
+  return member_list_.Get(index);
+}
+inline ::protocols::common::YinglingComboStatus_ComboMember* YinglingComboStatus_Combo::mutable_member_list(int index) {
+  return member_list_.Mutable(index);
+}
+inline ::protocols::common::YinglingComboStatus_ComboMember* YinglingComboStatus_Combo::add_member_list() {
+  return member_list_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::YinglingComboStatus_ComboMember >&
+YinglingComboStatus_Combo::member_list() const {
+  return member_list_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::protocols::common::YinglingComboStatus_ComboMember >*
+YinglingComboStatus_Combo::mutable_member_list() {
+  return &member_list_;
+}
+
+// -------------------------------------------------------------------
+
+// YinglingComboStatus
+
+// repeated .protocols.common.YinglingComboStatus_Combo combo_list = 1;
+inline int YinglingComboStatus::combo_list_size() const {
+  return combo_list_.size();
+}
+inline void YinglingComboStatus::clear_combo_list() {
+  combo_list_.Clear();
+}
+inline const ::protocols::common::YinglingComboStatus_Combo& YinglingComboStatus::combo_list(int index) const {
+  return combo_list_.Get(index);
+}
+inline ::protocols::common::YinglingComboStatus_Combo* YinglingComboStatus::mutable_combo_list(int index) {
+  return combo_list_.Mutable(index);
+}
+inline ::protocols::common::YinglingComboStatus_Combo* YinglingComboStatus::add_combo_list() {
+  return combo_list_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::YinglingComboStatus_Combo >&
+YinglingComboStatus::combo_list() const {
+  return combo_list_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::protocols::common::YinglingComboStatus_Combo >*
+YinglingComboStatus::mutable_combo_list() {
+  return &combo_list_;
+}
+
+// -------------------------------------------------------------------
+
+// YinglingTrainStatus
+
+// repeated .protocols.common.TrainAttribute train_attribute_list = 1;
+inline int YinglingTrainStatus::train_attribute_list_size() const {
+  return train_attribute_list_.size();
+}
+inline void YinglingTrainStatus::clear_train_attribute_list() {
+  train_attribute_list_.Clear();
+}
+inline const ::protocols::common::TrainAttribute& YinglingTrainStatus::train_attribute_list(int index) const {
+  return train_attribute_list_.Get(index);
+}
+inline ::protocols::common::TrainAttribute* YinglingTrainStatus::mutable_train_attribute_list(int index) {
+  return train_attribute_list_.Mutable(index);
+}
+inline ::protocols::common::TrainAttribute* YinglingTrainStatus::add_train_attribute_list() {
+  return train_attribute_list_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::protocols::common::TrainAttribute >&
+YinglingTrainStatus::train_attribute_list() const {
+  return train_attribute_list_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::protocols::common::TrainAttribute >*
+YinglingTrainStatus::mutable_train_attribute_list() {
+  return &train_attribute_list_;
+}
+
 
 // @@protoc_insertion_point(namespace_scope)
 
@@ -17397,8 +21896,16 @@ inline const EnumDescriptor* GetEnumDescriptor< protocols::common::ItemPositionT
   return protocols::common::ItemPositionType_descriptor();
 }
 template <>
+inline const EnumDescriptor* GetEnumDescriptor< protocols::common::DirectionType>() {
+  return protocols::common::DirectionType_descriptor();
+}
+template <>
 inline const EnumDescriptor* GetEnumDescriptor< protocols::common::MessageAction>() {
   return protocols::common::MessageAction_descriptor();
+}
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< protocols::common::AttrChangeType>() {
+  return protocols::common::AttrChangeType_descriptor();
 }
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< protocols::common::ARENA_SELF_NOTICE_TYPE>() {
@@ -17505,6 +22012,14 @@ inline const EnumDescriptor* GetEnumDescriptor< protocols::common::QuestType>() 
   return protocols::common::QuestType_descriptor();
 }
 template <>
+inline const EnumDescriptor* GetEnumDescriptor< protocols::common::TreasureBoxBonusType>() {
+  return protocols::common::TreasureBoxBonusType_descriptor();
+}
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< protocols::common::ActivityStatus>() {
+  return protocols::common::ActivityStatus_descriptor();
+}
+template <>
 inline const EnumDescriptor* GetEnumDescriptor< protocols::common::DIFFICULTY_LEVEL>() {
   return protocols::common::DIFFICULTY_LEVEL_descriptor();
 }
@@ -17541,6 +22056,10 @@ inline const EnumDescriptor* GetEnumDescriptor< protocols::common::FunctionLimit
   return protocols::common::FunctionLimitType_descriptor();
 }
 template <>
+inline const EnumDescriptor* GetEnumDescriptor< protocols::common::NumberLimitType>() {
+  return protocols::common::NumberLimitType_descriptor();
+}
+template <>
 inline const EnumDescriptor* GetEnumDescriptor< protocols::common::VipSettingsType>() {
   return protocols::common::VipSettingsType_descriptor();
 }
@@ -17553,8 +22072,16 @@ inline const EnumDescriptor* GetEnumDescriptor< protocols::common::PlayerFlagTyp
   return protocols::common::PlayerFlagType_descriptor();
 }
 template <>
+inline const EnumDescriptor* GetEnumDescriptor< protocols::common::StartupActivityType>() {
+  return protocols::common::StartupActivityType_descriptor();
+}
+template <>
 inline const EnumDescriptor* GetEnumDescriptor< protocols::common::ClientPlayerFlagType>() {
   return protocols::common::ClientPlayerFlagType_descriptor();
+}
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< protocols::common::TrainType>() {
+  return protocols::common::TrainType_descriptor();
 }
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< protocols::common::BUY_MORE_TIMES_TYPE>() {
@@ -17567,6 +22094,10 @@ inline const EnumDescriptor* GetEnumDescriptor< protocols::common::BUY_CLEAR_CD_
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< protocols::common::UniqueNameType>() {
   return protocols::common::UniqueNameType_descriptor();
+}
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< protocols::common::GuildSkillStatus>() {
+  return protocols::common::GuildSkillStatus_descriptor();
 }
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< protocols::common::FunctionType>() {
@@ -17591,6 +22122,14 @@ inline const EnumDescriptor* GetEnumDescriptor< protocols::common::UpdateMonster
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< protocols::common::TeamChannelMemberNotifyType>() {
   return protocols::common::TeamChannelMemberNotifyType_descriptor();
+}
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< protocols::common::TitleId>() {
+  return protocols::common::TitleId_descriptor();
+}
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< protocols::common::ROOM_OPERATION>() {
+  return protocols::common::ROOM_OPERATION_descriptor();
 }
 
 }  // namespace google

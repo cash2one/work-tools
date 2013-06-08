@@ -18,9 +18,10 @@ public:
     T* writable() { return  m_read == &m_data_a ? &m_data_b : &m_data_a ; } ;
 
 private:
-    T* m_read ;
+
     T m_data_a ;
     T m_data_b ;
+    T* m_read ;
 
 } ;
 

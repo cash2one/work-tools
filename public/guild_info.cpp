@@ -13,6 +13,10 @@ guild_info::guild_info()
     leader_server_id = 0;
     total_member = 0;
     max_member = 0;
+    building_grade = 0;
+    maintain_time = 0;
+    boss_damage_buff = 0;
+    boss_defence_buff = 0;
     memset(dirty,1,sizeof(dirty));
 }
 void guild_info::load(const char** data)
@@ -31,6 +35,11 @@ void guild_info::load(const char** data)
     leader_name.assign(data[11]);
     guild_name.assign(data[12]);
     notice.assign(data[13]);
+    building_grade = (int64_t)atol(data[14]);
+    maintain_time = (int32_t)atoi(data[15]);
+    guild_activity_data.assign(data[16]);
+    boss_damage_buff = (int32_t)atoi(data[17]);
+    boss_defence_buff = (int32_t)atoi(data[18]);
     memset(dirty,0,sizeof(dirty));
 }
 void guild_info::load(const vector<string>& data)
@@ -49,6 +58,11 @@ void guild_info::load(const vector<string>& data)
     leader_name.assign(data[11].c_str());
     guild_name.assign(data[12].c_str());
     notice.assign(data[13].c_str());
+    building_grade = (int64_t)atol(data[14].c_str());
+    maintain_time = (int32_t)atoi(data[15].c_str());
+    guild_activity_data.assign(data[16].c_str());
+    boss_damage_buff = (int32_t)atoi(data[17].c_str());
+    boss_defence_buff = (int32_t)atoi(data[18].c_str());
     memset(dirty,0,sizeof(dirty));
 }
 int guild_info::sql_key(char* buf,int size) const
@@ -144,6 +158,36 @@ int guild_info::sql_data(char* buf,int size) const
     {
         if(first_flag==0) {memcpy(buf,",",1); buf+= 1 ; size-= 1 ;}
         len =sql_notice(buf,size);
+        buf += len ; size -= len ;first_flag=0;
+    }
+    if(dirty[14])
+    {
+        if(first_flag==0) {memcpy(buf,",",1); buf+= 1 ; size-= 1 ;}
+        len =sql_building_grade(buf,size);
+        buf += len ; size -= len ;first_flag=0;
+    }
+    if(dirty[15])
+    {
+        if(first_flag==0) {memcpy(buf,",",1); buf+= 1 ; size-= 1 ;}
+        len =sql_maintain_time(buf,size);
+        buf += len ; size -= len ;first_flag=0;
+    }
+    if(dirty[16])
+    {
+        if(first_flag==0) {memcpy(buf,",",1); buf+= 1 ; size-= 1 ;}
+        len =sql_guild_activity_data(buf,size);
+        buf += len ; size -= len ;first_flag=0;
+    }
+    if(dirty[17])
+    {
+        if(first_flag==0) {memcpy(buf,",",1); buf+= 1 ; size-= 1 ;}
+        len =sql_boss_damage_buff(buf,size);
+        buf += len ; size -= len ;first_flag=0;
+    }
+    if(dirty[18])
+    {
+        if(first_flag==0) {memcpy(buf,",",1); buf+= 1 ; size-= 1 ;}
+        len =sql_boss_defence_buff(buf,size);
         buf += len ; size -= len ;first_flag=0;
     }
     return origin_size - size ; 

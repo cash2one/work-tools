@@ -20,6 +20,8 @@ public:
 	
 	bool InitSkillPracticeData(const char* data_file);
 
+	bool InitBattleSkillUpgrade(const char* data_file);
+
 	const SkillData* GetSkillPrototype(int proto_id, int level);
 	const SkillBookData* GetSkillBookPrototype(int proto_id);
 
@@ -27,11 +29,26 @@ public:
 	const SkillIDList*  GetSkillIdList(int prof, int level);
 
 	const SkillPracticeModeData* GetSkillPracticeModeData(int mode);
+
+	int GetBattleSkillUpgradeYouli(int skill_id, int cur_level) const
+	{
+		SkillUpgradeData::const_iterator it = skill_upgrade_data_.find(std::make_pair(skill_id, cur_level));
+		if (it != skill_upgrade_data_.end())
+		{
+			return it->second;
+		}
+		else
+		{
+			return -1;
+		}
+	}
+
     void clear() ;
 private:
 	typedef std::map<std::pair<int,int>, const SkillData*> Prototypes;
 	typedef std::map<int, const SkillBookData*> SkillBookPrototypes;
 	typedef std::map<int, const SkillPracticeModeData*> SkillPracticePrototypes;
+	typedef std::map<std::pair<int, int>, int> SkillUpgradeData;
 
 	// [prof, level]
 	typedef std::pair<int, int> ProfessionSkillKey;
@@ -47,6 +64,8 @@ private:
 
 	SkillPracticePrototypes skill_practice_prototypes_;
 	SkillPracticeModeDataGroup skill_practice_data_group_;
+
+	SkillUpgradeData skill_upgrade_data_;
 
 	//DECLARE_SINGLETON_CONSTRUCTER(SkillPrototypeMgr);
 };
